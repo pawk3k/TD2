@@ -21,7 +21,7 @@ public class MainDisplay {
     // The window handle
     private long window;
 
-    public void run() {
+    public void run() throws Exception{
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
         System.out.println("OS name " + System.getProperty("os.name"));
         System.out.println("OS version " + System.getProperty("os.version"));
@@ -61,6 +61,9 @@ public class MainDisplay {
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+            if(key == GLFW_KEY_D && action == GLFW_PRESS){
+                
+            }
             if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
         });
@@ -93,7 +96,7 @@ public class MainDisplay {
         glfwShowWindow(window);
     }
 
-    private void loop() {
+    private void loop() throws Exception {
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
         // LWJGL detects the context that is current in the current thread,
@@ -112,14 +115,56 @@ public class MainDisplay {
                 0.5f, 0.5f, 0f,
                 -0.5f, 0.5f, 0f
         };
+        float[] positions = new float[] {
+                // VO
+                -0.5f,  0.5f,  0.5f,
+                // V1
+                -0.5f, -0.5f,  0.5f,
+                // V2
+                0.5f, -0.5f,  0.5f,
+                // V3
+                0.5f,  0.5f,  0.5f,
+                // V4
+                -0.5f,  0.5f, -0.5f,
+                // V5
+                0.5f,  0.5f, -0.5f,
+                // V6
+                -0.5f, -0.5f, -0.5f,
+                // V7
+                0.5f, -0.5f, -0.5f,
+        };
+        float[] colours = new float[]{
+                0.5f, 0.0f, 0.0f,
+                0.0f, 0.5f, 0.0f,
+                0.0f, 0.0f, 0.5f,
+                0.0f, 0.5f, 0.5f,
+                0.5f, 0.0f, 0.0f,
+                0.0f, 0.5f, 0.0f,
+                0.0f, 0.0f, 0.5f,
+                0.0f, 0.5f, 0.5f,
+        };
+
+        int[] indices = new int[] {
+                // Front face
+                0, 1, 3, 3, 1, 2,
+                // Top Face
+                4, 0, 3, 5, 4, 3,
+                // Right face
+                3, 2, 7, 5, 3, 7,
+                // Left face
+                6, 1, 0, 6, 0, 4,
+                // Bottom face
+                2, 1, 6, 2, 6, 7,
+                // Back face
+                7, 6, 4, 7, 4, 5,
+        };
         Loader loader = new Loader();
         Renderer renderer = new Renderer();
-        Model model = loader.loadToVAO(vertices);
+        Model model = loader.loadToVAO(positions,colours,indices);
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) ) {
             glClearColor(0.0f, 0.1f, 0.0f, 0.0f);
-
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
             renderer.render(model);
             // Poll for window events. The key callback above will only be
@@ -129,9 +174,8 @@ public class MainDisplay {
         }
     }
 
-    public static void main(String[] args) {
-        String k = GL11.glGetString(GL11.GL_VERSION);
-        System.out.println("k " + GL11.glGetString(GL11.GL_VERSION));
+    public static void main(String[] args) throws Exception{
+
         new MainDisplay().run();
     }
 

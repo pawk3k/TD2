@@ -11,10 +11,20 @@ public class Model {
 
     private int vaoID;
     private int vertexCount;
+    private int[] indecies;
 
-    public Model(int vaoID, int vertexCount) {
+    public int[] getIndecies() {
+        return indecies;
+    }
+
+    public void setIndecies(int[] indecies) {
+        this.indecies = indecies;
+    }
+
+    public Model(int vaoID, int vertexCount, int[] indicies) {
         this.vaoID = vaoID;
         this.vertexCount = vertexCount;
+        this.indecies = indicies;
     }
 
     /**

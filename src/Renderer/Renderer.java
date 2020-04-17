@@ -1,9 +1,13 @@
 package Renderer;
 
 import Renderer.Model;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import shaders.ShaderProgram;
+
+import java.nio.IntBuffer;
 
 /**
  * Handles the rendering of a model to the screen.
@@ -41,12 +45,29 @@ public class Renderer {
      * @param model
      *            - The model to be rendered.
      */
-    public void render(Model model) {
+    public void render(Model model) throws Exception{
+        ShaderProgram shaderProgram = new ShaderProgram();
+        shaderProgram.createVertexShader("src/shaders/vertex.glsl");
+        shaderProgram.createFragmentShader("src/shaders/fragment.glsl");
+        shaderProgram.link();
+        shaderProgram.bind();
         GL30.glBindVertexArray(model.getVaoID());
         GL20.glEnableVertexAttribArray(0);
-        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
+        GL20.glEnableVertexAttribArray(1);
+        IntBuffer indecies = storeDataInIntBuffer(model.getIndecies());
+        GL11.glDrawElements(GL11.GL_TRIANGLES,indecies);
         GL20.glDisableVertexAttribArray(0);
+        GL20.glDisableVertexAttribArray(1);
         GL30.glBindVertexArray(0);
+        shaderProgram.unbind();
+
+    }
+
+    private IntBuffer storeDataInIntBuffer(int[] data) {
+        IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
+        buffer.put(data);
+        buffer.flip();
+        return buffer;
     }
 
 }

@@ -2,6 +2,7 @@ package Renderer;
 
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +34,12 @@ public class Loader {
      *            example a quad).
      * @return The loaded model.
      */
-    public Model loadToVAO(float[] positions) {
+    public Model loadToVAO(float[] positions,float[] colors,int[] indicies) {
         int vaoID = createVAO();
         storeDataInAttributeList(0, positions);
+        storeDataInAttributeList(1  , colors);
         unbindVAO();
-        return new Model(vaoID, positions.length / 3);
+        return new Model(vaoID, positions.length / 3,indicies);
     }
 
 
@@ -153,5 +155,7 @@ public class Loader {
         buffer.flip();
         return buffer;
     }
+
+
 
 }
