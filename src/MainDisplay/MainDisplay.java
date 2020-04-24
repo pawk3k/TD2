@@ -3,6 +3,8 @@ package MainDisplay;
 import Renderer.Loader;
 import Renderer.Model;
 import Renderer.Renderer;
+import org.joml.*;
+import org.joml.Math;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -16,7 +18,19 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+
+
 public class MainDisplay {
+    private static final float FOV = (float) Math.toRadians(60.0f);
+
+    private static final float Z_NEAR = 0.01f;
+
+    private static final float Z_FAR = 1000.f;
+
+    private static int width = 1300;
+    private static int height = 768;
+
+    private Matrix4f projectionMatrix;
 
     // The window handle
     private long window;
@@ -55,7 +69,7 @@ public class MainDisplay {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        window = glfwCreateWindow(1300, 768, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(width, height, "Hello World!", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -117,11 +131,11 @@ public class MainDisplay {
         };
         float[] positions = new float[] {
                 // VO
-                -0.5f,  0.5f,  0.5f,
+                -0.5f,  0.5f,  -1.5f,
                 // V1
-                -0.5f, -0.5f,  0.5f,
+                -0.5f, -0.5f,  -1.5f,
                 // V2
-                0.5f, -0.5f,  0.5f,
+                0.5f, -0.5f,  -1.5f,
                 // V3
                 0.5f,  0.5f,  0.5f,
                 // V4
@@ -158,15 +172,36 @@ public class MainDisplay {
                 // Back face
                 7, 6, 4, 7, 4, 5,
         };
+//        float[] positions = new float[]{
+//                -0.5f,  0.5f, 0.0f,
+//                -0.5f, -0.5f, 0.0f,
+//                0.5f, -0.5f, 0.0f,
+//                0.5f,  0.5f, 0.0f,
+//        };
+//        int[] indices = new int[]{
+//                0, 1, 3, 3, 1, 2,
+//        };
+//        float[] colours = new float[]{
+//                0.5f, 0.0f, 0.0f,
+//                0.0f, 0.5f, 0.0f,
+//                0.0f, 0.0f, 0.5f,
+//                0.0f, 0.5f, 0.5f,
+//        };
         Loader loader = new Loader();
         Renderer renderer = new Renderer();
-        Model model = loader.loadToVAO(positions,colours,indices);
+        Model model = loader.loadToVAO(positions,positions,indices);
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) ) {
-            glClearColor(0.0f, 0.1f, 0.0f, 0.0f);
+            glClearColor(0.1f, 0.0f, 0.0f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-            renderer.render(model);
+
+//            float aspectRatio = (float) width / height;
+//            projectionMatrix = new Matrix4f().perspective(FOV, aspectRatio,
+//                    Z_NEAR, Z_FAR);
+
+
+            renderer.render(model,projectionMatrix);
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwSwapBuffers(window);

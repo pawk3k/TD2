@@ -1,6 +1,7 @@
 package Renderer;
 
 import Renderer.Model;
+import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -45,20 +46,25 @@ public class Renderer {
      * @param model
      *            - The model to be rendered.
      */
-    public void render(Model model) throws Exception{
+    public void render(Model model, Matrix4f projection) throws Exception{
         ShaderProgram shaderProgram = new ShaderProgram();
         shaderProgram.createVertexShader("src/shaders/vertex.glsl");
         shaderProgram.createFragmentShader("src/shaders/fragment.glsl");
         shaderProgram.link();
         shaderProgram.bind();
+
         GL30.glBindVertexArray(model.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         IntBuffer indecies = storeDataInIntBuffer(model.getIndecies());
+//        GL11.glDrawArrays(GL11.GL_TRIANGLES,0,model.getVertexCount());
+//        shaderProgram.createUniform("projectionMatrix");
+//        shaderProgram.setUniform("projectionMatrix",projection);
         GL11.glDrawElements(GL11.GL_TRIANGLES,indecies);
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL30.glBindVertexArray(0);
+
         shaderProgram.unbind();
 
     }
