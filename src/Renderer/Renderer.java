@@ -5,6 +5,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import shaders.ShaderProgram;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.lang.Math.*;
 import org.lwjgl.glfw.GLFW;
@@ -56,12 +60,9 @@ public class Renderer {
         int myColor = GL30.glGetUniformLocation( shaderProgram.getProgramId(),"myColor");
         GL30.glUniform3f( myColor, 0.0f, 0.0f, b);
 
-        float[] M = new float[]{
-                1.0f, 0.0f, 0.0f, 0.0f,
-                0.0f, 1.0f, 0.0f, 0.0f,
-                0.0f, 0.0f, 1.0f, 0.0f,
-                0.0f, 0.0f, 0.0f, 1.0f,
-        };
+        FloatBuffer M = createFloatBuffer(16);
+        model.rotate(0.0f,0.0f,0.0f);
+        model.getM().get(M);
 
         int M_Matrix = GL30.glGetUniformLocation( shaderProgram.getProgramId(),"M");
         GL30.glUniformMatrix4fv( M_Matrix, false, M);
@@ -82,6 +83,13 @@ public class Renderer {
         buffer.put(data);
         buffer.flip();
         return buffer;
+    }
+
+    private static FloatBuffer createFloatBuffer(int size)
+    {
+        return ByteBuffer.allocateDirect(size << 2)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
     }
 
 }
