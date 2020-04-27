@@ -9,7 +9,7 @@ import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
-
+import Model.Kub;
 import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -21,11 +21,13 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 
 public class MainDisplay {
-    private static final float FOV = (float) Math.toRadians(60.0f);
+    private static final float FOV = (float) Math.toRadians(70.0f);
+    public static float x_of= 0.0f;
+    private Input input;
+    private static float z_of = 0.0f;
+    private static final float Z_NEAR = 0.4f;
 
-    private static final float Z_NEAR = 0.01f;
-
-    private static final float Z_FAR = 1000.f;
+    private static final float Z_FAR = 1000000.f;
 
     private static int width = 1300;
     private static int height = 768;
@@ -33,7 +35,7 @@ public class MainDisplay {
     private Matrix4f projectionMatrix;
 
     // The window handle
-    private long window;
+    public long window;
 
     public void run() throws Exception{
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -74,13 +76,20 @@ public class MainDisplay {
             throw new RuntimeException("Failed to create the GLFW window");
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if(key == GLFW_KEY_D && action == GLFW_PRESS){
-                
-            }
-            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
-        });
+//        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+//            if(key == GLFW_KEY_D && action == GLFW_PRESS){
+//                x_of+=0.1;
+//            }
+//            if(key == GLFW_KEY_A && action == GLFW_PRESS){
+//                x_of-=0.1;
+//            }
+//            if(key == GLFW_KEY_Z && action == GLFW_PRESS){
+//                z_of-=0.1;
+//            }
+//            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+//                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+//        });
+        input = new Input(window);
 
         // Get the thread stack and push a new frame
         try ( MemoryStack stack = stackPush() ) {
@@ -108,6 +117,8 @@ public class MainDisplay {
 
         // Make the window visible
         glfwShowWindow(window);
+
+
     }
 
     private void loop() throws Exception {
@@ -117,91 +128,38 @@ public class MainDisplay {
         // creates the GLCapabilities instance and makes the OpenGL
         // bindings available for use.
         GL.createCapabilities();
+        glEnable(GL_DEPTH_TEST); //Włącz test głębokości na pikselach
 
-        // Set the clear color
-        float[] vertices = {
-                // Left bottom triangle
-                -0.5f, 0.5f, 0f,
-                -0.5f, -0.5f, 0f,
-                0.5f, -0.5f, 0f,
-                // Right top triangle
-                0.5f, -0.5f, 0f,
-                0.5f, 0.5f, 0f,
-                -0.5f, 0.5f, 0f
+        float[] positions = new float[]{
+                -0.5f,  0.5f, -1.05f,
+                -0.5f, -0.5f, -1.05f,
+                0.5f, -0.5f, -1.05f,
+                0.5f,  0.5f, -1.05f,
         };
-        float[] positions = new float[] {
-                // VO
-                -0.5f,  0.5f,  -1.5f,
-                // V1
-                -0.5f, -0.5f,  -1.5f,
-                // V2
-                0.5f, -0.5f,  -1.5f,
-                // V3
-                0.5f,  0.5f,  0.5f,
-                // V4
-                -0.5f,  0.5f, -0.5f,
-                // V5
-                0.5f,  0.5f, -0.5f,
-                // V6
-                -0.5f, -0.5f, -0.5f,
-                // V7
-                0.5f, -0.5f, -0.5f,
+        int[] indices = new int[]{
+                0, 1, 3, 3, 1, 2,
         };
         float[] colours = new float[]{
                 0.5f, 0.0f, 0.0f,
                 0.0f, 0.5f, 0.0f,
                 0.0f, 0.0f, 0.5f,
                 0.0f, 0.5f, 0.5f,
-                0.5f, 0.0f, 0.0f,
-                0.0f, 0.5f, 0.0f,
-                0.0f, 0.0f, 0.5f,
-                0.0f, 0.5f, 0.5f,
         };
+        Kub cube = new Kub();
 
-        int[] indices = new int[] {
-                // Front face
-                0, 1, 3, 3, 1, 2,
-                // Top Face
-                4, 0, 3, 5, 4, 3,
-                // Right face
-                3, 2, 7, 5, 3, 7,
-                // Left face
-                6, 1, 0, 6, 0, 4,
-                // Bottom face
-                2, 1, 6, 2, 6, 7,
-                // Back face
-                7, 6, 4, 7, 4, 5,
-        };
-//        float[] positions = new float[]{
-//                -0.5f,  0.5f, 0.0f,
-//                -0.5f, -0.5f, 0.0f,
-//                0.5f, -0.5f, 0.0f,
-//                0.5f,  0.5f, 0.0f,
-//        };
-//        int[] indices = new int[]{
-//                0, 1, 3, 3, 1, 2,
-//        };
-//        float[] colours = new float[]{
-//                0.5f, 0.0f, 0.0f,
-//                0.0f, 0.5f, 0.0f,
-//                0.0f, 0.0f, 0.5f,
-//                0.0f, 0.5f, 0.5f,
-//        };
         Loader loader = new Loader();
         Renderer renderer = new Renderer();
-        Model model = loader.loadToVAO(positions,positions,indices);
+        Model model = loader.loadToVAO(cube.getPositions(),cube.getColors(),cube.getIndecies());
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) ) {
             glClearColor(0.1f, 0.0f, 0.0f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
-//            float aspectRatio = (float) width / height;
-//            projectionMatrix = new Matrix4f().perspective(FOV, aspectRatio,
-//                    Z_NEAR, Z_FAR);
-
-
-            renderer.render(model,projectionMatrix);
+            float aspectRatio = (float) width / height;
+            projectionMatrix = new Matrix4f().perspective(FOV, aspectRatio,
+                    Z_NEAR, Z_FAR);
+            renderer.render(model,projectionMatrix,window,this.input.getX_of(),z_of);
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwSwapBuffers(window);

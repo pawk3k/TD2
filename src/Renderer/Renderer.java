@@ -1,6 +1,7 @@
 package Renderer;
 
 import Renderer.Model;
+import Window.Window;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -9,6 +10,9 @@ import org.lwjgl.opengl.GL30;
 import shaders.ShaderProgram;
 
 import java.nio.IntBuffer;
+
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 /**
  * Handles the rendering of a model to the screen.
@@ -45,8 +49,11 @@ public class Renderer {
      *
      * @param model
      *            - The model to be rendered.
+     * @param window
      */
-    public void render(Model model, Matrix4f projection) throws Exception{
+    public void render(Model model, Matrix4f projection, long window,float x_of,float z_of) throws Exception{
+
+
         ShaderProgram shaderProgram = new ShaderProgram();
         shaderProgram.createVertexShader("src/shaders/vertex.glsl");
         shaderProgram.createFragmentShader("src/shaders/fragment.glsl");
@@ -57,9 +64,14 @@ public class Renderer {
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         IntBuffer indecies = storeDataInIntBuffer(model.getIndecies());
-//        GL11.glDrawArrays(GL11.GL_TRIANGLES,0,model.getVertexCount());
-//        shaderProgram.createUniform("projectionMatrix");
-//        shaderProgram.setUniform("projectionMatrix",projection);
+
+        Matrix4f world = new Matrix4f().identity().translate(x_of,0.0f,z_of-0.5f).scale(0.5f);
+        shaderProgram.createUniform("worldMatrix");
+        shaderProgram.setUniform("worldMatrix",world);
+        shaderProgram.createUniform("projectionMatrix");
+        shaderProgram.setUniform("projectionMatrix",projection);
+        shaderProgram.createUniform("viewMatrix");
+        shaderProgram.setUniform("viewMatrix",world);
         GL11.glDrawElements(GL11.GL_TRIANGLES,indecies);
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
