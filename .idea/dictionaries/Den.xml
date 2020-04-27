@@ -2,7 +2,9 @@
   <dictionary name="Den">
     <words>
       <w>glfw</w>
+      <w>glsl</w>
       <w>scancode</w>
+      <w>slerp</w>
       <w>vaos</w>
       <w>vbos</w>
       <w>vidmode</w>

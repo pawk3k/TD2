@@ -3,6 +3,7 @@ package MainDisplay;
 import Renderer.Loader;
 import Renderer.Model;
 import Renderer.Renderer;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -100,8 +101,10 @@ public class MainDisplay {
         Model model = loader.loadToVAO(positions,colours,indices);
 
         while ( !glfwWindowShouldClose(window) ) {
-            renderer.refresh();
+            renderer.refreshScreen();
 
+            float slerp = (float) Math.sin(Math.sin(org.lwjgl.glfw.GLFW.glfwGetTime())) / 2.0f + 0.5f;
+            model.rotate(0.0f,slerp*360, 0.0f);
             renderer.render(model);
 
             glfwSwapBuffers(window);

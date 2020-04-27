@@ -1,17 +1,17 @@
 package Renderer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import shaders.ShaderProgram;
 
+import javax.swing.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.lang.Math.*;
-import org.lwjgl.glfw.GLFW;
 
 /**
  * Handles the rendering of a model to the screen.
@@ -20,7 +20,13 @@ import org.lwjgl.glfw.GLFW;
  *
  */
 public class Renderer {
+    FloatBuffer M;
 
+    public Renderer(){
+        M = ByteBuffer.allocateDirect(16 << 2)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+    }
     /**
      * This method must be called each frame, before any rendering is carried
      * out. It basically clears the screen of everything that was rendered last
@@ -28,7 +34,7 @@ public class Renderer {
      * the colour that it uses to clear the screen. In this example it makes the
      * entire screen red at the start of each frame.
      */
-    public void refresh() {
+    public void refreshScreen() {
         GL11.glClearColor(0.29f, 0.3f, 0.3f, 1.0f);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
@@ -50,21 +56,11 @@ public class Renderer {
      *            - The model to be rendered.
      */
     public void render(Model model) throws Exception{
-        ShaderProgram shaderProgram = new ShaderProgram();
-        shaderProgram.createVertexShader("src/shaders/vertex.glsl");
-        shaderProgram.createFragmentShader("src/shaders/fragment.glsl");
-        shaderProgram.link();
-        shaderProgram.bind();
+        ShaderProgram shaderProgram = new ShaderProgram("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
+        shaderProgram.use();
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        float b = (float) Math.sin(Math.sin(GLFW.glfwGetTime())) / 2.0f + 0.5f;
-        int myColor = GL30.glGetUniformLocation( shaderProgram.getProgramId(),"myColor");
-        GL30.glUniform3f( myColor, 0.0f, 0.0f, b);
-
-        FloatBuffer M = createFloatBuffer(16);
-        model.rotate(0.0f,0.0f,0.0f);
-        model.getM().get(M);
-
         int M_Matrix = GL30.glGetUniformLocation( shaderProgram.getProgramId(),"M");
+        model.getM().get(M);
         GL30.glUniformMatrix4fv( M_Matrix, false, M);
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         GL30.glBindVertexArray(model.getVaoID());
@@ -84,12 +80,4 @@ public class Renderer {
         buffer.flip();
         return buffer;
     }
-
-    private static FloatBuffer createFloatBuffer(int size)
-    {
-        return ByteBuffer.allocateDirect(size << 2)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
-    }
-
 }

@@ -18,19 +18,18 @@ public class ShaderProgram
     private int vertexShaderId;
     private int fragmentShaderId;
 
-    public ShaderProgram() throws Exception {
+    public ShaderProgram(String vertexShaderCode, String fragmentShaderCode) throws Exception {
         programId = glCreateProgram();
         if (programId == 0) {
             throw new Exception("Could not create Shader");
         }
+        vertexShaderId = createShader(vertexShaderCode, GL_VERTEX_SHADER);
+        fragmentShaderId = createShader(fragmentShaderCode, GL_FRAGMENT_SHADER);
     }
 
-    public void createVertexShader(String shaderCode) throws Exception {
-        vertexShaderId = createShader(shaderCode, GL_VERTEX_SHADER);
-    }
-
-    public void createFragmentShader(String shaderCode) throws Exception {
-        fragmentShaderId = createShader(shaderCode, GL_FRAGMENT_SHADER);
+    public void use() throws Exception{
+        link();
+        bind();
     }
 
     protected int createShader(String shaderCode, int shaderType) throws Exception {
@@ -71,12 +70,12 @@ public class ShaderProgram
             throw new Exception("Error linking Shader code: " + glGetProgramInfoLog(programId, 1024));
         }
 
-        if (vertexShaderId != 0) {
-            glDetachShader(programId, vertexShaderId);
-        }
-        if (fragmentShaderId != 0) {
-            glDetachShader(programId, fragmentShaderId);
-        }
+//        if (vertexShaderId != 0) {
+//            glDetachShader(programId, vertexShaderId);
+//        }
+//        if (fragmentShaderId != 0) {
+//            glDetachShader(programId, fragmentShaderId);
+//        }
 
         glValidateProgram(programId);
         if (glGetProgrami(programId, GL_VALIDATE_STATUS) == 0) {

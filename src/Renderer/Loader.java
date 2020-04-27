@@ -30,7 +30,7 @@ public class Loader {
         storeDataInAttributeList(0, positions);
         storeDataInAttributeList(1, colors);
         unbindVAO();
-        return new Model(vaoID,positions.length / 3, indices);
+        return new Model(vaoID, indices);
     }
 
     /**
