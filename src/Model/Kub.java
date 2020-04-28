@@ -3,7 +3,7 @@ package Model;
 public class Kub {
     private float[] positions;
     private float[] colors;
-    private int[] indecies;
+    private int[] indecies,texCoords;
 
     public float[] getPositions() {
         return positions;

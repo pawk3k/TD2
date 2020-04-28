@@ -6,11 +6,16 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
+import Model.*;
 import org.lwjgl.opengl.GL30;
+import org.newdawn.slick.opengl.Texture;
 import shaders.ShaderProgram;
 
+import javax.sound.midi.Soundbank;
 import java.nio.IntBuffer;
+import java.sql.SQLOutput;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
@@ -52,7 +57,7 @@ public class Renderer {
      *            - The model to be rendered.
      * @param window
      */
-    public void render(Model model, Matrix4f projection, long window, float x_of, float z_of, Vector3f cameraPos) throws Exception{
+    public void render(Model model, Matrix4f projection, long window, float x_of, float z_of, Vector3f cameraPos, TextureClass wall) throws Exception{
 
 
         ShaderProgram shaderProgram = new ShaderProgram();
@@ -60,11 +65,6 @@ public class Renderer {
         shaderProgram.createFragmentShader("src/shaders/fragment.glsl");
         shaderProgram.link();
         shaderProgram.bind();
-
-        GL30.glBindVertexArray(model.getVaoID());
-        GL20.glEnableVertexAttribArray(0);
-        GL20.glEnableVertexAttribArray(1);
-        IntBuffer indecies = storeDataInIntBuffer(model.getIndecies());
         Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, cameraPos.y,-5.0f,
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f);
@@ -72,17 +72,26 @@ public class Renderer {
                 .rotate((float)Math.toRadians(cameraPos.y), new Vector3f(0, 1, 0));
 
         Matrix4f world = new Matrix4f().identity().translate(0.0f,0.0f,0.0f).scale(1.0f);
+        GL30.glBindVertexArray(model.getVaoID());
+        GL20.glEnableVertexAttribArray(0);
+        GL20.glEnableVertexAttribArray(1);
+
+        IntBuffer indecies = storeDataInIntBuffer(model.getIndecies());
+
         shaderProgram.createUniform("worldMatrix");
         shaderProgram.setUniform("worldMatrix",world);
         shaderProgram.createUniform("projectionMatrix");
         shaderProgram.setUniform("projectionMatrix",projection);
         shaderProgram.createUniform("viewMatrix");
         shaderProgram.setUniform("viewMatrix",viewMatrix);
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D,wall.getTextureID());
         GL11.glDrawElements(GL11.GL_TRIANGLES,indecies);
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL30.glBindVertexArray(0);
-
         shaderProgram.unbind();
 
     }

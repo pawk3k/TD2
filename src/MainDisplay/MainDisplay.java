@@ -11,6 +11,12 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 import Model.Kub;
+import Model.*;
+import org.newdawn.slick.opengl.PNGDecoder;
+import org.newdawn.slick.opengl.Texture;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -27,7 +33,7 @@ public class MainDisplay {
     private Input input;
     private static float z_of = 0.2f;
     private static final float Z_NEAR = 0.4f;
-
+    private TextureClass wall;
     private static final float Z_FAR = 1000000.f;
 
     private static int width = 1300;
@@ -130,16 +136,44 @@ public class MainDisplay {
         // bindings available for use.
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST); //Włącz test głębokości na pikselach
+        wall = new TextureClass("res/stone-wall.png");
+        wall.create();
+
+
+
+
+//        -0.5,  0.5, -0.5,
+//                -0.5, -0.5, -0.5,
+//                0.5, -0.5, -0.5,
+//                0.5,  0.5, -0.5
+//
+//// indices
+//        0, 1, 2,
+//                2, 3, 0
+//
+//// uv
+//        0,1,
+//                0,0,
+//                1,0,
+//                1,1
+//
 
         float[] positions = new float[]{
-                -0.5f,  0.5f, -1.05f,
-                -0.5f, -0.5f, -1.05f,
-                0.5f, -0.5f, -1.05f,
-                0.5f,  0.5f, -1.05f,
+                -0.5f,  0.5f, -0.5f,
+                -0.5f, -0.5f, -0.5f,
+                0.5f, -0.5f, -0.5f,
+                0.5f,  0.5f, -0.5f
         };
         int[] indices = new int[]{
-                0, 1, 3, 3, 1, 2,
+                0, 1, 2,
+                2, 3, 0        };
+        float[] texCoords = new float[]{
+                0.0f,1.0f,
+                0.0f,0.0f,
+                1.0f,0.0f,
+                1.0f,1.0f
         };
+
         float[] colours = new float[]{
                 0.5f, 0.0f, 0.0f,
                 0.0f, 0.5f, 0.0f,
@@ -148,10 +182,13 @@ public class MainDisplay {
         };
         Kub cube = new Kub();
         Camera camera = new Camera();
-
         Loader loader = new Loader();
+
         Renderer renderer = new Renderer();
-        Model model = loader.loadToVAO(cube.getPositions(),cube.getColors(),cube.getIndecies());
+
+
+        System.out.println(wall.getTextureID());
+        Model model = loader.loadToVAO(positions,colours,indices,texCoords);
         float rotation_angle = 0.0f;
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
@@ -164,7 +201,7 @@ public class MainDisplay {
             projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(45.0f), aspectRatio, 0.01f, 100.0f);
 
 
-            renderer.render(model,projectionMatrix,window,input.getX_of(),z_of,camera.getRotation());
+            renderer.render(model,projectionMatrix,window,input.getX_of(),z_of,camera.getRotation(), wall);
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwSwapBuffers(window);

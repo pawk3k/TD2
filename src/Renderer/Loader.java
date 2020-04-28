@@ -34,10 +34,10 @@ public class Loader {
      *            example a quad).
      * @return The loaded model.
      */
-    public Model loadToVAO(float[] positions,float[] colors,int[] indicies) {
+    public Model loadToVAO(float[] positions,float[] colors,int[] indicies,float[] texCoords) {
         int vaoID = createVAO();
-        storeDataInAttributeList(0, positions);
-        storeDataInAttributeList(1  , colors);
+        storeDataInAttributeList(0,3, positions);
+        storeDataInAttributeList(1 ,2 , texCoords);
         unbindVAO();
         return new Model(vaoID, positions.length / 3,indicies);
     }
@@ -109,13 +109,13 @@ public class Loader {
      *            - The geometry data to be stored in the VAO, in this case the
      *            positions of the vertices.
      */
-    private void storeDataInAttributeList(int attributeNumber, float[] data) {
+    private void storeDataInAttributeList(int attributeNumber,int size, float[] data) {
         int vboID = GL15.glGenBuffers();
         vbos.add(vboID);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
         FloatBuffer buffer = storeDataInFloatBuffer(data);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-        GL20.glVertexAttribPointer(attributeNumber, 3, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glVertexAttribPointer(attributeNumber, size, GL11.GL_FLOAT, false, 0, 0);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
     }
 
