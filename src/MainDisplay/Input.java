@@ -24,10 +24,10 @@ public class Input {
 
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
             if(key == GLFW_KEY_D && action == GLFW_PRESS){
-                this.x_of+=0.1;
+                this.x_of+=0.1f;
             }
             if(key == GLFW_KEY_A && action == GLFW_PRESS){
-                this.x_of-=0.1;
+                this.x_of-=1.0f;
             }
             if(key == GLFW_KEY_Z && action == GLFW_PRESS){
                 z_of-=0.1;

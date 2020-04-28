@@ -22,4 +22,23 @@ public class Camera {
         }
         position.y += offsetY;
     }
+
+    public Vector3f getPosition(){
+        return position;
+    }
+    public Vector3f getRotation(){
+        return rotation;
+    }
+
+    public void setRotation(float x, float y, float z) {
+        rotation.x = x;
+        rotation.y = y;
+        rotation.z = z;
+    }
+
+    public void moveRotation(float offsetX, float offsetY, float offsetZ) {
+        rotation.x += offsetX;
+        rotation.y += offsetY;
+        rotation.z += offsetZ;
+    }
 }

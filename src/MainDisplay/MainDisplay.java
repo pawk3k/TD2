@@ -1,5 +1,6 @@
 package MainDisplay;
 
+import Camera.Camera;
 import Renderer.Loader;
 import Renderer.Model;
 import Renderer.Renderer;
@@ -146,30 +147,29 @@ public class MainDisplay {
                 0.0f, 0.5f, 0.5f,
         };
         Kub cube = new Kub();
+        Camera camera = new Camera();
 
         Loader loader = new Loader();
         Renderer renderer = new Renderer();
         Model model = loader.loadToVAO(cube.getPositions(),cube.getColors(),cube.getIndecies());
+        float rotation_angle = 0.0f;
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) ) {
             glClearColor(0.1f, 0.0f, 0.0f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
+//            camera.movePosition(input.getX_of(),0.0f,0.0f);
+            camera.setRotation(rotation_angle,0,0);
             float aspectRatio = (float) width / height;
-//            projectionMatrix = new Matrix4f().perspective(FOV, aspectRatio,
-//                    Z_NEAR, Z_FAR).lookAt(0.0f , this.input.getX_of(), -1.0f,
-//                    0.0f, 0.0f, 0.0f,
-//                    0.0f, 1.0f, 0.0f);;
-//
-                    projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(45.0f), aspectRatio, 0.01f, 100.0f);
+            projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(45.0f), aspectRatio, 0.01f, 100.0f);
 
 
-            renderer.render(model,projectionMatrix,window,input.getX_of(),z_of);
+            renderer.render(model,projectionMatrix,window,input.getX_of(),z_of,camera.getRotation());
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwSwapBuffers(window);
             glfwPollEvents();
+            rotation_angle+=1.0f;
         }
     }
 
