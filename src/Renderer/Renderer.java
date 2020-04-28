@@ -64,14 +64,16 @@ public class Renderer {
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         IntBuffer indecies = storeDataInIntBuffer(model.getIndecies());
-
-        Matrix4f world = new Matrix4f().identity().translate(x_of,0.0f,z_of-0.5f).scale(0.5f);
+        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(x_of*.5f, 0.0f, 3.0f,
+                0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f).setRotationXYZ(x_of,0.0f,0.0f);
+        Matrix4f world = new Matrix4f().identity().translate(0.0f,0.0f,z_of-0.5f).scale(0.5f);
         shaderProgram.createUniform("worldMatrix");
         shaderProgram.setUniform("worldMatrix",world);
         shaderProgram.createUniform("projectionMatrix");
         shaderProgram.setUniform("projectionMatrix",projection);
         shaderProgram.createUniform("viewMatrix");
-        shaderProgram.setUniform("viewMatrix",world);
+        shaderProgram.setUniform("viewMatrix",viewMatrix);
         GL11.glDrawElements(GL11.GL_TRIANGLES,indecies);
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);

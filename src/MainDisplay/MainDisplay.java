@@ -24,7 +24,7 @@ public class MainDisplay {
     private static final float FOV = (float) Math.toRadians(70.0f);
     public static float x_of= 0.0f;
     private Input input;
-    private static float z_of = 0.0f;
+    private static float z_of = 0.2f;
     private static final float Z_NEAR = 0.4f;
 
     private static final float Z_FAR = 1000000.f;
@@ -157,9 +157,15 @@ public class MainDisplay {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
             float aspectRatio = (float) width / height;
-            projectionMatrix = new Matrix4f().perspective(FOV, aspectRatio,
-                    Z_NEAR, Z_FAR);
-            renderer.render(model,projectionMatrix,window,this.input.getX_of(),z_of);
+//            projectionMatrix = new Matrix4f().perspective(FOV, aspectRatio,
+//                    Z_NEAR, Z_FAR).lookAt(0.0f , this.input.getX_of(), -1.0f,
+//                    0.0f, 0.0f, 0.0f,
+//                    0.0f, 1.0f, 0.0f);;
+//
+                    projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(45.0f), aspectRatio, 0.01f, 100.0f);
+
+
+            renderer.render(model,projectionMatrix,window,input.getX_of(),z_of);
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwSwapBuffers(window);
