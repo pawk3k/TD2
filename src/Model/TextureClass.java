@@ -1,26 +1,16 @@
 
 package Model;
-import java.io.*;
-import java.nio.*;
 
-import org.lwjgl.opengl.GL30;
-import  org.lwjgl.opengl.GL30C.*;
-import  org.lwjgl.opengl.GL30C;
-
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.newdawn.slick.opengl.PNGDecoder;
 import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.lwjgl.opengl.GL11;
 
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.ByteBuffer;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11C.GL_NEAREST;
-import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 import static org.newdawn.slick.opengl.PNGDecoder.RGBA;
 
 
@@ -33,8 +23,6 @@ public class TextureClass {
 
         public TextureClass(String path) {
             this.path = path;
-
-
         }
 
         public void create() {

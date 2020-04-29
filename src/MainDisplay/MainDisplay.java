@@ -18,6 +18,7 @@ import org.newdawn.slick.opengl.Texture;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.*;
+import java.util.Arrays;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -141,23 +142,6 @@ public class MainDisplay {
 
 
 
-
-//        -0.5,  0.5, -0.5,
-//                -0.5, -0.5, -0.5,
-//                0.5, -0.5, -0.5,
-//                0.5,  0.5, -0.5
-//
-//// indices
-//        0, 1, 2,
-//                2, 3, 0
-//
-//// uv
-//        0,1,
-//                0,0,
-//                1,0,
-//                1,1
-//
-
         float[] positions = new float[]{
                 -0.5f,  0.5f, -0.5f,
                 -0.5f, -0.5f, -0.5f,
@@ -171,7 +155,10 @@ public class MainDisplay {
                 0.0f,1.0f,
                 0.0f,0.0f,
                 1.0f,0.0f,
-                1.0f,1.0f
+                1.0f,1.0f,
+
+
+
         };
 
         float[] colours = new float[]{
@@ -181,14 +168,19 @@ public class MainDisplay {
                 0.0f, 0.5f, 0.5f,
         };
         Kub cube = new Kub();
+        KubWitolda kw = new KubWitolda();
         Camera camera = new Camera();
         Loader loader = new Loader();
 
         Renderer renderer = new Renderer();
 
-
+        ObjModel objModel = new ObjModel("res/island.obj");
+        objModel.read_object_file();
+        System.out.println(Arrays.toString(objModel.getIndeciesBuffer()));
         System.out.println(wall.getTextureID());
-        Model model = loader.loadToVAO(positions,colours,indices,texCoords);
+        Model model = loader.loadToVAO(cube.getPositions(),colours,cube.getIndecies(),kw.getTexCoords());
+
+        Model modelW = loader.loadToVAO(objModel.getVerticesBuffer(),colours,objModel.getIndeciesBuffer(),kw.getTexCoords());
         float rotation_angle = 0.0f;
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
@@ -201,7 +193,7 @@ public class MainDisplay {
             projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(45.0f), aspectRatio, 0.01f, 100.0f);
 
 
-            renderer.render(model,projectionMatrix,window,input.getX_of(),z_of,camera.getRotation(), wall);
+            renderer.render(modelW,projectionMatrix,camera.getRotation(), wall,true);
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwSwapBuffers(window);

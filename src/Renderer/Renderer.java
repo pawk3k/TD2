@@ -19,6 +19,7 @@ import java.sql.SQLOutput;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 
 /**
  * Handles the rendering of a model to the screen.
@@ -55,9 +56,9 @@ public class Renderer {
      *
      * @param model
      *            - The model to be rendered.
-     * @param window
+     *
      */
-    public void render(Model model, Matrix4f projection, long window, float x_of, float z_of, Vector3f cameraPos, TextureClass wall) throws Exception{
+    public void render(Model model, Matrix4f projection, Vector3f cameraPos, TextureClass wall,boolean choose_draw) throws Exception{
 
 
         ShaderProgram shaderProgram = new ShaderProgram();
@@ -65,17 +66,17 @@ public class Renderer {
         shaderProgram.createFragmentShader("src/shaders/fragment.glsl");
         shaderProgram.link();
         shaderProgram.bind();
-        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, cameraPos.y,-5.0f,
+        //camera
+        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, cameraPos.y,-50.0f,
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f);
         viewMatrix.rotate((float)Math.toRadians(cameraPos.x), new Vector3f(1, 0, 0))
-                .rotate((float)Math.toRadians(cameraPos.y), new Vector3f(0, 1, 0));
+                .rotate((float)Math.toRadians(cameraPos.x), new Vector3f(0, 1, 0));
 
-        Matrix4f world = new Matrix4f().identity().translate(0.0f,0.0f,0.0f).scale(1.0f);
+        Matrix4f world = new Matrix4f().identity();
         GL30.glBindVertexArray(model.getVaoID());
         GL20.glEnableVertexAttribArray(0);
-        GL20.glEnableVertexAttribArray(1);
-
+//        GL20.glEnableVertexAttribArray(1);
         IntBuffer indecies = storeDataInIntBuffer(model.getIndecies());
 
         shaderProgram.createUniform("worldMatrix");
@@ -88,13 +89,28 @@ public class Renderer {
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D,wall.getTextureID());
-        GL11.glDrawElements(GL11.GL_TRIANGLES,indecies);
+
+        if(choose_draw){
+//            GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
+            GL11.glDrawElements(GL11.GL_TRIANGLES,indecies);
+
+        }else{
+            GL11.glDrawElements(GL11.GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+        }
+
+
+
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL30.glBindVertexArray(0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D,0);
+
         shaderProgram.unbind();
 
     }
+
+
 
     private IntBuffer storeDataInIntBuffer(int[] data) {
         IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
