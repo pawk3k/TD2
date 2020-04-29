@@ -72,45 +72,28 @@ public class MainDisplay {
     private void loop() throws Exception {
         GL.createCapabilities();                                                  // Needed for calling OpenGL functions
 
-        float[] positions0 = new float[] {
-                0.0f,  1.0f,  0.0f,
-                0.5f,  -0.5f,  0.0f,
-                -0.5f,  -0.5f,  0.0f,
-        };
-
-        float[] positions1 = new float[] {
-                0.5f,  0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                -0.5f, -0.5f, 0.0f,
-                -0.5f,  0.5f, 0.0f
+        float[] verticles0 = new float[] {
+                0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
+                -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
+                0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top
         };
 
         int[] indices0 = new int[] {
                 0, 1, 2,
         };
 
-        int[] indices1 = new int[] {
-                0, 1, 3,
-                1, 2, 3
-        };
-
         Shader myShader = new Shader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
         Loader myLoader = new Loader();
         Renderer myRenderer = new Renderer();
 
-        int idx0 = myLoader.createVAO(positions0,indices0);
-        int idx1 = myLoader.createVAO(positions1,indices1);
+        int idx0 = myLoader.createVAO(verticles0,indices0);
         Model model0 = new Model(myLoader.getVao(idx0), myLoader.getEboNum(idx0), myShader.getProgramId());
-        Model model1 = new Model(myLoader.getVao(idx1), myLoader.getEboNum(idx1), myShader.getProgramId());
 
         while ( !glfwWindowShouldClose(window) ) {
             myRenderer.refreshScreen();
 
             model0.rotate(1,0,0);
             myRenderer.render(model0);
-
-            model1.rotate(0,1,0);
-            myRenderer.render(model1);
 
             glfwSwapBuffers(window);
             glfwPollEvents();

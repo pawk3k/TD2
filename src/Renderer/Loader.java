@@ -19,7 +19,7 @@ public class Loader {
     private List<Integer> eboNums = new ArrayList<>();
     private int last_index = 0;
 
-    public int createVAO(float[] positions, int[] indices){
+    public int createVAO(float[] vertices, int[] indices){
         int vao, vbo, ebo;
 
         vao = glGenVertexArrays();
@@ -28,13 +28,16 @@ public class Loader {
         glBindVertexArray(vao);
 
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, positions, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 6*4, 0);
         glEnableVertexAttribArray(0);
+
+        glVertexAttribPointer(1, 3, GL_FLOAT, false, 6*4, 3*4);
+        glEnableVertexAttribArray(1);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
