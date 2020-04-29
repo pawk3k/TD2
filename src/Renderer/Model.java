@@ -4,17 +4,19 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class Model {
-    private int vaoID;
-    private int[] indices;
+    private final int vaoID;
+    private final int indicesNum;
+    private final int shaderProgramId;
 
     private Vector3f scale;
     private Vector3f rotation;
     private Vector3f translation;
     private Matrix4f M;
 
-    public Model(int vaoID, int[] indices) {
+    public Model(int vaoID, int indicesNum, int shaderProgramId) {
         this.vaoID = vaoID;
-        this.indices = indices;
+        this.indicesNum = indicesNum;
+        this.shaderProgramId = shaderProgramId;
         this.scale = new Vector3f(1.0f, 1.0f, 1.0f);
         this.rotation = new Vector3f(0.0f, 0.0f, 0.0f);
         this.translation = new Vector3f(0.0f, 0.0f, 0.0f);
@@ -66,11 +68,15 @@ public class Model {
         return M;
     }
 
-    public int[] getIndices() {
-        return indices;
+    public int getIndicesNumber() {
+        return indicesNum;
     }
 
     public int getVaoID() {
         return vaoID;
+    }
+
+    public int getShaderProgramId(){
+        return shaderProgramId;
     }
 }

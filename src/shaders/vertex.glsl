@@ -1,11 +1,9 @@
-#version 130
+#version 330 core
 
-in vec4 position;
+layout (location = 0) in vec3 aPos;
 uniform mat4 M;
 
-out vec3 myPos;
 void main()
 {
-    gl_Position =  vec4( position * M );
-    myPos = position.xyz;
+    gl_Position = vec4(aPos.xyz, 1.0) * M;
 }

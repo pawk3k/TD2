@@ -3,17 +3,17 @@ package MainDisplay;
 import Renderer.Loader;
 import Renderer.Model;
 import Renderer.Renderer;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
+import shaders.Shader;
+
 import java.nio.IntBuffer;
 import java.util.Objects;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -21,19 +21,11 @@ public class MainDisplay {
     private long window;
 
     public void run() throws Exception{
-        //System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-        //System.out.println("OS name " + System.getProperty("os.name"));
-        //System.out.println("OS version " + System.getProperty("os.version"));
-        //System.out.println("OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
-
         init();
         loop();
 
-        // Free the window callbacks and destroy the window
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
-
-        // Terminate GLFW and free the error callback
         glfwTerminate();
         Objects.requireNonNull(glfwSetErrorCallback(null)).free();
     }
@@ -80,32 +72,45 @@ public class MainDisplay {
     private void loop() throws Exception {
         GL.createCapabilities();                                                  // Needed for calling OpenGL functions
 
-        float[] positions = new float[] {
-                0.0f,  0.5f,  0.0f,
+        float[] positions0 = new float[] {
+                0.0f,  1.0f,  0.0f,
                 0.5f,  -0.5f,  0.0f,
                 -0.5f,  -0.5f,  0.0f,
         };
 
-        float[] colours = new float[]{
-                0.0f, 0.0f, 0.0f,
-                0.0f, 0.0f, 0.0f,
-                0.0f, 0.0f, 0.0f,
+        float[] positions1 = new float[] {
+                0.5f,  0.5f, 0.0f,
+                0.5f, -0.5f, 0.0f,
+                -0.5f, -0.5f, 0.0f,
+                -0.5f,  0.5f, 0.0f
         };
 
-        int[] indices = new int[] {
+        int[] indices0 = new int[] {
                 0, 1, 2,
         };
-        
-        Loader loader = new Loader();
-        Renderer renderer = new Renderer();
-        Model model = loader.loadToVAO(positions,colours,indices);
+
+        int[] indices1 = new int[] {
+                0, 1, 3,
+                1, 2, 3
+        };
+
+        Shader myShader = new Shader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
+        Loader myLoader = new Loader();
+        Renderer myRenderer = new Renderer();
+
+        int idx0 = myLoader.createVAO(positions0,indices0);
+        int idx1 = myLoader.createVAO(positions1,indices1);
+        Model model0 = new Model(myLoader.getVao(idx0), myLoader.getEboNum(idx0), myShader.getProgramId());
+        Model model1 = new Model(myLoader.getVao(idx1), myLoader.getEboNum(idx1), myShader.getProgramId());
 
         while ( !glfwWindowShouldClose(window) ) {
-            renderer.refreshScreen();
+            myRenderer.refreshScreen();
 
-            float slerp = (float) Math.sin(Math.sin(org.lwjgl.glfw.GLFW.glfwGetTime())) / 2.0f + 0.5f;
-            model.rotate(0.0f,slerp*360, 0.0f);
-            renderer.render(model);
+            model0.rotate(1,0,0);
+            myRenderer.render(model0);
+
+            model1.rotate(0,1,0);
+            myRenderer.render(model1);
 
             glfwSwapBuffers(window);
             glfwPollEvents();

@@ -1,9 +1,8 @@
-#version 130
+#version 330 core
 
-in vec3 myPos;
-out vec4 fragColor;
+out vec4 FragColor;
 
-void main(void)
+void main()
 {
-    fragColor = vec4( normalize(myPos).y > 0.1f ? vec3(0.0f, 0.0f, 0.0f) : vec3(0.0f, 1.0f, 0.93f), 1.0);
+   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
 }
