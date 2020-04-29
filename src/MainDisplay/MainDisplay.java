@@ -137,7 +137,7 @@ public class MainDisplay {
         // bindings available for use.
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST); //Włącz test głębokości na pikselach
-        wall = new TextureClass("res/stone-wall.png");
+        wall = new TextureClass("res/box.png");
         wall.create();
 
 
@@ -174,13 +174,16 @@ public class MainDisplay {
 
         Renderer renderer = new Renderer();
 
-        ObjModel objModel = new ObjModel("res/island.obj");
+        ObjModel objModel = new ObjModel("res/box.obj");
         objModel.read_object_file();
+
+
         System.out.println(Arrays.toString(objModel.getIndeciesBuffer()));
+        System.out.println(Arrays.toString(objModel.getVerticesBuffer()));
         System.out.println(wall.getTextureID());
         Model model = loader.loadToVAO(cube.getPositions(),colours,cube.getIndecies(),kw.getTexCoords());
 
-        Model modelW = loader.loadToVAO(objModel.getVerticesBuffer(),colours,objModel.getIndeciesBuffer(),kw.getTexCoords());
+        Model modelW = loader.loadToVAO(objModel.getVerticesBuffer(),colours,objModel.getIndeciesBuffer(),objModel.getTextureBuffer());
         float rotation_angle = 0.0f;
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.

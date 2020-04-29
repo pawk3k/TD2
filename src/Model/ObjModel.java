@@ -9,6 +9,13 @@ import java.util.Scanner; // Import the Scanner class to read text files
 public class ObjModel {
     private String path;
 
+    public float[] getTextureBuffer() {
+        return textureBuffer;
+    }
+
+    private float[] textureBuffer;
+
+
     private float[] verticesBuffer;
 
     public float[] getVerticesBuffer() {
@@ -28,7 +35,10 @@ public class ObjModel {
 
     public void read_object_file(){
         ArrayList<Float> vertices = new ArrayList<>();
-        ArrayList<Integer> indecies = new ArrayList<>();
+        ArrayList<Float> textures = new ArrayList<>();
+        ArrayList<Integer> indeciesPos = new ArrayList<>();
+
+        ArrayList<Integer> indeciesTex = new ArrayList<>();
 
         try {
 
@@ -46,14 +56,22 @@ public class ObjModel {
                     vertices.add(Float.parseFloat(arr[3]));
 
                 }
+                if(data.startsWith("vt ")){
+                    String[] splited = data.split(" ");
+                    textures.add(Float.parseFloat(splited[1]));
+                    textures.add(Float.parseFloat(splited[2]));
+                    System.out.println(Arrays.toString(splited));
+
+                }
                 if(data.startsWith("f")){
                     String[] line_arr = data.split(" ");
                     for(int i = 1;i<4;i++){
                         String[] splitted_arr =  line_arr[i].split("/");
-                        indecies.add(Integer.parseInt(splitted_arr[0]));
+                        indeciesPos.add(Integer.parseInt(splitted_arr[0]));
+                        indeciesTex.add(Integer.parseInt(splitted_arr[1]));
                     }
-
                 }
+
             }
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -67,12 +85,26 @@ public class ObjModel {
             verticesArr[i++] = element;
         }
         this.verticesBuffer = verticesArr;
-        int[] indexArr = new int[indecies.size()];
+        int[] indexArr = new int[indeciesPos.size()];
         i = 0;
-        for (int element :indecies){
-            indexArr[i++] = element;
+        for (int element :indeciesPos){
+            indexArr[i++] = element -1;
         }
         this.indeciesBuffer = indexArr;
+
+
+        float[] textureArr = new float[verticesArr.length*2];
+
+        for (int j = 0; j < indeciesPos.size(); j++) {
+            int should_be_id = indeciesPos.get(j) -1;
+            System.out.println(indeciesPos.get(j)-1);
+            textureArr[should_be_id] = textures.get(indeciesTex.get(j)-1);
+        }
+
+        this.textureBuffer = textureArr;
+
+
+
 
     }
 

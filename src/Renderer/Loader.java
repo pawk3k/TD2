@@ -156,6 +156,13 @@ public class Loader {
         return buffer;
     }
 
+    private IntBuffer storeDataInIntBuffer(int[] data) {
+        IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
+        buffer.put(data);
+        buffer.flip();
+        return buffer;
+    }
+
 
 
 }

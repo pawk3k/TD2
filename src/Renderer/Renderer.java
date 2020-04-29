@@ -19,7 +19,10 @@ import java.sql.SQLOutput;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
+import static org.lwjgl.opengl.GL11C.*;
+import static org.lwjgl.opengles.GLES20.GL_FLOAT;
 
 /**
  * Handles the rendering of a model to the screen.
@@ -67,7 +70,7 @@ public class Renderer {
         shaderProgram.link();
         shaderProgram.bind();
         //camera
-        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, cameraPos.y,-50.0f,
+        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, cameraPos.y,-10.0f,
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f);
         viewMatrix.rotate((float)Math.toRadians(cameraPos.x), new Vector3f(1, 0, 0))
@@ -76,8 +79,9 @@ public class Renderer {
         Matrix4f world = new Matrix4f().identity();
         GL30.glBindVertexArray(model.getVaoID());
         GL20.glEnableVertexAttribArray(0);
-//        GL20.glEnableVertexAttribArray(1);
+        GL20.glEnableVertexAttribArray(1);
         IntBuffer indecies = storeDataInIntBuffer(model.getIndecies());
+
 
         shaderProgram.createUniform("worldMatrix");
         shaderProgram.setUniform("worldMatrix",world);
@@ -89,10 +93,10 @@ public class Renderer {
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D,wall.getTextureID());
-
         if(choose_draw){
-//            GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
-            GL11.glDrawElements(GL11.GL_TRIANGLES,indecies);
+//            glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+            GL11.glDrawElements(GL11.GL_TRIANGLES, indecies);
+//            GL11.glDrawArrays(GL11.GL_TRIANGLES,0,model.getVertexCount());
 
         }else{
             GL11.glDrawElements(GL11.GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
