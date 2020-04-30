@@ -2,6 +2,8 @@ package Renderer;
 
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryStack;
 
@@ -13,7 +15,7 @@ import java.nio.IntBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
-
+import Model.TextureClass;
 public class Renderer {
     private FloatBuffer M;
     private FloatBuffer P;
@@ -25,7 +27,7 @@ public class Renderer {
         this.M  = stack.mallocFloat(16);
         this.P = stack.mallocFloat(16);
         this.V = stack.mallocFloat(16);
-        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, 40.f, -30.0f,
+        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, 0.f, -10.0f,
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f);
         float aspectRatio = (float) 900 / 600;
@@ -41,7 +43,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    public void render(Model model) throws Exception {
+    public void render(Model model, TextureClass wall) throws Exception {
         model.rotate(0, 1, 0);
 
 
@@ -57,7 +59,10 @@ public class Renderer {
 
         glUseProgram(model.getShaderProgramId());
         glBindVertexArray(model.getVaoID());
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D,wall.getTextureID());
+//        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
         glDrawElements(GL_TRIANGLES, model.getIndicesNumber(), GL_UNSIGNED_INT, 0);
 

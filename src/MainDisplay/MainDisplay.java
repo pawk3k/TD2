@@ -8,8 +8,14 @@ import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
+import Model.TextureClass;
+import static org.lwjgl.glfw.Callbacks.*;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.system.MemoryStack.*;
+import static org.lwjgl.system.MemoryUtil.*;
 import shaders.Shader;
 import Model.Kub;
 import java.nio.IntBuffer;
@@ -77,8 +83,13 @@ public class MainDisplay {
     }
 
     private void loop() throws Exception {
-        GL.createCapabilities();                                                  // Needed for calling OpenGL functions
-
+        GL.createCapabilities();// Needed for calling OpenGL functions
+//        glDepthFunc(GL_LEQUAL);
+//
+//        GL11.glEnable(GL_DEPTH_TEST);
+//        glEnable(GL_DEPTH_TEST); //Włącz test głębokości na pikselach
+        TextureClass wall = new TextureClass("res/red_brick.png");
+        wall.create();
         float[] verticles0 = new float[]{
                 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   // bottom right
                 -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom left
@@ -89,7 +100,9 @@ public class MainDisplay {
                 0, 1, 2,
         };
 
-        ObjModel objModel = new ObjModel("res/cat.obj");
+        ObjModel objModel = new ObjModel("res/firewall.obj");
+//        TextureClass textureClass = new TextureClass("");
+
         objModel.read_object_file();
         Shader myShader = new Shader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
         Loader myLoader = new Loader();
@@ -97,11 +110,11 @@ public class MainDisplay {
 
         Renderer myRenderer = new Renderer();
         Kub kub = new Kub();
-        int idx0 = myLoader.createVAO(verticles0, indices0);
-        int idx1 = myLoader.createVAO(kub.getPositions(), kub.getIndecies());
-        int idx2 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer());
-        Model model0 = new Model(myLoader.getVao(idx0), myLoader.getEboNum(idx0), myShader.getProgramId());
-        Model model1 = new Model(myLoader.getVao(idx1), myLoader.getEboNum(idx1), myShader.getProgramId());
+//        int idx0 = myLoader.createVAO(verticles0, indices0);
+//        int idx1 = myLoader.createVAO(kub.getPositions(), kub.getIndecies());
+        int idx2 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer(),objModel.getTextureBuffer());
+//        Model model0 = new Model(myLoader.getVao(idx0), myLoader.getEboNum(idx0), myShader.getProgramId());
+//        Model model1 = new Model(myLoader.getVao(idx1), myLoader.getEboNum(idx1), myShader.getProgramId());
         Model model2 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
 
 
@@ -112,10 +125,9 @@ public class MainDisplay {
 
         while (!glfwWindowShouldClose(window)) {
             myRenderer.refreshScreen();
-//            GL20.glEnable(GL20.GL_DEPTH_TEST); //Włącz test głębokości na pikselach
 
 
-            myRenderer.render(model2);
+            myRenderer.render(model2,wall);
 
             glfwSwapBuffers(window);
             glfwPollEvents();

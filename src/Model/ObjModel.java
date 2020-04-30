@@ -92,11 +92,13 @@ public class ObjModel {
         this.indeciesBuffer = indexArr;
 
 
-        float[] textureArr = new float[verticesArr.length*2];
+        float[] textureArr = new float[verticesArr.length/3*2];
+
 
         for (int j = 0; j < indeciesPos.size(); j++) {
-            int should_be_id = indeciesPos.get(j) -1;
+            int should_be_id = indeciesPos.get(j);
             textureArr[should_be_id] = textures.get(indeciesTex.get(j)-1);
+//            textureArr[should_be_id*2] =  1- textures.get(indeciesTex.get(j));
         }
 
         this.textureBuffer = textureArr;
