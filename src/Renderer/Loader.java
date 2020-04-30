@@ -1,8 +1,5 @@
 package Renderer;
 
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +16,7 @@ public class Loader {
     private List<Integer> eboNums = new ArrayList<>();
     private int last_index = 0;
 
-    public int createVAO(float[] vertices, int[] indices){
+    public int createVAO(float[] vertices, int[] indices) {
         int vao, vbo, ebo;
 
         vao = glGenVertexArrays();
@@ -33,11 +30,12 @@ public class Loader {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 6*4, 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, 3, GL_FLOAT, false, 6*4, 3*4);
-        glEnableVertexAttribArray(1);
+//        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
+//        glEnableVertexAttribArray(1);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
@@ -48,12 +46,11 @@ public class Loader {
         return last_index++;
     }
 
-    public int getVao(int index){
+    public int getVao(int index) {
         return vaos.get(index);
     }
 
-    public int getEboNum(int index){
+    public int getEboNum(int index) {
         return eboNums.get(index);
     }
-
 }

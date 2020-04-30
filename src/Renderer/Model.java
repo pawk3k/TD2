@@ -23,37 +23,47 @@ public class Model {
         this.M = new Matrix4f();
     }
 
-    public void rotate(float pitch, float yaw, float roll){
-        this.rotation.add(new Vector3f( pitch, yaw, roll));
-        updateM();
-    };
-
-    public void translate(float x, float y, float z){
-        this.translation.add(new Vector3f( x, y, z));
-        updateM();
-    };
-
-    public void scale(float x, float y, float z){
-        this.scale.add(new Vector3f( x, y, z));
+    public void rotate(float pitch, float yaw, float roll) {
+        this.rotation.add(new Vector3f(pitch, yaw, roll));
         updateM();
     }
 
-    public void setRotation(float pitch, float yaw, float roll){
-        this.rotation = new Vector3f( pitch, yaw, roll);
-        updateM();
-    };
+    ;
 
-    public void setPosition(float x, float y, float z){
-        this.translation = new Vector3f( x, y, z);
+    public void translate(float x, float y, float z) {
+        this.translation.add(new Vector3f(x, y, z));
         updateM();
-    };
+    }
 
-    public void setScale(float x, float y, float z){
-        this.scale = new Vector3f( x, y, z);
+    ;
+
+    public void scale(float x, float y, float z) {
+        this.scale.add(new Vector3f(x, y, z));
         updateM();
-    };
+    }
 
-    private void updateM(){
+    public void setRotation(float pitch, float yaw, float roll) {
+        this.rotation = new Vector3f(pitch, yaw, roll);
+        updateM();
+    }
+
+    ;
+
+    public void setPosition(float x, float y, float z) {
+        this.translation = new Vector3f(x, y, z);
+        updateM();
+    }
+
+    ;
+
+    public void setScale(float x, float y, float z) {
+        this.scale = new Vector3f(x, y, z);
+        updateM();
+    }
+
+    ;
+
+    private void updateM() {
         this.M = new Matrix4f()
                 .translate(translation)
                 .rotationXYZ(
@@ -64,7 +74,7 @@ public class Model {
                 .scale(scale);
     }
 
-    public Matrix4f getM(){
+    public Matrix4f getM() {
         return M;
     }
 
@@ -72,11 +82,11 @@ public class Model {
         return indicesNum;
     }
 
-    public int getVaoID() {
-        return vaoID;
+    public int getShaderProgramId() {
+        return shaderProgramId;
     }
 
-    public int getShaderProgramId(){
-        return shaderProgramId;
+    public int getVaoID() {
+        return vaoID;
     }
 }

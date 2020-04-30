@@ -6,14 +6,17 @@ import Renderer.Renderer;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.system.MemoryStack;
 import shaders.Shader;
-
+import Model.Kub;
 import java.nio.IntBuffer;
 import java.util.Objects;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengles.GLES20.GL_DEPTH_TEST;
+import static org.lwjgl.opengles.GLES20.glEnable;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -72,28 +75,34 @@ public class MainDisplay {
     private void loop() throws Exception {
         GL.createCapabilities();                                                  // Needed for calling OpenGL functions
 
-        float[] verticles0 = new float[] {
-                0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
-                -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
-                0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top
+        float[] verticles0 = new float[]{
+                0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   // bottom right
+                -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom left
+                0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f    // top
         };
 
-        int[] indices0 = new int[] {
+        int[] indices0 = new int[]{
                 0, 1, 2,
         };
 
         Shader myShader = new Shader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
         Loader myLoader = new Loader();
         Renderer myRenderer = new Renderer();
-
-        int idx0 = myLoader.createVAO(verticles0,indices0);
+        Kub kub = new Kub();
+        int idx0 = myLoader.createVAO(verticles0, indices0);
+        int idx1 = myLoader.createVAO(kub.getPositions(), kub.getIndecies());
         Model model0 = new Model(myLoader.getVao(idx0), myLoader.getEboNum(idx0), myShader.getProgramId());
+        Model model1 = new Model(myLoader.getVao(idx1), myLoader.getEboNum(idx1), myShader.getProgramId());
 
-        while ( !glfwWindowShouldClose(window) ) {
+
+
+        while (!glfwWindowShouldClose(window)) {
             myRenderer.refreshScreen();
+//            GL20.glEnable(GL20.GL_DEPTH_TEST); //Włącz test głębokości na pikselach
 
-            model0.rotate(1,0,0);
-            myRenderer.render(model0);
+
+            model1.rotate(1, 1, 0);
+            myRenderer.render(model1);
 
             glfwSwapBuffers(window);
             glfwPollEvents();

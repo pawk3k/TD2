@@ -1,4 +1,5 @@
-#version 330 core
+
+#version 330
 
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aColor;
@@ -8,6 +9,6 @@ out vec3 modelColor;
 
 void main()
 {
-    gl_Position = vec4(aPos.xyz, 1.0) * M;
+    gl_Position = M * vec4(aPos.xyz, 1.0);
     modelColor = aColor;
 }
