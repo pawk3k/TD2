@@ -60,7 +60,6 @@ public class ObjModel {
                     String[] splited = data.split(" ");
                     textures.add(Float.parseFloat(splited[1]));
                     textures.add(Float.parseFloat(splited[2]));
-                    System.out.println(Arrays.toString(splited));
 
                 }
                 if(data.startsWith("f")){
@@ -97,7 +96,6 @@ public class ObjModel {
 
         for (int j = 0; j < indeciesPos.size(); j++) {
             int should_be_id = indeciesPos.get(j) -1;
-            System.out.println(indeciesPos.get(j)-1);
             textureArr[should_be_id] = textures.get(indeciesTex.get(j)-1);
         }
 
