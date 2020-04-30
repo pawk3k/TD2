@@ -89,7 +89,7 @@ public class MainDisplay {
                 0, 1, 2,
         };
 
-        ObjModel objModel = new ObjModel("res/island.obj");
+        ObjModel objModel = new ObjModel("res/cat.obj");
         objModel.read_object_file();
         Shader myShader = new Shader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
         Loader myLoader = new Loader();
