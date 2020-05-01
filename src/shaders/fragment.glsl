@@ -9,5 +9,4 @@ uniform sampler2D tex;
 void main(void)
 {
     fragColor = texture(tex,passCoords_of_Texture);
-
 }

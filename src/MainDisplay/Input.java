@@ -6,20 +6,12 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 public class Input {
 
-    public long window;
+    private long window;
+    private float x_of;
+    private float z_of;
 
-    public float getX_of() {
-        return x_of;
-    }
-
-    public float getZ_of() {
-        return z_of;
-    }
-
-    public float x_of;
-    public float z_of;
-    public Input(long widow){
-        this.window = widow;
+    public Input(long in_window){
+        this.window = in_window;
 
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
             if(key == GLFW_KEY_D && action == GLFW_PRESS){
@@ -34,6 +26,13 @@ public class Input {
             if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
         });
+    }
 
+    public float getX_of() {
+        return x_of;
+    }
+
+    public float getZ_of() {
+        return z_of;
     }
 }

@@ -3,8 +3,8 @@ package Model;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.openvr.Texture;
 import org.newdawn.slick.opengl.PNGDecoder;
-import org.newdawn.slick.opengl.Texture;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import static org.newdawn.slick.opengl.PNGDecoder.RGBA;
-
 
 public class TextureClass {
     private String path;
@@ -32,7 +31,7 @@ public class TextureClass {
 
                 PNGDecoder decoder = new PNGDecoder(is);
                 ByteBuffer buf = ByteBuffer.allocateDirect(4*decoder.getWidth()*decoder.getHeight());
-                decoder.decode(buf, decoder.getWidth()*4, RGBA);;
+                decoder.decode(buf, decoder.getWidth()*4, RGBA);
                 buf.flip();
                 textureID = GL11.glGenTextures();
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
