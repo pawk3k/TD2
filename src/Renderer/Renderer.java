@@ -13,7 +13,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.glUseProgram;
+import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import Model.TextureClass;
 public class Renderer {
@@ -40,10 +40,10 @@ public class Renderer {
 
     public void refreshScreen() {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Model model, TextureClass wall) throws Exception {
+    public void render(Model model, int textureId) throws Exception {
         model.rotate(0, 1, 0);
 
 
@@ -52,7 +52,8 @@ public class Renderer {
         int m_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "M");
         int p_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "P");
         int v_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "V");
-
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
         GL30.glUniformMatrix4fv(m_Matrix, false, M);
         GL30.glUniformMatrix4fv(p_Matrix, false, P);
         GL30.glUniformMatrix4fv(v_Matrix, false, V);
@@ -61,10 +62,13 @@ public class Renderer {
         glBindVertexArray(model.getVaoID());
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D,wall.getTextureID());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D,textureId);
 //        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
         glDrawElements(GL_TRIANGLES, model.getIndicesNumber(), GL_UNSIGNED_INT, 0);
+
+//        glDisableVertexAttribArray(0);
+//        glDisableVertexAttribArray(1);
 
 
 

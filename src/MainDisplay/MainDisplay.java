@@ -84,39 +84,19 @@ public class MainDisplay {
 
     private void loop() throws Exception {
         GL.createCapabilities();// Needed for calling OpenGL functions
-//        glDepthFunc(GL_LEQUAL);
-//
-//        GL11.glEnable(GL_DEPTH_TEST);
-//        glEnable(GL_DEPTH_TEST); //Włącz test głębokości na pikselach
-        TextureClass wall = new TextureClass("res/red_brick.png");
-        wall.create();
-        float[] verticles0 = new float[]{
-                0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   // bottom right
-                -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom left
-                0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f    // top
-        };
 
-        int[] indices0 = new int[]{
-                0, 1, 2,
-        };
-
-        ObjModel objModel = new ObjModel("res/firewall.obj");
-//        TextureClass textureClass = new TextureClass("");
-
+        ObjModel objModel = new ObjModel("res/firewall2.obj","res/red_brick.png");
         objModel.read_object_file();
+
         Shader myShader = new Shader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
         Loader myLoader = new Loader();
         Camera camera = new Camera();
 
         Renderer myRenderer = new Renderer();
         Kub kub = new Kub();
-//        int idx0 = myLoader.createVAO(verticles0, indices0);
-//        int idx1 = myLoader.createVAO(kub.getPositions(), kub.getIndecies());
         int idx2 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer(),objModel.getTextureBuffer());
-//        Model model0 = new Model(myLoader.getVao(idx0), myLoader.getEboNum(idx0), myShader.getProgramId());
-//        Model model1 = new Model(myLoader.getVao(idx1), myLoader.getEboNum(idx1), myShader.getProgramId());
         Model model2 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
-
+        glEnable(GL_DEPTH_TEST);
 
 
 
@@ -127,7 +107,7 @@ public class MainDisplay {
             myRenderer.refreshScreen();
 
 
-            myRenderer.render(model2,wall);
+            myRenderer.render(model2,objModel.getTextureId());
 
             glfwSwapBuffers(window);
             glfwPollEvents();
