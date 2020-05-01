@@ -37,6 +37,11 @@ public class ObjModel {
         return textureId;
     }
 
+
+    /*
+    *
+    * @param path_to_object
+    * */
     public ObjModel(String path_to_object, String path_to_texture){
         this.pathO = path_to_object;
         TextureClass wall = new TextureClass(path_to_texture);

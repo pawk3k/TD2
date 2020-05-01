@@ -1,6 +1,8 @@
 package MainDisplay;
 
 import Camera.Camera;
+import Model.Kub;
+import Model.ObjModel;
 import Renderer.Loader;
 import Renderer.Model;
 import Renderer.Renderer;
@@ -8,22 +10,16 @@ import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
-import Model.TextureClass;
-import static org.lwjgl.glfw.Callbacks.*;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryStack.*;
-import static org.lwjgl.system.MemoryUtil.*;
 import shaders.Shader;
-import Model.Kub;
+
 import java.nio.IntBuffer;
 import java.util.Objects;
-import Model.ObjModel;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -77,7 +73,7 @@ public class MainDisplay {
     private void loop() throws Exception {
         GL.createCapabilities();// Needed for calling OpenGL functions
 
-        ObjModel objModel = new ObjModel("res/firewall2.obj","res/red_brick.png");
+        ObjModel objModel = new ObjModel("res/tower.obj","res/tower.png");
         objModel.read_object_file();
 
         Shader myShader = new Shader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");

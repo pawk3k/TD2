@@ -27,7 +27,7 @@ public class Renderer {
         this.M  = stack.mallocFloat(16);
         this.P = stack.mallocFloat(16);
         this.V = stack.mallocFloat(16);
-        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, 0.f, -10.0f,
+        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, 10.f, -30.0f,
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f);
         float aspectRatio = (float) 900 / 600;
