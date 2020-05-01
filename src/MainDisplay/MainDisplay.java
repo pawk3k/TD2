@@ -87,7 +87,6 @@ public class MainDisplay {
         Camera camera = new Camera();
 
         Renderer myRenderer = new Renderer();
-        Kub kub = new Kub();
 //        int idx0 = myLoader.createVAO(verticles0, indices0);
 //        int idx1 = myLoader.createVAO(kub.getPositions(), kub.getIndecies());
         int idx2 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer(),objModel.getTextureBuffer());
@@ -97,7 +96,6 @@ public class MainDisplay {
 
         while (!glfwWindowShouldClose(window)) {
             myRenderer.refreshScreen();
-
 
             myRenderer.render(model2,wall);
 
