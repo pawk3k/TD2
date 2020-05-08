@@ -1,5 +1,6 @@
 package Renderer;
 
+import org.joml.Math;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -64,14 +65,12 @@ public class Model {
     ;
 
     private void updateM() {
-        this.M = new Matrix4f()
-                .translate(translation)
-                .rotationXYZ(
-                        (float) Math.toRadians(rotation.x),
-                        (float) Math.toRadians(rotation.y),
-                        (float) Math.toRadians(rotation.z)
-                )
-                .scale(scale);
+        this.M = new Matrix4f().identity()
+                .translate(translation).rotateX((float)Math.toRadians(rotation.x)).
+                rotateY((float)Math.toRadians(rotation.y)).
+                rotateZ((float)Math.toRadians(rotation.z)).
+                scale(scale);
+
     }
 
     public Matrix4f getM() {
@@ -84,6 +83,20 @@ public class Model {
 
     public int getShaderProgramId() {
         return shaderProgramId;
+    }
+
+
+    public void movePosition(float offsetX, float offsetY, float offsetZ) {
+        if ( offsetZ != 0 ) {
+            translation.x += (float) Math.sin(Math.toRadians(rotation.y)) * -1.0f * offsetZ;
+            translation.z += (float)Math.cos(Math.toRadians(rotation.y)) * offsetZ;
+        }
+        if ( offsetX != 0) {
+            translation.x += (float)Math.sin(Math.toRadians(rotation.y - 90)) * -1.0f * offsetX;
+            translation.z += (float)Math.cos(Math.toRadians(rotation.y - 90)) * offsetX;
+        }
+        translation.y += offsetY;
+        updateM();
     }
 
     public int getVaoID() {

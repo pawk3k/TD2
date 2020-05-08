@@ -27,7 +27,7 @@ public class Renderer {
         this.M  = stack.mallocFloat(16);
         this.P = stack.mallocFloat(16);
         this.V = stack.mallocFloat(16);
-        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, 10.f, -30.0f,
+        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, 0.f, -40.0f,
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f);
         float aspectRatio = (float) 900 / 600;
@@ -44,11 +44,10 @@ public class Renderer {
     }
 
     public void render(Model model, int textureId) throws Exception {
-        model.rotate(0, 1, 0);
 
 
         model.getM().get(M);
-
+        model.rotate(0, 1, 0);
         int m_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "M");
         int p_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "P");
         int v_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "V");
@@ -67,8 +66,8 @@ public class Renderer {
 
         glDrawElements(GL_TRIANGLES, model.getIndicesNumber(), GL_UNSIGNED_INT, 0);
 
-//        glDisableVertexAttribArray(0);
-//        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
 
 
 

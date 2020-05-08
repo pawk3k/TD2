@@ -83,17 +83,24 @@ public class MainDisplay {
         Renderer myRenderer = new Renderer();
         Kub kub = new Kub();
         int idx2 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer(),objModel.getTextureBuffer());
+        int idx3 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer(),objModel.getTextureBuffer());
         Model model2 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
+        Model model3 = new Model(myLoader.getVao(idx3), myLoader.getEboNum(idx3), myShader.getProgramId());
+        Model model4 = new Model(myLoader.getVao(idx3), myLoader.getEboNum(idx3), myShader.getProgramId());
         glEnable(GL_DEPTH_TEST);
+//        model2.scale(6.f,6.1f,6.1f);
+        model2.translate(5.f,5.f,5.f);
+        model4.translate(-5.f,-5.f,-5.f);
 
 
 
         while (!glfwWindowShouldClose(window)) {
             myRenderer.refreshScreen();
 
-
             myRenderer.render(model2,objModel.getTextureId());
-
+            myRenderer.render(model3,objModel.getTextureId());
+            myRenderer.render(model4,objModel.getTextureId());
+//            myRenderer.render(model3,objModel.getTextureId());
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
