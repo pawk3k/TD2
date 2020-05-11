@@ -73,7 +73,7 @@ public class MainDisplay {
     private void loop() throws Exception {
         GL.createCapabilities();// Needed for calling OpenGL functions
 
-        ObjModel objModel = new ObjModel("res/firewall2.obj","res/red_brick.png");
+        ObjModel objModel = new ObjModel("res/tower.obj","res/tower.png");
         objModel.read_object_file();
 
         Shader myShader = new Shader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
@@ -82,14 +82,10 @@ public class MainDisplay {
 
         Renderer myRenderer = new Renderer();
         Kub kub = new Kub();
-        int idx2 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer(),objModel.getTextureBuffer());
-        int idx3 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer(),objModel.getTextureBuffer());
+        int idx2 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer(),objModel.getTextureBuffer(),objModel.getNormalsBuffer());
         Model model2 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
-        Model model3 = new Model(myLoader.getVao(idx3), myLoader.getEboNum(idx3), myShader.getProgramId());
-        Model model4 = new Model(myLoader.getVao(idx3), myLoader.getEboNum(idx3), myShader.getProgramId());
         glEnable(GL_DEPTH_TEST);
-        model2.translate(5.f,5.f,5.f);
-        model4.translate(-5.f,-5.f,-5.f);
+        model2.setPosition(0.f,-3.f,0.f);
 
 
 
@@ -97,9 +93,6 @@ public class MainDisplay {
             myRenderer.refreshScreen();
 
             myRenderer.render(model2,objModel.getTextureId());
-//            myRenderer.render(model3,objModel.getTextureId());
-//            myRenderer.render(model4,objModel.getTextureId());
-//            myRenderer.render(model3,objModel.getTextureId());
             glfwSwapBuffers(window);
             glfwPollEvents();
         }

@@ -22,7 +22,7 @@ public class Loader {
     private List<Integer> eboNums = new ArrayList<>();
     private int last_index = 0;
 
-    public int createVAO(float[] vertices, int[] indices, float[] textures) {
+    public int createVAO(float[] vertices, int[] indices, float[] textures,float normals[]) {
         int vao, ebo;
         vao = glGenVertexArrays();
         ebo = glGenBuffers();
@@ -33,9 +33,11 @@ public class Loader {
 
         storeDataInAttributeList(0,3,vertices);
         storeDataInAttributeList(1,2,textures);
+        storeDataInAttributeList(2,3,normals);
 
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
 
         glBindVertexArray(0);
 
