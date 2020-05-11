@@ -73,7 +73,7 @@ public class MainDisplay {
     private void loop() throws Exception {
         GL.createCapabilities();// Needed for calling OpenGL functions
 
-        ObjModel objModel = new ObjModel("res/tower.obj","res/tower.png");
+        ObjModel objModel = new ObjModel("res/firewall2.obj","res/red_brick.png");
         objModel.read_object_file();
 
         Shader myShader = new Shader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
@@ -88,7 +88,6 @@ public class MainDisplay {
         Model model3 = new Model(myLoader.getVao(idx3), myLoader.getEboNum(idx3), myShader.getProgramId());
         Model model4 = new Model(myLoader.getVao(idx3), myLoader.getEboNum(idx3), myShader.getProgramId());
         glEnable(GL_DEPTH_TEST);
-//        model2.scale(6.f,6.1f,6.1f);
         model2.translate(5.f,5.f,5.f);
         model4.translate(-5.f,-5.f,-5.f);
 
@@ -98,8 +97,8 @@ public class MainDisplay {
             myRenderer.refreshScreen();
 
             myRenderer.render(model2,objModel.getTextureId());
-            myRenderer.render(model3,objModel.getTextureId());
-            myRenderer.render(model4,objModel.getTextureId());
+//            myRenderer.render(model3,objModel.getTextureId());
+//            myRenderer.render(model4,objModel.getTextureId());
 //            myRenderer.render(model3,objModel.getTextureId());
             glfwSwapBuffers(window);
             glfwPollEvents();

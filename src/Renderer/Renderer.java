@@ -27,7 +27,7 @@ public class Renderer {
         this.M  = stack.mallocFloat(16);
         this.P = stack.mallocFloat(16);
         this.V = stack.mallocFloat(16);
-        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, 0.f, -40.0f,
+        Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, -4.f, -10.0f,
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f);
         float aspectRatio = (float) 900 / 600;
@@ -39,7 +39,7 @@ public class Renderer {
     }
 
     public void refreshScreen() {
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
