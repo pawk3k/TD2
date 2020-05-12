@@ -1,14 +1,26 @@
 package Camera;
 
 import org.joml.Math;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class Camera {
     private Vector3f position;
     private Vector3f rotation;
+    private Matrix4f V;
+
+    public Matrix4f getV() {
+        return V;
+    }
+
     public Camera(){
+        V =  new Matrix4f().identity().lookAt(0.0f, 0.f, -20.0f,
+                0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f);
+
+
         position = new Vector3f(0, 0, 0);
-        rotation = new Vector3f(0, 0, 0);
+        rotation = new Vector3f(0, 1, 0);
     }
 
     public void movePosition(float offsetX, float offsetY, float offsetZ) {
@@ -21,6 +33,19 @@ public class Camera {
             position.z += (float)Math.cos(Math.toRadians(rotation.y - 90)) * offsetX;
         }
         position.y += offsetY;
+    }
+
+
+    public Matrix4f getViewMatrix() {
+        Vector3f cameraPos = this.getPosition();
+        Vector3f rotation = this.getRotation();
+
+        // First do the rotation so camera rotates over its position
+        V.rotate((float)Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
+                .rotate((float)Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
+        // Then do the translation
+        V.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+        return V;
     }
 
 
@@ -42,4 +67,6 @@ public class Camera {
         rotation.y += offsetY;
         rotation.z += offsetZ;
     }
+
+
 }

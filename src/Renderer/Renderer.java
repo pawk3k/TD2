@@ -34,7 +34,6 @@ public class Renderer {
         Matrix4f projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(45.0f), aspectRatio, 0.01f, 100.0f);
 
         projectionMatrix.get(P);
-        viewMatrix.get(V);
 
     }
 
@@ -43,11 +42,15 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Model model, int textureId) throws Exception {
+    public void render(Model model, int textureId,Matrix4f camera) throws Exception {
 
+
+
+
+        camera.get(V);
 
         model.getM().get(M);
-        model.rotate(0, 1, 0);
+//        model.rotate(0, 1, 0);
         int m_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "M");
         int p_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "P");
         int v_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "V");

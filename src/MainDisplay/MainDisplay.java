@@ -7,6 +7,7 @@ import Renderer.Loader;
 import Renderer.Model;
 import Renderer.Renderer;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -82,17 +83,22 @@ public class MainDisplay {
 
         Renderer myRenderer = new Renderer();
         Kub kub = new Kub();
+        Input input = new Input(window);
         int idx2 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer(),objModel.getTextureBuffer(),objModel.getNormalsBuffer());
         Model model2 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
+        Model model3 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
         glEnable(GL_DEPTH_TEST);
+
+        camera.getV().translate(input.getX_of()*100,0.f,0.f);
+
         model2.setPosition(0.f,-3.f,0.f);
-
-
-
+        model3.setPosition(-5.f,-3.f,0.f);
         while (!glfwWindowShouldClose(window)) {
             myRenderer.refreshScreen();
 
-            myRenderer.render(model2,objModel.getTextureId());
+//           matrix4f.rotateY(0.01f);
+            myRenderer.render(model2,objModel.getTextureId(), camera.getV());
+            myRenderer.render(model3,objModel.getTextureId(), camera.getV());
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
