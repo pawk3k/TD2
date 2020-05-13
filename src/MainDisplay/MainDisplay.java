@@ -16,6 +16,7 @@ import org.lwjgl.system.MemoryStack;
 import shaders.Shader;
 
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -92,6 +93,9 @@ public class MainDisplay {
         light.setColor(new Vector4f(1,1,0,1));
         light.setPosition(new Vector4f(0,-6,-5,1)); ///this.position = new Vector4f(0,-6,-5,1);
 //        light.setIntensity(5.f);
+
+        long startTime = System.currentTimeMillis();
+        long endTime;
         Model model3 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
         glEnable(GL_DEPTH_TEST);
 
@@ -99,17 +103,38 @@ public class MainDisplay {
 
         model2.setPosition(0.f,-3.f,0.f);
         model3.setPosition(-5.f,-3.f,0.f);
+        ArrayList<Model> models = new  ArrayList<>();
+        models.add(model2);
+
         while (!glfwWindowShouldClose(window)) {
+
             myRenderer.refreshScreen();
+            endTime = System.currentTimeMillis();
+            model3.translate(0.f,0.0f,-.01f);
 
 
             light.setPosition(new Vector4f(0 + input.getL_x_of(),2 + -input.getL_y_of(),-5 + input.getL_z_of(),1)); //this.position = new Vector4f(0,-6,-5,1);
             camera.getViewMatrix().rotateX(1);
             camera.setPosition(new Vector3f(0.f,0.f,15.f +input.getX_of()));
 
+            for( Model e : models){
+                e.translate(0.f,0.f,-0.01f);
+                myRenderer.render(e,objModel.getTextureId(), camera.getViewMatrix(),light,global_sun);
+            }
 //           matrix4f.rotateY(0.01f);
-            myRenderer.render(model2,objModel.getTextureId(), camera.getViewMatrix(),light,global_sun);
-            myRenderer.render(model3,objModel.getTextureId(), camera.getViewMatrix(),light,global_sun);
+            System.out.println(endTime-startTime);
+            if((endTime - startTime) > 3000 && (endTime - startTime) < 3019п)
+            {
+                System.out.println("5 seconds elapsed");
+
+                Model new_model = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
+                new_model.setPosition(-5.f,-3.f,0.f);
+                models.add(new_model);
+                startTime = System.currentTimeMillis();
+//                startTime = 0;
+//                myRenderer.render(model3,objModel.getTextureId(), camera.getViewMatrix(),light,global_sun);
+
+            }
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
@@ -118,5 +143,8 @@ public class MainDisplay {
     public static void main(String[] args) throws Exception{
         new MainDisplay().run();
     }
+
+
+
 
 }
