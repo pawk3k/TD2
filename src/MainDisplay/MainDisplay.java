@@ -103,7 +103,7 @@ public class MainDisplay {
 
             light.setPosition(new Vector4f(0 + input.getL_x_of(),2 + -input.getL_y_of(),-5,1)); //this.position = new Vector4f(0,-6,-5,1);
 
-            camera.setPosition(new Vector3f(0.f,0.f,-15.f +input.getX_of()));
+            camera.setPosition(new Vector3f(0.f,0.f,15.f +input.getX_of()));
 
 //           matrix4f.rotateY(0.01f);
             myRenderer.render(model2,objModel.getTextureId(), camera.getViewMatrix(),light);
