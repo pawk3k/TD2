@@ -1,7 +1,10 @@
 package Renderer;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
+import Model.Light;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
@@ -42,7 +45,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Model model, int textureId,Matrix4f camera) throws Exception {
+    public void render(Model model, int textureId, Matrix4f camera, Light light) throws Exception {
 
 
 
@@ -54,13 +57,18 @@ public class Renderer {
         int m_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "M");
         int p_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "P");
         int v_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "V");
+        int lightPos = GL30.glGetUniformLocation(model.getShaderProgramId(), "my_l.position");
+        int lightCol = GL30.glGetUniformLocation(model.getShaderProgramId(),"my_l.color");
+        Vector4f vecPos = light.getPosition();
+        Vector4f vecCol = light.getColor();
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
         GL30.glUniformMatrix4fv(m_Matrix, false, M);
         GL30.glUniformMatrix4fv(p_Matrix, false, P);
         GL30.glUniformMatrix4fv(v_Matrix, false, V);
-
+        GL30.glUniform4f(lightPos,vecPos.x,vecPos.y,vecPos.z,vecPos.w);
+        GL30.glUniform4f(lightCol,vecCol.x,vecCol.y,vecCol.z,vecCol.w);
         glUseProgram(model.getShaderProgramId());
         glBindVertexArray(model.getVaoID());
 

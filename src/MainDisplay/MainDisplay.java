@@ -1,5 +1,5 @@
 package MainDisplay;
-
+import Model.Light;
 import Camera.Camera;
 import Model.Kub;
 import Model.ObjModel;
@@ -8,6 +8,7 @@ import Renderer.Model;
 import Renderer.Renderer;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -86,8 +87,12 @@ public class MainDisplay {
         Input input = new Input(window);
         int idx2 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer(),objModel.getTextureBuffer(),objModel.getNormalsBuffer());
         Model model2 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
+        Light light = new Light();
+        light.setColor(new Vector4f(1,0,0,1));
+//        light.setPosition(new Vector4f(0,2,-5,1)); //this.position = new Vector4f(0,-6,-5,1);
         Model model3 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
         glEnable(GL_DEPTH_TEST);
+
 
 
         model2.setPosition(0.f,-3.f,0.f);
@@ -97,8 +102,8 @@ public class MainDisplay {
             camera.setPosition(new Vector3f(0.f,10.f+input.getX_of(),-15.f +input.getX_of() ));
 
 //           matrix4f.rotateY(0.01f);
-            myRenderer.render(model2,objModel.getTextureId(), camera.getViewMatrix());
-            myRenderer.render(model3,objModel.getTextureId(), camera.getViewMatrix());
+            myRenderer.render(model2,objModel.getTextureId(), camera.getViewMatrix(),light);
+            myRenderer.render(model3,objModel.getTextureId(), camera.getViewMatrix(),light);
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
