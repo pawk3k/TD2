@@ -13,7 +13,7 @@ out vec3 modelColor;
 out vec4 ic;
 void main()
 {
-    vec4 lp = vec4(0,-6,-2,1);
+    vec4 lp = vec4(0,-6,-5,1);
 //    vec4 lp = vec4(10,-6,2,0);
 
     vec4 to_light = normalize(V * lp - V * M * vec4(aPos.xyz,1.0));    //Vector to light

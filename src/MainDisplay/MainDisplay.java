@@ -94,7 +94,7 @@ public class MainDisplay {
         model3.setPosition(-5.f,-3.f,0.f);
         while (!glfwWindowShouldClose(window)) {
             myRenderer.refreshScreen();
-            camera.setPosition(new Vector3f(0.f,0.f,-5.f +input.getX_of() ));
+            camera.setPosition(new Vector3f(0.f,10.f+input.getX_of(),-15.f +input.getX_of() ));
 
 //           matrix4f.rotateY(0.01f);
             myRenderer.render(model2,objModel.getTextureId(), camera.getViewMatrix());

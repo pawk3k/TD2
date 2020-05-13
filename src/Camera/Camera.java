@@ -15,7 +15,7 @@ public class Camera {
 
     public Camera(){
 
-        position = new Vector3f(0, 0, -10);
+        position = new Vector3f(0, 14, -20);
         rotation = new Vector3f(0, 1, 0);
         V =  new Matrix4f().identity().lookAt(position.x, position.y, position.z,
                 0.0f, 0.0f, 0.0f,
