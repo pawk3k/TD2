@@ -41,11 +41,11 @@ public class Renderer {
     }
 
     public void refreshScreen() {
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.0f, 0.2f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Model model, int textureId, Matrix4f camera, Light light) throws Exception {
+    public void render(Model model, int textureId, Matrix4f camera, Light light, Light global_sun) throws Exception {
 
 
 
@@ -57,7 +57,8 @@ public class Renderer {
         int m_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "M");
         int p_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "P");
         int v_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "V");
-        load_light_struct(model.getShaderProgramId(),light);
+        load_light_struct(model.getShaderProgramId(),light,"global_sun");
+        load_light_struct(model.getShaderProgramId(),light,"point_sun");
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
@@ -79,10 +80,10 @@ public class Renderer {
 
     }
 
-    private void load_light_struct(int shader_program_id, Light light){
-        int lightPos = GL30.glGetUniformLocation(shader_program_id, "my_l.position");
-        int lightCol = GL30.glGetUniformLocation(shader_program_id,"my_l.color");
-        int lightInt = GL30.glGetUniformLocation(shader_program_id,"my_l.intensity");
+    private void load_light_struct(int shader_program_id, Light light,String name_of_light){
+        int lightPos = GL30.glGetUniformLocation(shader_program_id, name_of_light + ".position");
+        int lightCol = GL30.glGetUniformLocation(shader_program_id, name_of_light + ".color");
+        int lightInt = GL30.glGetUniformLocation(shader_program_id, name_of_light +".intensity");
         Vector4f vecPos = light.getPosition();
         Vector4f vecCol = light.getColor();
         GL30.glUniform4f(lightPos,vecPos.x,vecPos.y,vecPos.z,vecPos.w);

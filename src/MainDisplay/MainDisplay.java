@@ -88,7 +88,9 @@ public class MainDisplay {
         int idx2 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer(),objModel.getTextureBuffer(),objModel.getNormalsBuffer());
         Model model2 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
         Light light = new Light();
+        Light global_sun = new Light();
         light.setColor(new Vector4f(1,1,0,1));
+        light.setPosition(new Vector4f(0,-6,-5,1)); ///this.position = new Vector4f(0,-6,-5,1);
 //        light.setIntensity(5.f);
         Model model3 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
         glEnable(GL_DEPTH_TEST);
@@ -101,13 +103,13 @@ public class MainDisplay {
             myRenderer.refreshScreen();
 
 
-            light.setPosition(new Vector4f(0 + input.getL_x_of(),2 + -input.getL_y_of(),-5,1)); //this.position = new Vector4f(0,-6,-5,1);
-
+            light.setPosition(new Vector4f(0 + input.getL_x_of(),2 + -input.getL_y_of(),-5 + input.getL_z_of(),1)); //this.position = new Vector4f(0,-6,-5,1);
+            camera.getViewMatrix().rotateX(1);
             camera.setPosition(new Vector3f(0.f,0.f,15.f +input.getX_of()));
 
 //           matrix4f.rotateY(0.01f);
-            myRenderer.render(model2,objModel.getTextureId(), camera.getViewMatrix(),light);
-            myRenderer.render(model3,objModel.getTextureId(), camera.getViewMatrix(),light);
+            myRenderer.render(model2,objModel.getTextureId(), camera.getViewMatrix(),light,global_sun);
+            myRenderer.render(model3,objModel.getTextureId(), camera.getViewMatrix(),light,global_sun);
             glfwSwapBuffers(window);
             glfwPollEvents();
         }

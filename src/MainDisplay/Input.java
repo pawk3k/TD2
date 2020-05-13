@@ -16,6 +16,12 @@ public class Input {
     private float l_x_of;
     private float l_y_of;
 
+    public float getL_z_of() {
+        return l_z_of;
+    }
+
+    private float l_z_of;
+
     public float getL_x_of() {
         return l_x_of;
     }
@@ -28,6 +34,16 @@ public class Input {
         this.window = in_window;
         this.l_x_of = 0.0f;
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+            if(key == GLFW_KEY_Q && action == GLFW_PRESS){
+                this.l_z_of+=1.0f;
+                System.out.println(l_z_of);
+            }
+            if(key == GLFW_KEY_E && action == GLFW_PRESS){
+                this.l_z_of-=1.0f;
+                System.out.println(l_z_of);
+            }
+
+
             if(key == GLFW_KEY_D && action == GLFW_PRESS){
                 this.l_x_of+=1.0f;
                 System.out.println(l_x_of);
