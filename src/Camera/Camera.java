@@ -14,13 +14,15 @@ public class Camera {
     }
 
     public Camera(){
-        V =  new Matrix4f().identity().lookAt(0.0f, 0.f, -20.0f,
+
+        position = new Vector3f(0, 0, -10);
+        rotation = new Vector3f(0, 1, 0);
+        V =  new Matrix4f().identity().lookAt(position.x, position.y, position.z,
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f);
 
 
-        position = new Vector3f(0, 0, 0);
-        rotation = new Vector3f(0, 1, 0);
+
     }
 
     public void movePosition(float offsetX, float offsetY, float offsetZ) {
@@ -41,13 +43,22 @@ public class Camera {
         Vector3f rotation = this.getRotation();
 
         // First do the rotation so camera rotates over its position
-        V.rotate((float)Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
-                .rotate((float)Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
-        // Then do the translation
-        V.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
-        return V;
+//        V.rotate((float)Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
+//                .rotate((float)Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
+//        // Then do the translation
+//        V.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+
+
+
+        return
+                new Matrix4f().identity().lookAt(cameraPos.x,cameraPos.y,cameraPos.z,
+                0.f,0.f,0.f,
+                0.f,1.f,0.f);
     }
 
+    public void setPosition(Vector3f position) {
+        this.position = position;
+    }
 
     public Vector3f getPosition(){
         return position;

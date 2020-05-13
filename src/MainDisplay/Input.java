@@ -1,6 +1,10 @@
 package MainDisplay;
 
 
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFW.*;
+import org.lwjgl.glfw.GLFWScrollCallback;
+
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
@@ -29,7 +33,30 @@ public class Input {
             if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
         });
+        final float[] mouseWheelVelocity = {0};
+
+        glfwSetScrollCallback(window, (long win, double dx, double dy) ->{
+            if(dy==-1.0f){
+                this.x_of+=-1.0f;
+            }if(dy==1.0f){
+                this.x_of+=1.0f;
+            }
+            System.out.println(this.x_of);
+
+        });
     }
+
+    public float getX_of() {
+        return x_of;
+    }
+
+    public float getZ_of() {
+        return z_of;
+    }
+    }
+
+
+
 
     // @TODOO Кароче треба доробити камеру на скролл шоб віддалялась то без траблів можна зробити як показано ось тут
 
@@ -44,11 +71,5 @@ public class Input {
 //}
 
 
-    public float getX_of() {
-        return x_of;
-    }
 
-    public float getZ_of() {
-        return z_of;
-    }
-}
+

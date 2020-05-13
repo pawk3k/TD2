@@ -89,16 +89,16 @@ public class MainDisplay {
         Model model3 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
         glEnable(GL_DEPTH_TEST);
 
-        camera.getV().translate(input.getX_of()*100,0.f,0.f);
 
         model2.setPosition(0.f,-3.f,0.f);
         model3.setPosition(-5.f,-3.f,0.f);
         while (!glfwWindowShouldClose(window)) {
             myRenderer.refreshScreen();
+            camera.setPosition(new Vector3f(0.f,0.f,-5.f +input.getX_of() ));
 
 //           matrix4f.rotateY(0.01f);
-            myRenderer.render(model2,objModel.getTextureId(), camera.getV());
-            myRenderer.render(model3,objModel.getTextureId(), camera.getV());
+            myRenderer.render(model2,objModel.getTextureId(), camera.getViewMatrix());
+            myRenderer.render(model3,objModel.getTextureId(), camera.getViewMatrix());
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
