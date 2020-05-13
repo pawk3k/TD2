@@ -57,33 +57,37 @@ public class Renderer {
         int m_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "M");
         int p_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "P");
         int v_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "V");
-        int lightPos = GL30.glGetUniformLocation(model.getShaderProgramId(), "my_l.position");
-        int lightCol = GL30.glGetUniformLocation(model.getShaderProgramId(),"my_l.color");
-        Vector4f vecPos = light.getPosition();
-        Vector4f vecCol = light.getColor();
+        load_light_struct(model.getShaderProgramId(),light);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
         GL30.glUniformMatrix4fv(m_Matrix, false, M);
         GL30.glUniformMatrix4fv(p_Matrix, false, P);
         GL30.glUniformMatrix4fv(v_Matrix, false, V);
-        GL30.glUniform4f(lightPos,vecPos.x,vecPos.y,vecPos.z,vecPos.w);
-        GL30.glUniform4f(lightCol,vecCol.x,vecCol.y,vecCol.z,vecCol.w);
+
         glUseProgram(model.getShaderProgramId());
         glBindVertexArray(model.getVaoID());
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D,textureId);
-//        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-
+        // Drawing scene
         glDrawElements(GL_TRIANGLES, model.getIndicesNumber(), GL_UNSIGNED_INT, 0);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(2);
 
+    }
 
-
+    private void load_light_struct(int shader_program_id, Light light){
+        int lightPos = GL30.glGetUniformLocation(shader_program_id, "my_l.position");
+        int lightCol = GL30.glGetUniformLocation(shader_program_id,"my_l.color");
+        int lightInt = GL30.glGetUniformLocation(shader_program_id,"my_l.intensity");
+        Vector4f vecPos = light.getPosition();
+        Vector4f vecCol = light.getColor();
+        GL30.glUniform4f(lightPos,vecPos.x,vecPos.y,vecPos.z,vecPos.w);
+        GL30.glUniform4f(lightCol,vecCol.x,vecCol.y,vecCol.z,vecCol.w);
+        GL30.glUniform1f(lightInt,light.getIntensity());
     }
 
 

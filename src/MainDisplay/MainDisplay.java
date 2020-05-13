@@ -88,7 +88,8 @@ public class MainDisplay {
         int idx2 = myLoader.createVAO(objModel.getVerticesBuffer(),objModel.getIndeciesBuffer(),objModel.getTextureBuffer(),objModel.getNormalsBuffer());
         Model model2 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
         Light light = new Light();
-        light.setColor(new Vector4f(1,0,0,1));
+        light.setColor(new Vector4f(1,1,0,1));
+        light.setIntensity(5.f);
 //        light.setPosition(new Vector4f(0,2,-5,1)); //this.position = new Vector4f(0,-6,-5,1);
         Model model3 = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
         glEnable(GL_DEPTH_TEST);

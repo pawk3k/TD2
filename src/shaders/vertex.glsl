@@ -17,6 +17,7 @@ uniform Light my_l;
 
 out vec4 light_col;
 out float kek;
+out float intensity;
 out vec3 modelColor;
 out vec4 ic;
 void main()
@@ -32,6 +33,7 @@ void main()
 
     float amount_of_light = clamp(dot(n,to_light),0.2,1);// Amount of light for certein point
     light_col = my_l.color;
+    intensity = my_l.intensity;
     ic = vec4(1.0);
     kek = amount_of_light;
     gl_Position =   P * V * M * vec4(aPos.xyz, 1.0);
