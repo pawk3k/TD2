@@ -14,5 +14,6 @@ uniform sampler2D tex;
 void main(void)
 {
 //    fragColor =  vec4(texture(tex,passCoords_of_Texture)*0.7 + (texture(tex,passCoords_of_Texture)* kek * vec4(1,1,1,1)));
-    fragColor =  vec4(texture(tex,passCoords_of_Texture))*light_col*intensity*(sun_amount_of_light + point_amount_of_light*attenuation);
+//    fragColor =  vec4(texture(tex,passCoords_of_Texture))*light_col*intensity*(sun_amount_of_light + point_amount_of_light*attenuation);
+    fragColor =  vec4(texture(tex,passCoords_of_Texture))*light_col*intensity *(sun_amount_of_light*2 + point_amount_of_light*attenuation) ;
 }

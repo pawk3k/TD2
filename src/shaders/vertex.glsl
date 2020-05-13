@@ -38,7 +38,7 @@ void main()
 //    attenuation = 1;
 
     vec4 to_light_p = normalize(V * lp - V * M * vec4(aPos.xyz,1.0));    //Vector to light point
-    vec4 to_light_g = normalize(V * vec4(dir.xyz,1.0) - V * M * vec4(aPos.xyz,1.0));    //Vector to light global sun
+    vec4 to_light_g = normalize(V * vec4(dir.xyz,0.0) - V * M * vec4(aPos.xyz,1.0));    //Vector to light global sun
 
     vec4 n = normalize(V * M * vec4(normal.xyz,1.0)); //Normalized normal vector
 
