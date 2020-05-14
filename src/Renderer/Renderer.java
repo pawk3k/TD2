@@ -1,21 +1,18 @@
 package Renderer;
 
+import Game.GameController;
+import Game.GameObject;
 import org.joml.Matrix4f;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryStack;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import Model.TextureClass;
 public class Renderer {
     private FloatBuffer M;
     private FloatBuffer P;
@@ -42,15 +39,12 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Model model, int textureId,Matrix4f camera) throws Exception {
-
-
-
+    public void render(GameObject obj, Matrix4f camera) {
+        Model model = GameController.models.get(obj.getModel());
 
         camera.get(V);
+        obj.getM().get(M);
 
-        model.getM().get(M);
-//        model.rotate(0, 1, 0);
         int m_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "M");
         int p_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "P");
         int v_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "V");
@@ -65,18 +59,13 @@ public class Renderer {
         glBindVertexArray(model.getVaoID());
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D,textureId);
-//        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTextureID());
+//      glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
         glDrawElements(GL_TRIANGLES, model.getIndicesNumber(), GL_UNSIGNED_INT, 0);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(2);
-
-
-
     }
-
-
 }
