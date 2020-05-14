@@ -56,6 +56,18 @@ public class Camera {
                 0.f,1.f,0.f);
     }
 
+    public Matrix4f getViewMatrix1() {
+        Vector3f cameraPos = getPosition();
+        Vector3f rotation = getRotation();
+
+        V.identity();
+        // First do the rotation so camera rotates over its position
+        V.rotate((float)Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
+                .rotate((float)Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
+        // Then do the translation
+        V.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+        return V;
+    }
     public void setPosition(Vector3f position) {
         this.position = position;
     }

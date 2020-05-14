@@ -14,11 +14,12 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 import shaders.Shader;
-
 import java.awt.*;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Vector;
+
 import SomeMath.Bezier;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -109,57 +110,31 @@ public class MainDisplay {
 
 
 
-        model2.setPosition(0.f,-10.f,0.f);
+//        model2.setPosition(0.f,-10.f,0.f);
         model3.setPosition(-5.f,-3.f,0.f);
         ArrayList<Model> models = new  ArrayList<>();
         models.add(model2);
-
+        ArrayList<Vector3f> vector3fs = new ArrayList<>();
+        vector3fs.add(new Vector3f(-40,-10,0));
+        vector3fs.add(new Vector3f(7.5f,5.0f,0.f));
+        vector3fs.add(new Vector3f(7.5f,5.f,0.f));
+        vector3fs.add(new Vector3f(7.5f,5.f,0.f));
+        vector3fs.add(new Vector3f(-10,10,0));
         models.add(model3);
         Vector3f result_B;
 
+        camera.setPosition(new Vector3f(-5.f ,0.f ,15.f));
 
 
         while (!glfwWindowShouldClose(window)) {
+
             endTime = System.currentTimeMillis();
 
             boolean secs3 = (endTime - startTime) > 3000 && (endTime - startTime) < 3019;
-
-            if(endTime - startTime <1000){
-                float time_for_bezier =  ( (float) (endTime -startTime)/1000);
-                result_B = (Bezier.bezierCurveQuadratic(new Vector3f(5,-5,0),new Vector3f(-10,-5,0),new Vector3f(7.5f,20,0.f),time_for_bezier));
-                model2.setPosition(result_B.x,result_B.y,result_B.z);
-            }
-
             myRenderer.refreshScreen();
-            model3.translate(0.f,0.0f,-.1f);
-
+            model3.rotate(1,1,0);
             light.setPosition(new Vector4f(0 + input.getL_x_of(),2 + -input.getL_y_of(),-5 + input.getL_z_of(),1)); //this.position = new Vector4f(0,-6,-5,1);
-            camera.getViewMatrix().rotateX(1);
-            camera.setPosition(new Vector3f(0.f,0.f,15.f +input.getX_of()));
-//            int i = 0;
-//            for( Model e : models){
-//                e.translate(0.f,0.f,-0.02f);
-                myRenderer.render(model2,objModel.getTextureId(), camera.getViewMatrix(),light,global_sun,0);
-                myRenderer.render(model3,objModel1.getTextureId(), camera.getViewMatrix(),light,global_sun,1);
-
-//            }
-//           matrix4f.rotateY(0.01f);
-//            System.out.println(endTime-startTime);
-            if(secs3)
-            {
-                startTime = System.currentTimeMillis();
-
-                System.out.println("5 seconds elapsed");
-
-                Model new_model = new Model(myLoader.getVao(idx2), myLoader.getEboNum(idx2), myShader.getProgramId());
-                new_model.setPosition(-5.f,-10.f,0.f);
-                new_model.setScale(0.5f,0.5f,0.5f);
-//                models.add(new_model);
-//                startTime = System.currentTimeMillis();
-//                startTime = 0;
-//                myRenderer.render(model3,objModel.getTextureId(), camera.getViewMatrix(),light,global_sun);
-
-            }
+            myRenderer.render(model3,objModel1.getTextureId(), camera.getViewMatrix1(),light,global_sun,1);
             glfwSwapBuffers(window);
             glfwPollEvents();
         }

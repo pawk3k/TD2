@@ -166,7 +166,6 @@ public class ObjModel {
             normalsArr[current_pos*3+1] = current_norm.y;
             normalsArr[current_pos*3+2] = current_norm.z;
         }
-        System.out.println("kek");
         this.normalsBuffer = normalsArr;
 
 
