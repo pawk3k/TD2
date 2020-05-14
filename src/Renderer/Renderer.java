@@ -18,6 +18,8 @@ import java.nio.IntBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glFlushMappedBufferRange;
+
 import Model.TextureClass;
 public class Renderer {
     private FloatBuffer M;
@@ -33,7 +35,7 @@ public class Renderer {
         Matrix4f viewMatrix = new Matrix4f().identity().lookAt(0.0f, -0.f, -20.0f,
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f);
-        float aspectRatio = (float) 900 / 600;
+        float aspectRatio = (float) 1300 / 768;
         Matrix4f projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(45.0f), aspectRatio, 0.01f, 100.0f);
 
         projectionMatrix.get(P);
@@ -45,7 +47,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Model model, int textureId, Matrix4f camera, Light light, Light global_sun) throws Exception {
+    public void render(Model model, int textureId, Matrix4f camera, Light light, Light global_sun,int id) throws Exception {
 
 
 
@@ -57,6 +59,7 @@ public class Renderer {
         int m_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "M");
         int p_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "P");
         int v_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "V");
+        int tex = GL30.glGetUniformLocation(model.getShaderProgramId(), "tex");
         load_light_struct(model.getShaderProgramId(),light,"global_sun");
         load_light_struct(model.getShaderProgramId(),light,"point_sun");
         glEnableVertexAttribArray(0);
@@ -68,12 +71,21 @@ public class Renderer {
 
         glUseProgram(model.getShaderProgramId());
         glBindVertexArray(model.getVaoID());
+        switch (id){
+            case 0:
+                GL13.glActiveTexture(GL13.GL_TEXTURE0);
+                break;
+            case 1:
+                GL13.glActiveTexture(GL13.GL_TEXTURE1);
+                break;
 
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        }
         GL11.glBindTexture(GL11.GL_TEXTURE_2D,textureId);
+        glUniform1i(tex,id);
+        glEnable(GL_TEXTURE_2D);
+
         // Drawing scene
         glDrawElements(GL_TRIANGLES, model.getIndicesNumber(), GL_UNSIGNED_INT, 0);
-
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(2);

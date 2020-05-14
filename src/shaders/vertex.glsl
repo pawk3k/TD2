@@ -42,8 +42,8 @@ void main()
 
     vec4 n = normalize(V * M * vec4(normal.xyz,1.0)); //Normalized normal vector
 
-    float p_amount_of_light = clamp(dot(n,to_light_p),0.2,1);// Amount of light for certein point
-    float g_amount_of_light = clamp(dot(n,to_light_g),0.2,1);// Amount of light for global sun
+    float p_amount_of_light = clamp(dot(n,to_light_p),0.2,0.6);// Amount of light for certein point
+    float g_amount_of_light = clamp(dot(n,to_light_g),0.2,0.4);// Amount of light for global sun
 
     light_col = point_sun.color;
     intensity = point_sun.intensity;
