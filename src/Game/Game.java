@@ -17,17 +17,32 @@ public class Game {
 
     public void init() throws Exception {
         int towerModel = gameController.addModel("res/tower.obj","res/tower.png", 0, "src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
-        towerA = createGameObject(0, towerModel);
-        towerB = createGameObject(0, towerModel);
-        GameObjects.get(towerB).localSetTranslation(new Vector3f(2f,0,0));
-        GameObjects.get(towerB).updateM();
+        body = createGameObject(0, towerModel);
+        wheel1 = createGameObject(body, towerModel);
+        wheel2 = createGameObject(body, towerModel);
+        wheel3 = createGameObject(body, towerModel);
+        wheel4 = createGameObject(body, towerModel);
+        GameObjects.get(wheel1).setRotation(new Vector3f(0,0,-90));
+        GameObjects.get(wheel2).setRotation(new Vector3f(0,0,90));
+        GameObjects.get(wheel3).setRotation(new Vector3f(0,0,-90));
+        GameObjects.get(wheel4).setRotation(new Vector3f(0,0,90));
+        GameObjects.get(wheel1).setTranslation(new Vector3f(2,0,0));
+        GameObjects.get(wheel2).setTranslation(new Vector3f(-2,0,0));
+        GameObjects.get(wheel3).setTranslation(new Vector3f(2,4,0));
+        GameObjects.get(wheel4).setTranslation(new Vector3f(-2,4,0));
+        GameObjects.get(wheel1).setScale(new Vector3f(0.2f,0.2f,0.2f));
+        GameObjects.get(wheel2).setScale(new Vector3f(0.2f,0.2f,0.2f));
+        GameObjects.get(wheel3).setScale(new Vector3f(0.2f,0.2f,0.2f));
+        GameObjects.get(wheel4).setScale(new Vector3f(0.2f,0.2f,0.2f));
     }
 
-    int towerA, towerB;
-    double lastTime = 0;
+    int body, wheel1, wheel2, wheel3, wheel4;
 
     public void update(double time){
-        GameObjects.get(towerA).globalSetTranslation(new Vector3f(0,(float) time % 3,0));
-        GameObjects.get(towerA).updateMF();
+        GameObjects.get(wheel1).rotate(new Vector3f(1,0,0));
+        GameObjects.get(wheel2).rotate(new Vector3f(1,0,0));
+        GameObjects.get(wheel3).rotate(new Vector3f(1,0,0));
+        GameObjects.get(wheel4).rotate(new Vector3f(1,0,0));
+        GameObjects.get(body).updateMF();
     }
 }
