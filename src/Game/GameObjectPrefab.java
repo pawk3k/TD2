@@ -12,13 +12,9 @@ public class GameObjectPrefab {
     protected List<Integer> children = new ArrayList<>();
     protected Matrix4f M = new Matrix4f().identity();
 
-    protected Vector3f localScale = new Vector3f(1.0f, 1.0f, 1.0f);
-    protected Vector3f localRotation = new Vector3f();
-    protected Vector3f localTranslation = new Vector3f();
-
-    protected Vector3f globalScale = new Vector3f(1.0f, 1.0f, 1.0f);
-    protected Vector3f globalRotation = new Vector3f();
-    protected Vector3f globalTranslation = new Vector3f();
+    protected Vector3f scale = new Vector3f(1.0f, 1.0f, 1.0f);
+    protected Vector3f rotation = new Vector3f();
+    protected Vector3f translation = new Vector3f();
 
     public int getId(){
         return id;
@@ -37,77 +33,50 @@ public class GameObjectPrefab {
     }
 
     /**
-     * Refresh all children' positions (call on child)
-     * @param parentTranslation parent global translation Vector3f
-     */
-    public void refreshGT(Vector3f parentTranslation){
-        this.globalTranslation = parentTranslation.add(this.localTranslation);
-        for(int child : children){
-            Game.GameObjects.get(child).refreshGT(new Vector3f(this.globalTranslation));
-        }
-    }
-    /**
-     * Move global position
+     * Move position
      * @param translation Vector3f
      */
-    public void globalTranslate(Vector3f translation){
-        this.globalTranslation.add(translation);
-
-        if(parent != 0)
-            this.localTranslation.sub(this.globalTranslation, Game.GameObjects.get(parent).globalTranslation);
-        else
-            this.localTranslation = this.globalTranslation;
-
-        for(int child : children){
-            Game.GameObjects.get(child).refreshGT(this.globalTranslation);
-        }
+    public void translate(Vector3f translation){
+        this.translation.add(translation);
     }
     /**
-     * Set global position
+     * Set position
      * @param translation Vector3f
      */
-    public void globalSetTranslation(Vector3f translation){
-        this.globalTranslation = translation;
+    public void setTranslation(Vector3f translation){
+        this.translation = translation;
+    }
 
-        if(parent != 0)
-            this.localTranslation = new Vector3f(this.globalTranslation).sub(Game.GameObjects.get(parent).globalTranslation);
-        else
-            this.localTranslation = this.globalTranslation;
-
-        for(int child : children){
-            Game.GameObjects.get(child).refreshGT(new Vector3f(this.globalTranslation));
-        }
+    /**
+     * Rotate
+     * @param rotation Vector3f
+     */
+    public void rotate(Vector3f rotation){
+        this.rotation.add(rotation);
     }
     /**
-     * Move local position
-     * @param translation Vector3f
+     * Set rotation
+     * @param rotation Vector3f
      */
-    public void localTranslate(Vector3f translation){
-        this.localTranslation.add(translation);
+    public void setRotation(Vector3f rotation){
+        this.rotation = rotation;
+    }
 
-        if(parent != 0)
-            this.globalTranslation.add(Game.GameObjects.get(parent).globalTranslation, this.localTranslation);
-        else
-            this.globalTranslation = this.localTranslation;
-
-        for(int child : children){
-            Game.GameObjects.get(child).refreshGT(this.globalTranslation);
-        }
+    /**
+     * Scale
+     * @param scale Vector3f
+     */
+    public void scale(Vector3f scale){
+        this.scale.mul(scale);
     }
     /**
-     * Set local position
-     * @param translation Vector3f
+     * Set scale
+     * @param scale Vector3f
      */
-    public void localSetTranslation(Vector3f translation){
-        this.localTranslation = translation;
-        if(parent != 0)
-            this.globalTranslation = translation.add(Game.GameObjects.get(parent).globalTranslation);
-        else
-            this.globalTranslation = this.localTranslation;
-        for(int child : children){
-            Game.GameObjects.get(child).refreshGT(this.globalTranslation);
-        }
+    public void setScale(Vector3f scale){
+        this.scale = scale;
     }
+
     /**
      * update matrix for full object (children included)
      */
@@ -121,12 +90,20 @@ public class GameObjectPrefab {
      * update matrix for this object only (children excluded)
      */
     public void updateM() {
-        this.M = new Matrix4f().identity().
-                translate(globalTranslation).
-                rotateX(Math.toRadians(globalRotation.x)).
-                rotateY(Math.toRadians(globalRotation.y)).
-                rotateZ(Math.toRadians(globalRotation.z)).
-                scale(globalScale);
+        if(parent != 0)
+            this.M = new Matrix4f(Game.GameObjects.get(parent).getM()).
+                    translate(translation).
+                    rotateX(Math.toRadians(rotation.x)).
+                    rotateY(Math.toRadians(rotation.y)).
+                    rotateZ(Math.toRadians(rotation.z)).
+                    scale(scale);
+        else
+            this.M = new Matrix4f().identity().
+                    translate(translation).
+                    rotateX(Math.toRadians(rotation.x)).
+                    rotateY(Math.toRadians(rotation.y)).
+                    rotateZ(Math.toRadians(rotation.z)).
+                    scale(scale);
     }
 
     public Matrix4f getM(){
