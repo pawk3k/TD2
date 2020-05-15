@@ -1,12 +1,18 @@
 package Game;
 
+import MainDisplay.Input;
+import Model.Light;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Game {
     public static Map<Integer, GameObject> GameObjects = new HashMap<Integer, GameObject>();
+//    public static Map<Integer, GameObject> PointLights = new HashMap<Integer, GameObject>();
+    public static Map<Integer, Light> lightPoints = new HashMap<>();
+
     private int idCounter = 1;
     private GameController gameController = new GameController();
 
@@ -15,13 +21,23 @@ public class Game {
         return idCounter++;
     }
 
+
+
+
     public void init() throws Exception {
-        int towerModel = gameController.addModel("res/tower.obj","res/tower.png", 0, "src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
-        body = createGameObject(0, towerModel);
-        wheel1 = createGameObject(body, towerModel);
-        wheel2 = createGameObject(body, towerModel);
-        wheel3 = createGameObject(body, towerModel);
-        wheel4 = createGameObject(body, towerModel);
+        int barrel = gameController.addModel("res/Mortar/Barrel.obj","res/Mortar/Gold_metal_texture.png", 0, "src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
+        int cannonBall = gameController.addModel("res/Mortar/Cannonball.obj","res/Mortar/Wood_planks_texture.png", 0, "src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
+        int foundation = gameController.addModel("res/Mortar/Foundation.obj","res/Mortar/Metal_plates_texture.png", 0, "src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
+        body = createGameObject(0, cannonBall);
+
+        Light light = new Light();
+//        light.setPosition(new Vector4f(0,0,0,1));
+        light.setColor(new Vector4f(1,0,0,1));
+        lightPoints.put(0,light);
+        wheel1 = createGameObject(body, barrel);
+        wheel2 = createGameObject(body, foundation);
+        wheel3 = createGameObject(body, cannonBall);
+        wheel4 = createGameObject(body, cannonBall);
         GameObjects.get(wheel1).setRotation(new Vector3f(0,0,-90));
         GameObjects.get(wheel2).setRotation(new Vector3f(0,0,90));
         GameObjects.get(wheel3).setRotation(new Vector3f(0,0,-90));
@@ -39,6 +55,8 @@ public class Game {
     int body, wheel1, wheel2, wheel3, wheel4;
 
     public void update(double time){
+
+        lightPoints.get(0).setPosition(new Vector4f(0,0,3-(float)time,1));
         GameObjects.get(wheel1).rotate(new Vector3f(1,0,0));
         GameObjects.get(wheel2).rotate(new Vector3f(1,0,0));
         GameObjects.get(wheel3).rotate(new Vector3f(1,0,0));

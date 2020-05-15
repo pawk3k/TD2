@@ -1,5 +1,6 @@
 package Renderer;
 
+import Game.Game;
 import Game.GameController;
 import Game.GameObject;
 import org.joml.Matrix4f;
@@ -48,7 +49,7 @@ public class Renderer {
 
     public void render(GameObject obj, Matrix4f camera) {
         Model model = GameController.models.get(obj.getModel());
-
+        Light light =  Game.lightPoints.get(0);
         camera.get(V);
         obj.getM().get(M);
 
@@ -68,7 +69,7 @@ public class Renderer {
         glBindVertexArray(model.getVaoID());
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTextureID());
-
+        load_light_struct(model.getShaderProgramId(),light,"point_sun");
 //        GL11.glBindTexture(GL11.GL_TEXTURE_2D,obj.getModel());
         glUniform1i(tex,0);
 //        glEnable(GL_TEXTURE_2D);

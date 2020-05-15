@@ -32,8 +32,6 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class MainDisplay {
     private long window;
-    private static int width  = 900;
-    private static int height = 600;
 
     public void run() throws Exception{
         init();
