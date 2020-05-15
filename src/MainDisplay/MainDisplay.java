@@ -86,8 +86,8 @@ public class MainDisplay {
         Input input = new Input(window);
 
         glEnable(GL_DEPTH_TEST);
-
-
+        float start  = System.currentTimeMillis();
+        float end;
         camera.setPosition(new Vector3f(-5.f ,0.f ,15.f));
 
 
@@ -95,7 +95,7 @@ public class MainDisplay {
             myRenderer.refreshScreen();
             camera.setPosition(new Vector3f(0.f,10.f+input.getX_of(),-15.f +input.getX_of() ));
 
-            mainScene.update(glfwGetTime());
+            mainScene.update((float)(glfwGetTime()-0.97));
 
             for (Map.Entry<Integer, GameObject> sceneObject : Game.GameObjects.entrySet()) {
                 myRenderer.render(sceneObject.getValue(), camera.getViewMatrix());
