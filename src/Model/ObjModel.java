@@ -1,14 +1,12 @@
 package Model;
-import Renderer.Model;
+
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
-
-import java.io.File;  // Import the File class
-import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner; // Import the Scanner class to read text files
+import java.util.Scanner;
+
 public class ObjModel {
     private String pathO;
 
@@ -41,20 +39,16 @@ public class ObjModel {
         return textureId;
     }
 
-
-    /*
-    *
-    * @param path_to_object
-    * */
     public ObjModel(String path_to_object, String path_to_texture){
         this.pathO = path_to_object;
         TextureClass wall = new TextureClass(path_to_texture);
         wall.create();
         this.textureId = wall.getTextureID();
+
+        read_object_file();
     }
 
-
-    public void read_object_file(){
+    private void read_object_file(){
         ArrayList<Float> vertices = new ArrayList<>(); // vertecies arr where every float is single vertex pos x y z
         ArrayList<Integer> indeciesPos = new ArrayList<>();
         ArrayList<Integer> indeciesNormals = new ArrayList<>();
@@ -155,7 +149,7 @@ public class ObjModel {
 
         }
         this.textureBuffer = textureArr;
-        
+
         // Reordering Normals postions
         float[] normalsArr = new float[positionV.size()*3];
 
@@ -167,7 +161,5 @@ public class ObjModel {
             normalsArr[current_pos*3+2] = current_norm.z;
         }
         this.normalsBuffer = normalsArr;
-
-
     }
 }

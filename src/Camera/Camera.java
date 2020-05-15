@@ -20,9 +20,6 @@ public class Camera {
         V =  new Matrix4f().identity().lookAt(position.x, position.y, position.z,
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f);
-
-
-
     }
 
     public void movePosition(float offsetX, float offsetY, float offsetZ) {
