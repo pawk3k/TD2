@@ -50,6 +50,8 @@ public class Renderer {
     public void render(GameObject obj, Matrix4f camera) {
         Model model = GameController.models.get(obj.getModel());
         Light light =  Game.lightPoints.get(0);
+
+
         camera.get(V);
         obj.getM().get(M);
 
@@ -60,6 +62,14 @@ public class Renderer {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
+        if(model.getShaderProgramId() == 2){
+
+            Matrix4f matrix4f = new Matrix4f().identity();
+            matrix4f.setOrtho2D(0, 100, 50, 50);
+            matrix4f.get(V);
+//            glEnable(GL_CULL_FACE);
+
+        }
         GL30.glUniformMatrix4fv(m_Matrix, false, M);
         GL30.glUniformMatrix4fv(p_Matrix, false, P);
         GL30.glUniformMatrix4fv(v_Matrix, false, V);
@@ -76,6 +86,8 @@ public class Renderer {
 
 //        GL13.glActiveTexture(GL13.GL_TEXTURE0);
 //      glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+//        glViewport(0,0,1300,768);
+
 
         // Drawing scene
         glDrawElements(GL_TRIANGLES, model.getIndicesNumber(), GL_UNSIGNED_INT, 0);
@@ -95,4 +107,5 @@ public class Renderer {
         GL30.glUniform4f(lightCol,vecCol.x,vecCol.y,vecCol.z,vecCol.w);
         GL30.glUniform1f(lightInt,light.getIntensity());
     }
+
 }

@@ -30,7 +30,7 @@ import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-public class MainDisplay {
+public class  MainDisplay {
     private long window;
 
     public void run() throws Exception{
@@ -86,17 +86,20 @@ public class MainDisplay {
         Input input = new Input(window);
 
         glEnable(GL_DEPTH_TEST);
-        float start  = System.currentTimeMillis();
-        float end;
+        long start  = System.currentTimeMillis();
+        long end;
         camera.setPosition(new Vector3f(-5.f ,0.f ,15.f));
 
 
         while (!glfwWindowShouldClose(window)) {
+            end = System.currentTimeMillis();
             myRenderer.refreshScreen();
             camera.setPosition(new Vector3f(0.f,10.f+input.getX_of(),-15.f +input.getX_of() ));
 
-            mainScene.update((float)(glfwGetTime()-0.97));
-
+            mainScene.update((float)(end-start)/1000);
+            if((float)(end-start)/1000 >1){
+                start = System.currentTimeMillis();
+            }
             for (Map.Entry<Integer, GameObject> sceneObject : Game.GameObjects.entrySet()) {
                 myRenderer.render(sceneObject.getValue(), camera.getViewMatrix());
             }
