@@ -37,6 +37,7 @@ public class Input {
                 if (key == GLFW_KEY_S) hold_s = false;
                 if (key == GLFW_KEY_D) hold_d = false;
             }
+
             if (key == GLFW_KEY_ESCAPE) glfwSetWindowShouldClose(window, true);
 
             Vector3f translate = new Vector3f();
