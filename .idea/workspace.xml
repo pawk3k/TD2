@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7d618a1c-457b-4665-8ef2-0f6b64392a5f" name="Default Changelist" comment="" />
+    <list default="true" id="2ebf176c-2430-4d01-b302-2802f6ffb9ae" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TD2/Camera/Camera.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TD2/Camera/Camera.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TD2/Game/GameObject.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TD2/Game/GameObject.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TD2/MainDisplay/Input.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TD2/MainDisplay/Input.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TD2/MainDisplay/MainDisplay.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TD2/MainDisplay/MainDisplay.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TD2/Model/ObjModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TD2/Model/ObjModel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TD2/Model/TextureClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TD2/Model/TextureClass.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TD2/Renderer/Loader.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TD2/Renderer/Loader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TD2/Renderer/Model.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TD2/Renderer/Model.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TD2/Renderer/Renderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TD2/Renderer/Renderer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainDisplay/Input.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainDisplay/Input.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainDisplay/MainDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainDisplay/MainDisplay.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,7 +33,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/TD2" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IgnoredFileRootStore">
     <option name="generatedRoots">
@@ -44,7 +59,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.18045977" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunManager" selected="Application.MainDisplay">
     <configuration name="MainDisplay (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -98,7 +113,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="7d618a1c-457b-4665-8ef2-0f6b64392a5f" name="Default Changelist" comment="" />
+      <changelist id="2ebf176c-2430-4d01-b302-2802f6ffb9ae" name="Default Changelist" comment="" />
       <created>1585906944001</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -135,6 +150,9 @@
       <workItem from="1588079912271" duration="3411000" />
       <workItem from="1588099554658" duration="7815000" />
       <workItem from="1588141205775" duration="8878000" />
+      <workItem from="1589738509325" duration="258000" />
+      <workItem from="1589738797687" duration="190000" />
+      <workItem from="1589739011707" duration="194000" />
     </task>
     <servers />
   </component>
@@ -156,8 +174,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
-      <path value="$PROJECT_DIR$" />
       <path value="$PROJECT_DIR$/grafika" />
+      <path value="$PROJECT_DIR$/TD2" />
     </ignored-roots>
   </component>
   <component name="WindowStateProjectService">
@@ -181,22 +199,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="157" y="100" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1587151123816" />
-    <state width="1322" height="264" key="GridCell.Tab.0.bottom" timestamp="1588153787636">
+    <state width="1322" height="199" key="GridCell.Tab.0.bottom" timestamp="1589739092647">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1322" height="264" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1588153787636" />
-    <state width="1322" height="264" key="GridCell.Tab.0.center" timestamp="1588153787636">
+    <state width="1322" height="199" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1589739092647" />
+    <state width="1322" height="199" key="GridCell.Tab.0.center" timestamp="1589739092647">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1322" height="264" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1588153787636" />
-    <state width="1322" height="264" key="GridCell.Tab.0.left" timestamp="1588153787635">
+    <state width="1322" height="199" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1589739092647" />
+    <state width="1322" height="199" key="GridCell.Tab.0.left" timestamp="1589739092647">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1322" height="264" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1588153787635" />
-    <state width="1322" height="264" key="GridCell.Tab.0.right" timestamp="1588153787636">
+    <state width="1322" height="199" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1589739092647" />
+    <state width="1322" height="199" key="GridCell.Tab.0.right" timestamp="1589739092647">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1322" height="264" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1588153787636" />
+    <state width="1322" height="199" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1589739092647" />
     <state width="1322" height="217" key="GridCell.Tab.1.bottom" timestamp="1588108732336">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -213,14 +231,14 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1322" height="217" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1588108732336" />
-    <state x="363" y="0" key="SettingsEditor" timestamp="1587716601377">
+    <state x="363" y="0" key="SettingsEditor" timestamp="1589739053101">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="363" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1587716601377" />
-    <state x="379" y="186" key="com.intellij.ide.util.TipDialog" timestamp="1588141205740">
+    <state x="363" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1589739053101" />
+    <state x="379" y="186" key="com.intellij.ide.util.TipDialog" timestamp="1589739012987">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="379" y="186" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1588141205740" />
+    <state x="379" y="186" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1589739012987" />
     <state x="339" y="157" key="run.anything.popup" timestamp="1588149039285">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

@@ -1,27 +1,16 @@
 package MainDisplay;
-import Model.Light;
-import Camera.Camera;
 import Game.Game;
 import Game.GameObject;
 import Game.GameController;
 import Renderer.Renderer;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
-import shaders.Shader;
-import java.awt.*;
-import java.nio.IntBuffer;
-import java.util.ArrayList;
+
 import java.nio.IntBuffer;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Vector;
-
-import SomeMath.Bezier;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;

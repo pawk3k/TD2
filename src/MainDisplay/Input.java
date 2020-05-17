@@ -1,6 +1,5 @@
 package MainDisplay;
 
-
 import Game.Game;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;

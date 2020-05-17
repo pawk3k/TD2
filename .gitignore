@@ -1,0 +1,6 @@
+.git/
+.idea/
+.gitignore.txt
+libs/
+out/
+res/
