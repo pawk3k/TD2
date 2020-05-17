@@ -1,6 +1,8 @@
 package MainDisplay;
 
 
+import Game.Game;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.glfw.GLFWScrollCallback;
@@ -9,67 +11,43 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 public class Input {
-
     private long window;
-    private float x_of;
-    private float z_of;
+    private boolean hold_w,hold_a,hold_s,hold_d;
 
-    public Input(long in_window){
+    public Input(long in_window) {
         this.window = in_window;
 
+        glfwSetScrollCallback(window, (window, xoffset, yoffset) -> {
+            if(yoffset == 1.0f) Game.Camera.zoom(true);
+            else Game.Camera.zoom(false);
+        });
+
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if(key == GLFW_KEY_D && action == GLFW_PRESS){
-                this.x_of=-1.0f;
+
+            if (action == GLFW_PRESS) {
+                if (key == GLFW_KEY_W) hold_w = true;
+                if (key == GLFW_KEY_A) hold_a = true;
+                if (key == GLFW_KEY_S) hold_s = true;
+                if (key == GLFW_KEY_D) hold_d = true;
             }
-            if(key == GLFW_KEY_A && action == GLFW_PRESS){
-                this.x_of=1.f;
+
+            if (action == GLFW_RELEASE) {
+                if (key == GLFW_KEY_W) hold_w = false;
+                if (key == GLFW_KEY_A) hold_a = false;
+                if (key == GLFW_KEY_S) hold_s = false;
+                if (key == GLFW_KEY_D) hold_d = false;
             }
-            if(key == GLFW_KEY_Z && action == GLFW_PRESS){
-                z_of-=0.1;
-            }
-            if(action== GLFW_RELEASE){
-                this.x_of = 0.0f;
-            }
-            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+            if (key == GLFW_KEY_ESCAPE) glfwSetWindowShouldClose(window, true);
+
+            Vector3f translate = new Vector3f();
+
+            if (hold_w) translate.add(new Vector3f(-1.0f, 0, 0));
+            if (hold_a) translate.add(new Vector3f(0, 0, 1.0f));
+            if (hold_s) translate.add(new Vector3f(1.0f, 0, 0));
+            if (hold_d) translate.add(new Vector3f(0, 0, -1.0f));
+
+            Game.Camera.translate(translate.mul(0.5f));
+            Game.Camera.updateV();
         });
-        final float[] mouseWheelVelocity = {0};
-
-        glfwSetScrollCallback(window, (long win, double dx, double dy) ->{
-            if(dy==-1.0f){
-                this.x_of+=-1.0f;
-            }if(dy==1.0f){
-                this.x_of+=1.0f;
-            }
-            System.out.println(this.x_of);
-
-        });
     }
-
-    public float getX_of() {
-        return x_of;
-    }
-
-    public float getZ_of() {
-        return z_of;
-    }
-    }
-
-
-
-
-    // @TODOO Кароче треба доробити камеру на скролл шоб віддалялась то без траблів можна зробити як показано ось тут
-
-//    glm::mat4 V = glm::lookAt(glm::vec3(view_x, view_y, view_z), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
-//void scroll_callback(GLFWwindow* window, double xOffset, double yOffset){
-//    view_x = view_x + xOffset;
-//    view_y = view_y + yOffset;
-//    printf("%lf : %lf\n",view_x,view_z);
-//
-////    double view_z = -5.0f;
-//
-//}
-
-
-
-
+}

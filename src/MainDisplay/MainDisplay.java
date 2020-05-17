@@ -1,5 +1,5 @@
 package MainDisplay;
-
+import Model.Light;
 import Camera.Camera;
 import Game.Game;
 import Game.GameObject;
@@ -7,14 +7,21 @@ import Game.GameController;
 import Renderer.Renderer;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
-
+import shaders.Shader;
+import java.awt.*;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.nio.IntBuffer;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Vector;
+
+import SomeMath.Bezier;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -25,8 +32,6 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class MainDisplay {
     private long window;
-    private static int width  = 900;
-    private static int height = 600;
 
     public void run() throws Exception{
         init();
@@ -47,7 +52,7 @@ public class MainDisplay {
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-        window = glfwCreateWindow(900, 600, "Tower Defence", NULL, NULL);
+        window = glfwCreateWindow(1300, 768, "Tower Defence", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -75,21 +80,18 @@ public class MainDisplay {
         Game mainScene = new Game();
         mainScene.init();
 
-        Camera camera = new Camera();
-
         Renderer myRenderer = new Renderer();
-        Input input = new Input(window);
+        new Input(window);
 
         glEnable(GL_DEPTH_TEST);
 
         while (!glfwWindowShouldClose(window)) {
             myRenderer.refreshScreen();
-            camera.setPosition(new Vector3f(0.f,10.f+input.getX_of(),-15.f +input.getX_of() ));
 
-            mainScene.update(glfwGetTime());
+            mainScene.update((float)(glfwGetTime()));
 
             for (Map.Entry<Integer, GameObject> sceneObject : Game.GameObjects.entrySet()) {
-                myRenderer.render(sceneObject.getValue(), camera.getViewMatrix());
+                myRenderer.render(sceneObject.getValue(), Game.Camera.getV());
             }
 
             glfwSwapBuffers(window);
