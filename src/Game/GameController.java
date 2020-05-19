@@ -26,18 +26,16 @@ public class GameController {
     private int idGameObjectsCounter = 1;
     private int idTurretsCounter = 1;
 
+    /**
+     * Load necessary models for easy turret creation into the memory
+    */
     public void loadEasyTurret() throws Exception {
         easyTurretParts = new int[]{
-                addModel("res/Turrets/EasyTurret/Gun.obj", "res/Turrets/EasyTurret/GoldMetal.png", 1, "", ""),
+                addModel("res/Turrets/EasyTurret/Gun.obj", "res/Turrets/EasyTurret/GoldMetal.png", (modelID == 1 ? 0 : 1), "src/shaders/vertex.glsl", "src/shaders/fragment.glsl"),
                 addModel("res/Turrets/EasyTurret/BarrelGuard.obj", "res/Turrets/EasyTurret/ClippedMetal.png", 1, "", ""),
                 addModel("res/Turrets/EasyTurret/Platform.obj", "res/Turrets/EasyTurret/GreyMetal.png", 1, "", ""),
                 addModel("res/Turrets/EasyTurret/Foundation.obj", "res/Turrets/EasyTurret/ClippedMetal.png", 1, "", "")
         };
-    }
-
-    public int createGameObject(int parent, int model) throws Exception {
-        Game.GameObjects.put(idGameObjectsCounter, new GameObject(idGameObjectsCounter, parent, model));
-        return idGameObjectsCounter++;
     }
 
     public void spawnTurret(int type, Vector3f position) throws Exception {
@@ -51,6 +49,20 @@ public class GameController {
                     createGameObject(0, easyTurretParts[3]),
                     position));
         }
+        else {
+            System.out.println("Pawka-kakawka :3");
+        }
+    }
+
+    public int setMap(String objPath, String texPath, int shaderID, String vertexShaderCode, String fragmentShaderCode) throws Exception {
+        int mapID = addModel(objPath, texPath, shaderID, vertexShaderCode, fragmentShaderCode);
+        Game.GameObjects.put(idGameObjectsCounter, new GameLevel(idGameObjectsCounter, mapID));
+        return idGameObjectsCounter;
+    }
+
+    public int createGameObject(int parent, int model) throws Exception {
+        Game.GameObjects.put(idGameObjectsCounter, new GameObject(idGameObjectsCounter, parent, model));
+        return idGameObjectsCounter++;
     }
 
     /**

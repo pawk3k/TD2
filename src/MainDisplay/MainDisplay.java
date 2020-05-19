@@ -1,7 +1,7 @@
 package MainDisplay;
 import Game.Game;
 import Game.GameObject;
-import Game.GameController;
+import Camera.Camera;
 import Renderer.Renderer;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -70,17 +70,18 @@ public class MainDisplay {
         mainScene.init();
 
         Renderer myRenderer = new Renderer();
-        new Input(window);
+        Input input = new Input(window);
 
         glEnable(GL_DEPTH_TEST);
 
         while (!glfwWindowShouldClose(window)) {
             myRenderer.refreshScreen();
 
+            input.submitKeys();
             mainScene.update((float)(glfwGetTime()));
 
             for (Map.Entry<Integer, GameObject> sceneObject : Game.GameObjects.entrySet()) {
-                myRenderer.render(sceneObject.getValue(), Game.Camera.getV());
+                myRenderer.render(sceneObject.getValue(), Game.camera.getV());
             }
 
             glfwSwapBuffers(window);

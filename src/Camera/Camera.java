@@ -8,20 +8,27 @@ public class Camera {
     private Vector3f maxPoint = new Vector3f(new Vector3f(50, 100, 0));
     private Vector3f lookPoint = new Vector3f();
     private Matrix4f V = new Matrix4f();
-    private float lookDistance = 0.1f;
+    private float lookDistance = 0.5f;
 
     public Matrix4f getV() {
         return V;
     }
 
     public void translate(Vector3f position) {
+        float diffX = lookPoint.x + position.x;
+        float diffZ = lookPoint.z + position.z;
+        diffX = diffX >= 100 ? 0 : diffX <= -100 ? 0 : position.x;
+        diffZ = diffZ >= 100 ? 0 : diffZ <= -100 ? 0 : position.z;
+
+        position = new Vector3f(diffX, position.y, diffZ);
+
         this.maxPoint.add(position);
         this.position.add(position);
         this.lookPoint.add(position);
     }
 
     public void zoom(boolean in){
-        if(this.lookDistance <= 0.2f && in || this.lookDistance >= 0.7f && !in) return;
+        if(this.lookDistance <= 0.3f && in || this.lookDistance >= 0.7f && !in) return;
         this.lookDistance += in ? -0.1f : 0.1f;
         this.position = new Vector3f(this.lookPoint).lerp(maxPoint, lookDistance);
         updateV();

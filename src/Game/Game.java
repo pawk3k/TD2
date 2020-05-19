@@ -1,5 +1,6 @@
 package Game;
 
+import Camera.Camera;
 import Game.PlayableGameObjects.Turret;
 import Model.Light;
 import org.joml.Vector3f;
@@ -11,16 +12,19 @@ public class Game {
     public static Map<Integer, GameObject> GameObjects = new HashMap<Integer, GameObject>();
     public static Map<Integer, Light> lightPoints = new HashMap<>();
     public static Map<Integer, Turret> turrets = new HashMap<>();
-    public static Camera Camera = new Camera();
+    public static Camera camera = new Camera();
+
 //    public static ArrayList<Vector3f> bezierPoints = new ArrayList<>();
 
     private GameController gameController = new GameController();
 
     public void init() throws Exception {
-        int barrel = gameController.addModel("res/Mortar/Barrel.obj","res/Mortar/Gold_metal_texture.png", 0, "src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
 
-        gameController.loadEasyTurret();
-        gameController.spawnTurret(0, new Vector3f(0,0,0));
+        //gameController.loadEasyTurret();
+        //gameController.spawnTurret(0, new Vector3f(0,0,0));
+        int map = gameController.setMap("res/Map/Map.obj","res/Map/mapTexture.png", 0, "src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
+        GameObjects.get(map).scale(new Vector3f(10f,10f,10f));
+        GameObjects.get(map).updateM();
 
         Light light = new Light();
         lightPoints.put(0, light);
