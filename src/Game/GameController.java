@@ -26,6 +26,10 @@ public class GameController {
     private int idGameObjectsCounter = 1;
     private int idTurretsCounter = 1;
 
+    public static Vector3f calcVec(int[] pos, float y, float scale){
+        return new Vector3f((float) (-9.5 + pos[0]) * scale, y,(float) (9.5 - pos[1]) * scale);
+    }
+
     /**
      * Load necessary models for easy turret creation into the memory
     */
@@ -38,7 +42,8 @@ public class GameController {
         };
     }
 
-    public void spawnTurret(int type, Vector3f position) throws Exception {
+    public void spawnTurret(int type, int[] pos) throws Exception {
+        Vector3f position = new Vector3f(-9.5f + pos[0],0,-9.5f + pos[1]);
         //TODO: замінити аргумент vec3 позицію на точку на матриці(карті)
         if(type == 0){
             int gun = createGameObject(0, easyTurretParts[0]);
@@ -52,6 +57,7 @@ public class GameController {
         else {
             System.out.println("Pawka-kakawka :3");
         }
+        idTurretsCounter++;
     }
 
     public int setMap(String objPath, String texPath, int shaderID, String vertexShaderCode, String fragmentShaderCode) throws Exception {

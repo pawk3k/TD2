@@ -1,7 +1,5 @@
 package Game;
 
-import Renderer.Model;
-
 public class GameObject extends GameObjectPrefab {
     int GameObjectModel;
 
