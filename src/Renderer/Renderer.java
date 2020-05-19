@@ -50,8 +50,6 @@ public class Renderer {
     public void render(GameObject obj, Matrix4f camera) {
         Model model = GameController.models.get(obj.getModel());
         Light light =  Game.lightPoints.get(0);
-
-
         camera.get(V);
         obj.getM().get(M);
 
@@ -62,6 +60,7 @@ public class Renderer {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
+        glViewport(0, 0, 1300, 768);
         if(model.getShaderProgramId() == 2){
 
             Matrix4f matrix4f = new Matrix4f().identity();
@@ -88,15 +87,12 @@ public class Renderer {
 //      glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 //        glViewport(0,0,1300,768);
 
-
         // Drawing scene
         glDrawElements(GL_TRIANGLES, model.getIndicesNumber(), GL_UNSIGNED_INT, 0);
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(2);
-
     }
-
     private void load_light_struct(int shader_program_id, Light light,String name_of_light){
         int lightPos = GL30.glGetUniformLocation(shader_program_id, name_of_light + ".position");
         int lightCol = GL30.glGetUniformLocation(shader_program_id, name_of_light + ".color");

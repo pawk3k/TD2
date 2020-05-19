@@ -1,13 +1,10 @@
 package MainDisplay;
-import Model.Light;
-import Camera.Camera;
+
 import Game.Game;
 import Game.GameObject;
 import Game.GameController;
 import Renderer.Renderer;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -80,28 +77,21 @@ public class  MainDisplay {
         Game mainScene = new Game();
         mainScene.init();
 
-        Camera camera = new Camera();
-
         Renderer myRenderer = new Renderer();
-        Input input = new Input(window);
+        new Input(window);
 
         glEnable(GL_DEPTH_TEST);
         long start  = System.currentTimeMillis();
         long end;
-        camera.setPosition(new Vector3f(-5.f ,0.f ,15.f));
-
 
         while (!glfwWindowShouldClose(window)) {
             end = System.currentTimeMillis();
             myRenderer.refreshScreen();
-            camera.setPosition(new Vector3f(0.f,10.f+input.getX_of(),-15.f +input.getX_of() ));
 
-            mainScene.update((float)(end-start)/1000);
-            if((float)(end-start)/1000 >1){
-                start = System.currentTimeMillis();
-            }
+            mainScene.update((float)(glfwGetTime()));
+
             for (Map.Entry<Integer, GameObject> sceneObject : Game.GameObjects.entrySet()) {
-                myRenderer.render(sceneObject.getValue(), camera.getViewMatrix());
+                myRenderer.render(sceneObject.getValue(), Game.Camera.getV());
             }
 
             glfwSwapBuffers(window);
