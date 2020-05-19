@@ -2,7 +2,7 @@ package MainDisplay;
 
 import Game.Game;
 import Game.GameObject;
-import Game.GameController;
+import Camera.Camera;
 import Renderer.Renderer;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -78,7 +78,7 @@ public class  MainDisplay {
         mainScene.init();
 
         Renderer myRenderer = new Renderer();
-        new Input(window);
+        Input input = new Input(window);
 
         glEnable(GL_DEPTH_TEST);
         long start  = System.currentTimeMillis();
@@ -88,10 +88,11 @@ public class  MainDisplay {
             end = System.currentTimeMillis();
             myRenderer.refreshScreen();
 
+            input.submitKeys();
             mainScene.update((float)(glfwGetTime()));
 
             for (Map.Entry<Integer, GameObject> sceneObject : Game.GameObjects.entrySet()) {
-                myRenderer.render(sceneObject.getValue(), Game.Camera.getV());
+                myRenderer.render(sceneObject.getValue(), Game.camera.getV());
             }
 
             glfwSwapBuffers(window);
