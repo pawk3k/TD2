@@ -57,7 +57,7 @@ public class GameController {
     public int setMap(String objPath, String texPath, int shaderID, String vertexShaderCode, String fragmentShaderCode) throws Exception {
         int mapID = addModel(objPath, texPath, shaderID, vertexShaderCode, fragmentShaderCode);
         Game.GameObjects.put(idGameObjectsCounter, new GameLevel(idGameObjectsCounter, mapID));
-        return idGameObjectsCounter;
+        return idGameObjectsCounter++;
     }
 
     public int createGameObject(int parent, int model) throws Exception {
@@ -96,7 +96,6 @@ public class GameController {
                 shader.getProgramId(),
                 loadedModel.getTextureId()
         ));
-
         return modelID++;
     }
 }

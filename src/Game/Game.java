@@ -26,6 +26,9 @@ public class Game {
         GameObjects.get(map).scale(new Vector3f(10f,10f,10f));
         GameObjects.get(map).updateM();
 
+        gameController.loadEasyTurret();
+        gameController.spawnTurret(0, new Vector3f());
+
         Light light = new Light();
         lightPoints.put(0, light);
 
