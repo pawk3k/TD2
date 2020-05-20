@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import static org.lwjgl.opengl.GL11C.GL_NEAREST;
 import static org.newdawn.slick.opengl.PNGDecoder.RGBA;
 
 public class TextureClass {
