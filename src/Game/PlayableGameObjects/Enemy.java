@@ -61,6 +61,10 @@ public class Enemy {
         }
     }
 
+    public Vector3f getPosition(){
+        return Game.GameObjects.get(body).getTranslation();
+    }
+
     /**
      * @param id Enemy ID
      * @param body Enemy' game object

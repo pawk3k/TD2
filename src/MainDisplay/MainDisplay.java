@@ -81,9 +81,6 @@ public class MainDisplay {
             input.submitKeys();
             mainScene.update((float)(glfwGetTime()));
 
-//            for (Map.Entry<Integer, GameObject> sceneObject : Game.GameObjects.entrySet()) {
-//                myRenderer.render(sceneObject.getValue(), Game.camera.getV());
-//            }
             for(Iterator<Map.Entry<Integer, GameObject>> it = Game.GameObjects.entrySet().iterator(); it.hasNext();){
                 GameObject gameObject = it.next().getValue();
                 if(GameController.removeListGameObjects.contains(gameObject.getId())) it.remove();

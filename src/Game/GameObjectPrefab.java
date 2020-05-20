@@ -20,6 +20,18 @@ public class GameObjectPrefab {
         return id;
     }
 
+    public Vector3f getScale(){
+        return this.scale;
+    }
+
+    public Vector3f getRotation(){
+        return this.rotation;
+    }
+
+    public Vector3f getTranslation(){
+        return this.translation;
+    }
+
     public int getParent(){
         return parent;
     }
@@ -93,21 +105,25 @@ public class GameObjectPrefab {
         if(parent != 0)
             this.M = new Matrix4f(Game.GameObjects.get(parent).getM()).
                     translate(translation).
-                    rotateX(Math.toRadians(rotation.x)).
-                    rotateY(Math.toRadians(rotation.y)).
-                    rotateZ(Math.toRadians(rotation.z)).
+                    rotateX(rotation.x).
+                    rotateY(rotation.y).
+                    rotateZ(rotation.z).
                     scale(scale);
         else
             this.M = new Matrix4f().identity().
                     translate(translation).
-                    rotateX(Math.toRadians(rotation.x)).
-                    rotateY(Math.toRadians(rotation.y)).
-                    rotateZ(Math.toRadians(rotation.z)).
+                    rotateX(rotation.x).
+                    rotateY(rotation.y).
+                    rotateZ(rotation.z).
                     scale(scale);
     }
 
     public Matrix4f getM(){
         return M;
+    }
+
+    public void setM(Matrix4f newM){
+        this.M = newM;
     }
 
     /**

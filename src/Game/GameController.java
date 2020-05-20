@@ -2,15 +2,14 @@ package Game;
 
 import Game.PlayableGameObjects.Enemy;
 import Game.PlayableGameObjects.Turret;
+import Model.ObjModel;
 import Renderer.Loader;
 import Renderer.Model;
 import org.joml.Vector3f;
 import shaders.Shader;
-import Model.ObjModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -91,17 +90,16 @@ public class GameController {
      * @param pos position on map in matrix coordinates [y, x]
      */
     public void spawnTurret(int type, int[] pos) throws Exception {
-        Vector3f position = calcVec(pos, 5f, 10f);
+        Vector3f position = calcVec(pos, 10f, 10f);
         switch (type) {
             case 1:
                 loadPartsPack(1);
-                int gun = createGameObject(0, easyTurretParts[0]);
-                createGameObject(gun, easyTurretParts[1]);
-                Game.turrets.put(idTurretsCounter, new Turret(
-                        idTurretsCounter, gun,
-                        createGameObject(0, easyTurretParts[2]),
-                        createGameObject(0, easyTurretParts[3]),
-                        position));
+                int foundation = createGameObject(0, easyTurretParts[3]),
+                    platform = createGameObject(foundation, easyTurretParts[2]),
+                    gun = createGameObject(platform, easyTurretParts[0]),
+                    barrelGuard = createGameObject(gun, easyTurretParts[1]);
+
+                Game.turrets.put(idTurretsCounter, new Turret(idTurretsCounter, gun, platform, foundation, position));
             break;
             case 2:
                 loadPartsPack(2);

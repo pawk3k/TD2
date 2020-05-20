@@ -26,7 +26,7 @@ public class Game {
      *  4 last bits considered to show next direction 0000
      *  UP RIGHT LEFT DOWN                            URLD
      * Build places:
-     *  8 bit marks building place, another 7 is building place ID
+     *  8 bit marks building place, another 7 is building place ID (number)
      *  1000000
      */
     public void init() throws Exception {
@@ -61,6 +61,8 @@ public class Game {
         GameObjects.get(map).updateM();
 
         gameController.spawnEnemy(1, new int[] {3,0});
+
+        gameController.spawnTurret(1, new int[] {10,10});
     }
 
     boolean en;
@@ -70,16 +72,24 @@ public class Game {
         float delta = time - oldTime;
         oldTime = time;
 
-        if(((int)time) % 2 == 0){
-            if(!en){
-            gameController.spawnEnemy(1, new int[] {3,0});
-            en = true;}
+//        if(((int)time) % 2 == 0){
+//            if(!en){
+//                gameController.spawnEnemy(1, new int[] {3,0});
+//                en = true;
+//            }
+//        }
+//        else en = false;
+
+        for(Iterator<Map.Entry<Integer, Turret>> it = Game.turrets.entrySet().iterator(); it.hasNext();){
+            Turret turret = it.next().getValue();
+            turret.move(delta);
+            if(GameController.removeListTurrets.contains(turret.getMyID())) it.remove();
         }
-        else en = false;
+        GameController.removeListTurrets.clear();
 
         for(Iterator<Map.Entry<Integer, Enemy>> it = Game.enemies.entrySet().iterator(); it.hasNext();){
             Enemy enemy = it.next().getValue();
-            enemy.move(delta * 5f);
+            enemy.move(delta);
             if(GameController.removeListEnemies.contains(enemy.getMyID())) it.remove();
         }
         GameController.removeListEnemies.clear();
