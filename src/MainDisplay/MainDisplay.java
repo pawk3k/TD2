@@ -1,7 +1,7 @@
 package MainDisplay;
 import Game.Game;
 import Game.GameObject;
-import Camera.Camera;
+import Game.GameController;
 import Renderer.Renderer;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 
@@ -80,9 +81,15 @@ public class MainDisplay {
             input.submitKeys();
             mainScene.update((float)(glfwGetTime()));
 
-            for (Map.Entry<Integer, GameObject> sceneObject : Game.GameObjects.entrySet()) {
-                myRenderer.render(sceneObject.getValue(), Game.camera.getV());
+//            for (Map.Entry<Integer, GameObject> sceneObject : Game.GameObjects.entrySet()) {
+//                myRenderer.render(sceneObject.getValue(), Game.camera.getV());
+//            }
+            for(Iterator<Map.Entry<Integer, GameObject>> it = Game.GameObjects.entrySet().iterator(); it.hasNext();){
+                GameObject gameObject = it.next().getValue();
+                if(GameController.removeListGameObjects.contains(gameObject.getId())) it.remove();
+                else myRenderer.render(gameObject, Game.camera.getV());
             }
+            GameController.removeListGameObjects.clear();
 
             glfwSwapBuffers(window);
             glfwPollEvents();
