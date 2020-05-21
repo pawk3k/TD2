@@ -124,7 +124,7 @@ public class  MainDisplay {
             glEnable(GL_TEXTURE_2D);
             for (Map.Entry<Integer, GameObject> sceneObject : Game.GameHudObjects.entrySet()) {
 //                glRasterPos2i(600,1200);
-                myRenderer.renderHud1(sceneObject.getValue(), 1300,768);
+                myRenderer.renderHud(sceneObject.getValue(), 1300,768);
                 x+=100;
 
             }

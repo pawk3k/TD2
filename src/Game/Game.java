@@ -3,17 +3,12 @@ package Game;
 import Camera.Camera;
 import Game.PlayableGameObjects.Enemy;
 import Game.PlayableGameObjects.Turret;
-import Model.Assets;
 import Model.Light;
 import Renderer.Loader;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static Game.GameController.models;
 
 public class Game {
     public static Map<Integer, GameObject> GameObjects = new HashMap<Integer, GameObject>();
@@ -72,41 +67,20 @@ public class Game {
         int cube = gameController.addModel("res/box1.obj","res/red_brick.png",1,"", "");
         int cube2 = gameController.addModel("res/box1.obj","res/red_brick.png",2,"", "");
 
-        Loader loader = new Loader();
-        Assets assets = new Assets();
-        int res =  loader.createVAO(assets.getVertices(),assets.getIndices(),assets.getTexture());
+        // Hearts
+        for (int i = 0; i < 6; i++) {
+            int cubeGO4 = gameController.createGameHudObject(0,hudModel2);
+        }
 
-//        models.put(res,)
-//        int barrelGO1 = gameController.createGameObject(0,barrel);
-//        int cubeGO2 = gameController.createGameHudObject(0,hudModel);
-//        int cubeGO3 = gameController.createGameObject(0,hudModel);
-//        int cubeGO4 = gameController.createGameHudObject(0,cube2);
+        float x = 3.5f;
 
-//        int cubeGO3 = gameController.createGameHudObject(map,hudModel1);
-        int cubeGO4 = gameController.createGameHudObject(map,hudModel2);
-
-
-//
-//        int cubeGO31 = gameController.createGameObject(map,cube);
-//        int cubeGO32 = gameController.createGameObject(map,cube);
-
-
-
-//        GameHudObjects.get(cubeGO3).setTranslation(new Vector3f(10.f,0.f,0.0f));
-//        GameHudObjects.get(cubeGO3).setScale(new Vector3f(5.f,5.f,5.f));
-//        GameHudObjects.get(cubeGO3).setRotation(new Vector3f(0.f,0.f,-20.0f));
-
-
-//        GameHudObjects.get(cubeGO4).setTranslation(new Vector3f(-12.f,0.f,0.0f));
-//        GameHudObjects.get(cubeGO4).setScale(new Vector3f(5.f,5.f,5.f));
-//        GameHudObjects.get(cubeGO4).setRotation(new Vector3f(0.f,90.f,0.f));
-
-
-
-//        GameHudObjects.get(cubeGO3).updateM();
-//        GameHudObjects.get(cubeGO4).updateM();
-
-//        enemy = new Enemy(barrelGO1,new int[] {3,0},5f);
+        for( Integer go : GameHudObjects.keySet()){
+            GameHudObjects.get(go).translate(new Vector3f(x,15.f,0.f));
+            GameHudObjects.get(go).rotate(new Vector3f(0.f,0,180.f));
+            GameHudObjects.get(go).updateM();
+            x-=2.0;
+        }
+        //Hearts
     }
 
     Enemy enemy;

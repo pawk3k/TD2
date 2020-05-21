@@ -91,61 +91,25 @@ public class Renderer {
         shader.unbind();
     }
 
-    public void renderHud(GameObject obj,int width , int height,Matrix4f camera){
+    public void renderHud(GameObject obj,int width , int height){
 
         Model model = GameController.models.get(obj.getModel());
         Shader shader =  GameController.shaders.get(2);
-        this.projectionMatrix.get(P);
         shader.bind();
-        camera.get(V);
         obj.getM().get(M);
-        Matrix4f m4f = getOrthoProjectionMatrix(0,width,height,0);
-//        m4f.get(P);
-
-        int m_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "M");
-        int p_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "P");
-        int v_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "V");
-        int tex = GL30.glGetUniformLocation(model.getShaderProgramId(), "tex");
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
-
-        GL30.glUniformMatrix4fv(m_Matrix, false, M);
-        GL30.glUniformMatrix4fv(p_Matrix, false, P);
-        GL30.glUniformMatrix4fv(v_Matrix, false, V);
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-
-        glBindVertexArray(model.getVaoID());
-
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTextureID());
-        glUniform1i(tex,0);
-
-        // Drawing scene
-        glDrawElements(GL_TRIANGLES, model.getIndicesNumber(), GL_UNSIGNED_INT, 0);
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(2);
-        shader.unbind();
-
-    }
-
-
-    public void renderHud1(GameObject obj,int width , int height){
-
-        Model model = GameController.models.get(obj.getModel());
-        Shader shader =  GameController.shaders.get(2);
-        shader.bind();
-
         Matrix4f m4f = setProjection(width,height);
-        m4f.scale(72);
+        m4f.scale(20);
         m4f.get(P);
 
         int p_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "P");
+        int m_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "M");
+
         int tex = GL30.glGetUniformLocation(model.getShaderProgramId(), "tex");
-        int color = GL30.glGetUniformLocation(model.getShaderProgramId(), "colour");
+//        int color = GL30.glGetUniformLocation(model.getShaderProgramId(), "colour");
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
+        GL30.glUniformMatrix4fv(m_Matrix, false, M);
         GL30.glUniformMatrix4fv(p_Matrix, false, P);
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
 
@@ -153,7 +117,7 @@ public class Renderer {
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTextureID());
         glUniform1i(tex,0);
-        glUniform4f(color,0,0,0,0.3f);
+//        glUniform4f(color,0,0,0,0.3f);
 
         // Drawing scene
         glDrawElements(GL_TRIANGLES, model.getIndicesNumber(), GL_UNSIGNED_INT, 0);

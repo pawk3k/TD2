@@ -9,5 +9,5 @@ uniform vec4 colour;
 
 void main()
 {
-    fragColor = colour;
+    fragColor = texture(tex, outTexCoord);
 }
