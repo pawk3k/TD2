@@ -62,7 +62,19 @@ public class Game {
 
         gameController.spawnEnemy(1, new int[] {3,0});
 
-        gameController.spawnTurret(1, new int[] {10,10});
+        gameController.spawnTurret(1, new int[] {1,3});
+        gameController.spawnTurret(1, new int[] {5,4});
+        gameController.spawnTurret(1, new int[] {8,4});
+        gameController.spawnTurret(1, new int[] {12,5});
+        gameController.spawnTurret(1, new int[] {14,1});
+        gameController.spawnTurret(1, new int[] {17,5});
+        gameController.spawnTurret(1, new int[] {3,14});
+        gameController.spawnTurret(1, new int[] {7,14});
+        gameController.spawnTurret(1, new int[] {7,12});
+        gameController.spawnTurret(1, new int[] {7,18});
+        gameController.spawnTurret(1, new int[] {11,16});
+        gameController.spawnTurret(1, new int[] {12,12});
+        gameController.spawnTurret(1, new int[] {17,14});
     }
 
     boolean en;
@@ -72,13 +84,13 @@ public class Game {
         float delta = time - oldTime;
         oldTime = time;
 
-//        if(((int)time) % 2 == 0){
-//            if(!en){
-//                gameController.spawnEnemy(1, new int[] {3,0});
-//                en = true;
-//            }
-//        }
-//        else en = false;
+        if(((int)time) % 4 == 0){
+            if(!en){
+                gameController.spawnEnemy(1, new int[] {3,0});
+                en = true;
+            }
+        }
+        else en = false;
 
         for(Iterator<Map.Entry<Integer, Turret>> it = Game.turrets.entrySet().iterator(); it.hasNext();){
             Turret turret = it.next().getValue();

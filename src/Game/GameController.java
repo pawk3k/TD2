@@ -90,7 +90,7 @@ public class GameController {
      * @param pos position on map in matrix coordinates [y, x]
      */
     public void spawnTurret(int type, int[] pos) throws Exception {
-        Vector3f position = calcVec(pos, 10f, 10f);
+        Vector3f position = calcVec(pos, 3f, 10f);
         switch (type) {
             case 1:
                 loadPartsPack(1);
