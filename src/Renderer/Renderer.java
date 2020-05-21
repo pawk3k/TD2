@@ -134,21 +134,18 @@ public class Renderer {
 
         Model model = GameController.models.get(obj.getModel());
         Shader shader =  GameController.shaders.get(2);
-        this.projectionMatrix.get(P);
         shader.bind();
 
-        obj.getM().get(M);
-        Matrix4f m4f = getOrthoProjectionMatrix(0,1300,768,0);
-//        m4f.get(P);
+        Matrix4f m4f = setProjection(width,height);
+        m4f.scale(72);
+        m4f.get(P);
 
-        int m_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "M");
         int p_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "P");
         int tex = GL30.glGetUniformLocation(model.getShaderProgramId(), "tex");
+        int color = GL30.glGetUniformLocation(model.getShaderProgramId(), "colour");
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
-
-        GL30.glUniformMatrix4fv(m_Matrix, false, M);
         GL30.glUniformMatrix4fv(p_Matrix, false, P);
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
 
@@ -156,6 +153,7 @@ public class Renderer {
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTextureID());
         glUniform1i(tex,0);
+        glUniform4f(color,0,0,0,0.3f);
 
         // Drawing scene
         glDrawElements(GL_TRIANGLES, model.getIndicesNumber(), GL_UNSIGNED_INT, 0);
@@ -178,7 +176,13 @@ public class Renderer {
 
     public final Matrix4f getOrthoProjectionMatrix(float left, float right, float bottom, float top) {
         orthoMatrix.identity();
-        orthoMatrix.setOrtho2D(left, right, bottom, top);
+        orthoMatrix.setOrtho(left, right, bottom, top,-1,1);
+        return orthoMatrix;
+    }
+
+    public Matrix4f setProjection(int width, int height) {
+        orthoMatrix.identity();
+        orthoMatrix = new Matrix4f().setOrtho2D(-width/2, width/2, -height/2, height/2);
         return orthoMatrix;
     }
 

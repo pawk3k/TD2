@@ -44,6 +44,28 @@ public class Loader {
 
         return last_index++;
     }
+    public int createVAO(float[] vertices, int[] indices, float[] textures) {
+        int vao, ebo;
+        vao = glGenVertexArrays();
+        ebo = glGenBuffers();
+        glBindVertexArray(vao);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
+
+        storeDataInAttributeList(0,3,vertices);
+        storeDataInAttributeList(1,2,textures);
+
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+
+        glBindVertexArray(0);
+
+        vaos.add(vao);
+        eboNums.add(indices.length);
+
+        return last_index++;
+    }
 
     public int getVao(int index) {
         return vaos.get(index);

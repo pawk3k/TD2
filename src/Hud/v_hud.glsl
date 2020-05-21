@@ -11,6 +11,6 @@ uniform mat4 P;
 uniform mat4 V;
 void main()
 {
-    gl_Position =  P  *V  * M * vec4(position.xyz, 1.0);
+    gl_Position =  P  * vec4(position.xz,position.y, 1.0);
     outTexCoord = textureCoords;
 }
