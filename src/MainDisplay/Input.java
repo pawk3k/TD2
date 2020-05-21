@@ -8,7 +8,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public class Input {
     private long window;
 
-    private boolean hold_w,hold_a,hold_s,hold_d,anyKeyPressed;
+    private boolean hold_w,hold_a,hold_s,hold_d,anyKeyPressed,mouseOnButton;
 
     public void submitKeys(){
         if(!anyKeyPressed) return;
@@ -51,5 +51,15 @@ public class Input {
 
             if (key == GLFW_KEY_ESCAPE) glfwSetWindowShouldClose(window, true);
         });
+
+        glfwSetCursorPosCallback(in_window,((window1, xpos, ypos) -> {
+            System.out.println(xpos + " " + ypos);
+        }));
+        glfwSetMouseButtonCallback(in_window,((window1, button, action, mods) -> {
+            if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
+                System.out.println("Pressed");
+            }
+
+        }));
     }
 }
