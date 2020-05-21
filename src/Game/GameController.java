@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class GameController {
     public static Map<Integer, Model> models = new HashMap<>();
-    public static Map<Integer, Shader> shaders = new HashMap<>();
+    public  static Map<Integer, Shader> shaders = new HashMap<>();
 
     /**
      * Keys of objects which will be removed (DeathNotes)
@@ -50,7 +50,7 @@ public class GameController {
      *             2 - hardTurretParts
      *             3 - easyEnemyParts
      *             4 - hardEnemyParts
-    */
+     */
     private void loadPartsPack(int type) throws Exception {
         switch (type) {
             case 1:
@@ -95,12 +95,12 @@ public class GameController {
             case 1:
                 loadPartsPack(1);
                 int foundation = createGameObject(0, easyTurretParts[3]),
-                    platform = createGameObject(foundation, easyTurretParts[2]),
-                    gun = createGameObject(platform, easyTurretParts[0]),
-                    barrelGuard = createGameObject(gun, easyTurretParts[1]);
+                        platform = createGameObject(foundation, easyTurretParts[2]),
+                        gun = createGameObject(platform, easyTurretParts[0]),
+                        barrelGuard = createGameObject(gun, easyTurretParts[1]);
 
                 Game.turrets.put(idTurretsCounter, new Turret(idTurretsCounter, gun, platform, foundation, position));
-            break;
+                break;
             case 2:
                 loadPartsPack(2);
                 //TODO: Додати турель 2
@@ -127,7 +127,7 @@ public class GameController {
 
                 //enemy = new Enemy(id,barrelGO1,new int[] {3,0},5f);
                 Game.enemies.put(idEnemyCounter,new Enemy(idEnemyCounter, body, pos, 5f));
-            break;
+                break;
             case 2:
                 loadPartsPack(4);
                 //TODO: Додати ворога 2
@@ -152,6 +152,11 @@ public class GameController {
         Game.GameObjects.put(idGameObjectsCounter, new GameLevel(idGameObjectsCounter, mapID));
         return idGameObjectsCounter++;
     }
+    public int createGameHudObject(int parent, int model) throws Exception {
+        Game.GameHudObjects.put(idGameObjectsCounter, new GameObject(idGameObjectsCounter, parent, model));
+        return idGameObjectsCounter++;
+
+    }
 
     /**
      * @param parent game object' parent, 0 if no parent
@@ -162,10 +167,7 @@ public class GameController {
         Game.GameObjects.put(idGameObjectsCounter, new GameObject(idGameObjectsCounter, parent, model));
         return idGameObjectsCounter++;
     }
-    public int createGameHudObject(int parent, int model) throws Exception {
-        Game.GameHudObjects.put(idGameObjectsCounter, new GameObject(idGameObjectsCounter, parent, model));
-        return idGameObjectsCounter++;
-    }
+
 
     /**
      * Add new model to storage in memory. Returns key to get model from models map.
@@ -174,7 +176,7 @@ public class GameController {
      * @param shaderID set 0 to load new shader from vertexShaderCode and fragmentShaderCode
      *                 or id of already loaded shader into map and values from vertexShaderCode and fragmentShaderCode
      *                 will be not considered
-    */
+     */
     public int addModel(String objPath, String texPath, int shaderID, String vertexShaderCode, String fragmentShaderCode) throws Exception {
         ObjModel loadedModel = new ObjModel(objPath, texPath);
         Shader shader;

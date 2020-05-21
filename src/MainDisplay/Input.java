@@ -7,8 +7,13 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Input {
     private long window;
+    enum button {
+        NONE,
+        LEFT,
+        RIGHT
 
-    private boolean hold_w,hold_a,hold_s,hold_d,anyKeyPressed,mouseOnButton;
+    }
+    private boolean hold_w,hold_a,hold_s,hold_d,anyKeyPressed,isMouseOnButtonL,isMouseOnButtonR;
 
     public void submitKeys(){
         if(!anyKeyPressed) return;
@@ -53,13 +58,33 @@ public class Input {
         });
 
         glfwSetCursorPosCallback(in_window,((window1, xpos, ypos) -> {
+            isMouseOnButtonL = isOverButton(xpos, ypos) == button.LEFT;
+            isMouseOnButtonR = isOverButton(xpos, ypos) == button.RIGHT;
+
+
+
             System.out.println(xpos + " " + ypos);
         }));
         glfwSetMouseButtonCallback(in_window,((window1, button, action, mods) -> {
             if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
-                System.out.println("Pressed");
+                if(isMouseOnButtonL){
+                    System.out.println("Left pressed");
+                }
+                if(isMouseOnButtonR){
+                    System.out.println("Right pressed");
+                }
             }
-
         }));
+    }
+
+    public button isOverButton(double x, double y){
+
+        if((x>540 && x < 600) && (y>654 && y < 720)){
+            return button.LEFT;
+        }
+        if((x > 700 && x < 760) && (y>650 && y < 720)){
+            return button.RIGHT;
+        }
+        else return  button.NONE ;
     }
 }
