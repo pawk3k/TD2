@@ -2,7 +2,7 @@ package MainDisplay;
 
 import Game.Game;
 import Game.GameObject;
-import Camera.Camera;
+import Game.GameController;
 import Renderer.Renderer;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -15,6 +15,7 @@ import java.awt.*;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.nio.IntBuffer;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Vector;
@@ -112,22 +113,18 @@ public class  MainDisplay {
             mainScene.update((float)(glfwGetTime()));
 //
 
-            for (Map.Entry<Integer, GameObject> sceneObject : Game.GameObjects.entrySet()) {
-                myRenderer.render(sceneObject.getValue(), Game.camera.getV());
+            for(Iterator<Map.Entry<Integer, GameObject>> it = Game.GameObjects.entrySet().iterator(); it.hasNext();){
+                GameObject gameObject = it.next().getValue();
+                if(GameController.removeListGameObjects.contains(gameObject.getId())) it.remove();
+                else myRenderer.render(gameObject, Game.camera.getV());
             }
-//            glDepthMask(GL11.GL_FALSE);  // disable writes to Z-Buffer
-//            GL11.glDisable(GL_DEPTH_TEST);  // disable depth-testing
-//            GL11.glDisable(GL11.GL_CULL_FACE);
 
-//            GL11.glMatrixMode(GL11.GL_PROJECTION);
-
-            glEnable(GL_TEXTURE_2D);
             for (Map.Entry<Integer, GameObject> sceneObject : Game.GameHudObjects.entrySet()) {
-//                glRasterPos2i(600,1200);
-                myRenderer.renderHud(sceneObject.getValue(), 1300,768);
+                myRenderer.renderHud(sceneObject.getValue(), getWidth(),getHeight());
                 x+=100;
 
             }
+            GameController.removeListGameObjects.clear();
 
             glfwSwapBuffers(window);
             glfwPollEvents();

@@ -55,7 +55,6 @@ public class Renderer {
 
         Model model = GameController.models.get(obj.getModel());
         int id =  model.getShaderProgramId();
-        glViewport(0, 0, 1300, 768);
 
         Shader shader =  GameController.shaders.get(1);
         shader.bind();

@@ -8,6 +8,7 @@ import Renderer.Loader;
 import org.joml.Vector3f;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Game {
@@ -15,6 +16,7 @@ public class Game {
     public static Map<Integer, GameObject> GameHudObjects = new HashMap<Integer, GameObject>();
     public static Map<Integer, Light> lightPoints = new HashMap<>();
     public static Map<Integer, Turret> turrets = new HashMap<>();
+    public static Map<Integer, Enemy> enemies = new HashMap<>();
     public static Camera camera = new Camera();
     public static int[][] GameMap;
 
@@ -26,13 +28,13 @@ public class Game {
      *  4 last bits considered to show next direction 0000
      *  UP RIGHT LEFT DOWN                            URLD
      * Build places:
-     *  8 bit marks building place, another 7 is building place ID
+     *  8 bit marks building place, another 7 is building place ID (number)
      *  1000000
      */
     public void init() throws Exception {
         GameMap = new int[][] {
                 {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-                {0,  0,  0,257,  0,  0,  0,  0,  0,  0,  0,  0,  4,  4,  4,  4,  4,  4,  4,  4},
+                {0,  0,  0,257,  0,  0,  0,  0,  0,  0,  0,  0,  4,  4,  4,  4,  4,  4,  4,  0},
                 {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  0,  0,  0,  0,  0,  0,  0},
                 {4,  4,  4,  4,  4,  4,  1,  0,  0,  0,  0,  0,  8,  0,269,  0,  0,  0,  0,  0},
                 {0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  8,  0,  0,  0,  0,  0,  0,  0},
@@ -40,7 +42,7 @@ public class Game {
                 {0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  0,  0,  0},
                 {0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,267,  0,266,  0,  8,  0,268,  0},
                 {0,  0,  0,  0,259,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  0,  0,  0},
-                {0,  0,  0,  0,  0,  0,  3,  4,  4,  4,  4,  4,  4,  4,  4,  4,  8,  0,  0,  0},
+                {0,  0,  0,  0,  0,  0,  5,  4,  4,  4,  4,  4,  4,  4,  4,  4,  8,  0,  0,  0},
                 {0,  0,  0,  1,  2,  2,  2,  0,  0,  0,  0,  0,  0,  0,  8,  0,  0,  0,  0,  0},
                 {0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  0,265,  0,  0,  0},
                 {0,  0,  0,  1,  0,260,  0,  0,  0,  0,  0,  0,263,  0,  8,  0,  0,  0,  0,  0},
@@ -81,14 +83,51 @@ public class Game {
             x-=2.0;
         }
         //Hearts
+        gameController.spawnEnemy(1, new int[] {3,0});
+
+        gameController.spawnTurret(1, new int[] {1,3});
+        gameController.spawnTurret(1, new int[] {5,4});
+        gameController.spawnTurret(1, new int[] {8,4});
+        gameController.spawnTurret(1, new int[] {12,5});
+        gameController.spawnTurret(1, new int[] {14,1});
+        gameController.spawnTurret(1, new int[] {17,5});
+        gameController.spawnTurret(1, new int[] {3,14});
+        gameController.spawnTurret(1, new int[] {7,14});
+        gameController.spawnTurret(1, new int[] {7,12});
+        gameController.spawnTurret(1, new int[] {7,18});
+        gameController.spawnTurret(1, new int[] {11,16});
+        gameController.spawnTurret(1, new int[] {12,12});
+        gameController.spawnTurret(1, new int[] {17,14});
     }
 
-    Enemy enemy;
+    boolean en;
+
     float oldTime = 0;
-    public void update(float time){
+    public void update(float time) throws Exception {
         float delta = time - oldTime;
 
         oldTime = time;
-//        enemy.move(delta);
+
+        if(((int)time) % 4 == 0){
+            if(!en){
+                gameController.spawnEnemy(1, new int[] {3,0});
+                en = true;
+            }
+        }
+        else en = false;
+
+        for(Iterator<Map.Entry<Integer, Turret>> it = Game.turrets.entrySet().iterator(); it.hasNext();){
+            Turret turret = it.next().getValue();
+            turret.move(delta);
+            if(GameController.removeListTurrets.contains(turret.getMyID())) it.remove();
+        }
+        GameController.removeListTurrets.clear();
+
+        for(Iterator<Map.Entry<Integer, Enemy>> it = Game.enemies.entrySet().iterator(); it.hasNext();){
+            Enemy enemy = it.next().getValue();
+            enemy.move(delta);
+            if(GameController.removeListEnemies.contains(enemy.getMyID())) it.remove();
+        }
+        GameController.removeListEnemies.clear();
     }
 }
