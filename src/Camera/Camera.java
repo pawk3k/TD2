@@ -5,7 +5,6 @@ import org.joml.Vector3f;
 
 public class Camera {
     private Vector3f position = new Vector3f(5f,10f ,0);
-//    private Vector3f position = new Vector3f(0.f,0.f ,-0.1f);
     private Vector3f maxPoint = new Vector3f(new Vector3f(50, 100, 0));
     private Vector3f lookPoint = new Vector3f(0.f,0.f,0.f);
     private Matrix4f V = new Matrix4f();

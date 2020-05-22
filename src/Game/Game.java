@@ -61,46 +61,35 @@ public class Game {
         int map = gameController.setMap("res/Map/Map.obj","res/Map/mapTexture.png", 0, "src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
         GameObjects.get(map).scale(new Vector3f(10f,10f,10f));
         GameObjects.get(map).updateM();
-//        GameObjects.get(map).updateM();
+
         int  hudModel1 = gameController.addModel("res/HpPlane.obj","res/tower.png",0,"src/Hud/v_hud.glsl", "src/Hud/f_hud.glsl");
         int  hudModel2 = gameController.addModel("res/HpPlane.obj","res/hp.png",2,"", "");
 
-//        int barrel = gameController.addModel("res/Mortar/Barrel.obj","res/Mortar/Wood_planks_texture.png",1,"", "");
-        int cube = gameController.addModel("res/box1.obj","res/red_brick.png",1,"", "");
-        int cube2 = gameController.addModel("res/box1.obj","res/red_brick.png",2,"", "");
-
         // Hearts
-        for (int i = 0; i < 5; i++) {
-            int cubeGO4 = gameController.createGameHudObject(0,hudModel2);
-        }
+        for (int i = 0; i < 5; i++) gameController.createGameHudObject(0,hudModel2);
 
         float x = 3.5f;
 
         for( Integer go : GameHudObjects.keySet()){
             GameHudObjects.get(go).translate(new Vector3f(x,15.f,0.f));
-            GameHudObjects.get(go).setRotation(new Vector3f(0.f,0,-3.1f));
+            GameHudObjects.get(go).setRotation(new Vector3f(0.f,0,(float) Math.toRadians(180)));
             GameHudObjects.get(go).updateM();
             x-=2.0;
         }
-        //Hearts
 
-        //Buttons
         int cubeGO4 = gameController.createGameHudObject(0,hudModel1);
         GameHudObjects.get(cubeGO4).translate(new Vector3f(4,-15.f,0.f));
-        GameHudObjects.get(cubeGO4).setRotation(new Vector3f(0.f,0,-3.1f));
+        GameHudObjects.get(cubeGO4).setRotation(new Vector3f(0.f,0,(float) Math.toRadians(180)));
         GameHudObjects.get(cubeGO4).setScale(new Vector3f(2.f,2,2.0f));
         GameHudObjects.get(cubeGO4).updateM();
 
         int cubeGO5 = gameController.createGameHudObject(0,hudModel1);
         GameHudObjects.get(cubeGO5).translate(new Vector3f(-4,-15.f,0.f));
-        GameHudObjects.get(cubeGO5).setRotation(new Vector3f(0.f,0,-3.1f));
+        GameHudObjects.get(cubeGO5).setRotation(new Vector3f(0.f,0,(float) Math.toRadians(180)));
         GameHudObjects.get(cubeGO5).setScale(new Vector3f(2.f,2,2.0f));
         GameHudObjects.get(cubeGO5).updateM();
 
-
         gameController.spawnEnemy(1, new int[] {3,0});
-
-
 
         gameController.spawnTurret(1, new int[] {1,3});
         gameController.spawnTurret(1, new int[] {5,4});
@@ -118,13 +107,10 @@ public class Game {
     }
 
     boolean en;
-
     float oldTime = 0;
     public void update(float time) throws Exception {
         float delta = time - oldTime;
-
         oldTime = time;
-
         if(((int)time) % 4 == 0){
             if(!en){
                 gameController.spawnEnemy(1, new int[] {3,0});
