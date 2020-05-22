@@ -9,7 +9,7 @@ import java.util.List;
 public class GameObjectPrefab {
     protected int id;
     protected int parent;
-    protected List<Integer> children = new ArrayList<>();
+    private List<Integer> children = new ArrayList<>();
     protected Matrix4f M = new Matrix4f().identity();
 
     protected Vector3f scale = new Vector3f(1.0f, 1.0f, 1.0f);

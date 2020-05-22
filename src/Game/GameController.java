@@ -6,8 +6,10 @@ import Model.ObjModel;
 import Renderer.Loader;
 import Renderer.Model;
 import org.joml.Vector3f;
+import org.lwjgl.system.MathUtil;
 import shaders.Shader;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,11 +35,25 @@ public class GameController {
     private boolean[] loadedParts = new boolean[4]; //eTP, hTP, eEP, hEP
 
     private Loader loader = new Loader();
+    private static int idGameObjectsCounter = 1;
     private int modelID = 1;
     private int shaderID = 1;
-    private int idGameObjectsCounter = 1;
     private int idTurretsCounter = 1;
     private int idEnemyCounter = 1;
+
+    private static float lerp(float a, float b, float f) { return a + f * (b - a); }
+    public static float radianInterpolation(float from, float to, float f){
+        float tmpLerp;
+        if(Math.abs(from-to) < Math.PI) return lerp(from,to,f);
+        if(from < 0){
+            tmpLerp = lerp(from,(float)(-2*Math.PI-to),f);
+            return (float) (tmpLerp < -Math.PI ? Math.PI : tmpLerp);
+        }
+        else{
+            tmpLerp = lerp(from,(float) (2*Math.PI+to),f);
+            return (float) (tmpLerp > Math.PI ? -Math.PI : tmpLerp);
+        }
+    }
 
     public static Vector3f calcVec(int[] pos, float y, float scale){
         return new Vector3f((float) (-9.5 + pos[0]) * scale, y,(float) (9.5 - pos[1]) * scale);
@@ -56,10 +72,11 @@ public class GameController {
             case 1:
                 if (loadedParts[0]) return;
                 easyTurretParts = new int[]{
-                        addModel("res/Turrets/EasyTurret/Gun.obj", "res/Turrets/EasyTurret/GoldMetal.png", (modelID == 1 ? 0 : 1), "src/shaders/vertex.glsl", "src/shaders/fragment.glsl"),
+                        addModel("res/Turrets/EasyTurret/Gun.obj", "res/Green.png", (modelID == 1 ? 0 : 1), "src/shaders/vertex.glsl", "src/shaders/fragment.glsl"),
                         addModel("res/Turrets/EasyTurret/BarrelGuard.obj", "res/Turrets/EasyTurret/ClippedMetal.png", 1, "", ""),
                         addModel("res/Turrets/EasyTurret/Platform.obj", "res/Turrets/EasyTurret/GreyMetal.png", 1, "", ""),
-                        addModel("res/Turrets/EasyTurret/Foundation.obj", "res/Turrets/EasyTurret/ClippedMetal.png", 1, "", "")
+                        addModel("res/Turrets/EasyTurret/Foundation.obj", "res/Turrets/EasyTurret/ClippedMetal.png", 1, "", ""),
+                        addModel("res/Turrets/Bullet/bullet.obj","res/Turrets/Bullet/bullet.png",1,"","")
                 };
                 loadedParts[0] = true;
                 break;
@@ -70,7 +87,9 @@ public class GameController {
                 break;
             case 3:
                 if (loadedParts[2]) return;
-                System.out.println("easyEnemyParts load test");
+                easyEnemyParts = new int[]{
+                        addModel("res/Enemy/eye.obj","res/Enemy/eye.png",(modelID == 1 ? 0 : 1),"src/shaders/vertex.glsl","src/shaders/fragment.glsl")
+                };
                 loadedParts[2] = true;
                 break;
             case 4:
@@ -96,10 +115,10 @@ public class GameController {
                 loadPartsPack(1);
                 int foundation = createGameObject(0, easyTurretParts[3]),
                         platform = createGameObject(foundation, easyTurretParts[2]),
-                        gun = createGameObject(platform, easyTurretParts[0]),
-                        barrelGuard = createGameObject(gun, easyTurretParts[1]);
+                        gun = createGameObject(platform, easyTurretParts[0]);
+                createGameObject(gun, easyTurretParts[1]);
 
-                Game.turrets.put(idTurretsCounter, new Turret(idTurretsCounter, gun, platform, foundation, position));
+                Game.turrets.put(idTurretsCounter, new Turret(idTurretsCounter, gun, platform, foundation, position, easyTurretParts[4]));
                 break;
             case 2:
                 loadPartsPack(2);
@@ -122,10 +141,10 @@ public class GameController {
             case 1:
                 loadPartsPack(3);
 
-                int barrel = addModel("res/Mortar/Barrel.obj", "res/Mortar/Wood_planks_texture.png", (modelID == 1 ? 0 : 1), "src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
-                int body = createGameObject(0, barrel);
+                int body = createGameObject(0, easyEnemyParts[0]);
+                Game.GameObjects.get(body).setRotation(new Vector3f(0,(float)Math.toRadians(90),0));
+                Game.GameObjects.get(body).setScale(new Vector3f(2,2,2));
 
-                //enemy = new Enemy(id,barrelGO1,new int[] {3,0},5f);
                 Game.enemies.put(idEnemyCounter,new Enemy(idEnemyCounter, body, pos, 5f));
                 break;
             case 2:
@@ -152,6 +171,7 @@ public class GameController {
         Game.GameObjects.put(idGameObjectsCounter, new GameLevel(idGameObjectsCounter, mapID));
         return idGameObjectsCounter++;
     }
+
     public int createGameHudObject(int parent, int model) throws Exception {
         Game.GameHudObjects.put(idGameObjectsCounter, new GameObject(idGameObjectsCounter, parent, model));
         return idGameObjectsCounter++;
@@ -163,7 +183,7 @@ public class GameController {
      * @param model game object' model
      * @return game object ID
      */
-    public int createGameObject(int parent, int model) throws Exception {
+    public static int createGameObject(int parent, int model) throws Exception {
         Game.GameObjects.put(idGameObjectsCounter, new GameObject(idGameObjectsCounter, parent, model));
         return idGameObjectsCounter++;
     }

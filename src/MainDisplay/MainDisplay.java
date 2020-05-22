@@ -101,6 +101,7 @@ public class  MainDisplay {
         int x = 0;
         int y = 0;
         glEnable(GL11.GL_BLEND);
+        glEnable(GL11.GL_DEPTH_TEST);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         while (!glfwWindowShouldClose(window)) {
             w =400;

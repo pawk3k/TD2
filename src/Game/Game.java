@@ -4,7 +4,6 @@ import Camera.Camera;
 import Game.PlayableGameObjects.Enemy;
 import Game.PlayableGameObjects.Turret;
 import Model.Light;
-import Renderer.Loader;
 import org.joml.Vector3f;
 
 import java.util.HashMap;
