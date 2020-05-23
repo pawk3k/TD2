@@ -160,7 +160,7 @@ public class GameController {
     }
 
     public void upgradeStructure(int[] pos) throws Exception {
-        if((Game.GameMap[pos[0]][pos[1]] & 32768) != 32768) return;
+        if(((Game.GameMap[pos[0]][pos[1]] & 32768) != 32768) || pos[0] < 0 || pos[0] > 19 || pos[1] < 0 || pos[1] > 19) return;
         int type = (Game.GameMap[pos[0]][pos[1]] & 24576) >> 13;
         switch (type){
             case 0:
