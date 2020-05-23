@@ -4,6 +4,7 @@ import Game.Game;
 import Game.GameObject;
 import Game.GameController;
 import Renderer.Renderer;
+import Input.*;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -87,7 +88,7 @@ public class  MainDisplay {
 
     private void loop() throws Exception {
         GL.createCapabilities();
-
+        glEnable(GL_DEPTH_TEST);
         Game mainScene = new Game();
         mainScene.init();
 
@@ -95,6 +96,8 @@ public class  MainDisplay {
         Input input = new Input(window);
 
         long start  = System.currentTimeMillis();
+        MousePicker mp = new MousePicker(Game.camera,myRenderer,input);
+//        mp.calculateMouseRay();
         long end;
         int w = 250;
         int h = 200;
@@ -103,8 +106,7 @@ public class  MainDisplay {
         glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         while (!glfwWindowShouldClose(window)) {
-            w =400;
-            h  =250;
+            mp.update();
             x=400;
             end = System.currentTimeMillis();
             myRenderer.refreshScreen();

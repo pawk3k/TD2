@@ -57,7 +57,6 @@ public class Game {
 
         Light light = new Light();
         lightPoints.put(0, light);
-
         int map = gameController.setMap("res/Map/Map.obj","res/Map/mapTexture.png", 0, "src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
         GameObjects.get(map).scale(new Vector3f(10f,10f,10f));
         GameObjects.get(map).updateM();
@@ -78,7 +77,7 @@ public class Game {
 
         for( Integer go : GameHudObjects.keySet()){
             GameHudObjects.get(go).translate(new Vector3f(x,15.f,0.f));
-            GameHudObjects.get(go).setRotation(new Vector3f(0.f,0,-3.1f));
+            GameHudObjects.get(go).setRotation(new Vector3f(0.f,0,-3.14f));
             GameHudObjects.get(go).updateM();
             x-=2.0;
         }
@@ -87,13 +86,13 @@ public class Game {
         //Buttons
         int cubeGO4 = gameController.createGameHudObject(0,hudModel1);
         GameHudObjects.get(cubeGO4).translate(new Vector3f(4,-15.f,0.f));
-        GameHudObjects.get(cubeGO4).setRotation(new Vector3f(0.f,0,-3.1f));
+        GameHudObjects.get(cubeGO4).setRotation(new Vector3f(0.f,0,-3.14f));
         GameHudObjects.get(cubeGO4).setScale(new Vector3f(2.f,2,2.0f));
         GameHudObjects.get(cubeGO4).updateM();
 
         int cubeGO5 = gameController.createGameHudObject(0,hudModel1);
         GameHudObjects.get(cubeGO5).translate(new Vector3f(-4,-15.f,0.f));
-        GameHudObjects.get(cubeGO5).setRotation(new Vector3f(0.f,0,-3.1f));
+        GameHudObjects.get(cubeGO5).setRotation(new Vector3f(0.f,0,-3.14f));
         GameHudObjects.get(cubeGO5).setScale(new Vector3f(2.f,2,2.0f));
         GameHudObjects.get(cubeGO5).updateM();
 
@@ -103,48 +102,49 @@ public class Game {
 
 
         gameController.spawnTurret(1, new int[] {1,3});
-        gameController.spawnTurret(1, new int[] {5,4});
-        gameController.spawnTurret(1, new int[] {8,4});
-        gameController.spawnTurret(1, new int[] {12,5});
-        gameController.spawnTurret(1, new int[] {14,1});
-        gameController.spawnTurret(1, new int[] {17,5});
-        gameController.spawnTurret(1, new int[] {3,14});
-        gameController.spawnTurret(1, new int[] {7,14});
-        gameController.spawnTurret(1, new int[] {7,12});
-        gameController.spawnTurret(1, new int[] {7,18});
-        gameController.spawnTurret(1, new int[] {11,16});
-        gameController.spawnTurret(1, new int[] {12,12});
-        gameController.spawnTurret(1, new int[] {17,14});
+        System.out.println(GameController.calcVec(new int[] {1,3},0,10));
+//        gameController.spawnTurret(1, new int[] {5,4});
+//        gameController.spawnTurret(1, new int[] {8,4});
+//        gameController.spawnTurret(1, new int[] {12,5});
+//        gameController.spawnTurret(1, new int[] {14,1});
+//        gameController.spawnTurret(1, new int[] {17,5});
+//        gameController.spawnTurret(1, new int[] {3,14});
+//        gameController.spawnTurret(1, new int[] {7,14});
+//        gameController.spawnTurret(1, new int[] {7,12});
+//        gameController.spawnTurret(1, new int[] {7,18});
+//        gameController.spawnTurret(1, new int[] {11,16});
+//        gameController.spawnTurret(1, new int[] {12,12});
+//        gameController.spawnTurret(1, new int[] {17,14});
     }
 
     boolean en;
 
     float oldTime = 0;
     public void update(float time) throws Exception {
-        float delta = time - oldTime;
-
-        oldTime = time;
-
-        if(((int)time) % 4 == 0){
-            if(!en){
-                gameController.spawnEnemy(1, new int[] {3,0});
-                en = true;
-            }
-        }
-        else en = false;
-
-        for(Iterator<Map.Entry<Integer, Turret>> it = Game.turrets.entrySet().iterator(); it.hasNext();){
-            Turret turret = it.next().getValue();
-            turret.move(delta);
-            if(GameController.removeListTurrets.contains(turret.getMyID())) it.remove();
-        }
-        GameController.removeListTurrets.clear();
-
-        for(Iterator<Map.Entry<Integer, Enemy>> it = Game.enemies.entrySet().iterator(); it.hasNext();){
-            Enemy enemy = it.next().getValue();
-            enemy.move(delta);
-            if(GameController.removeListEnemies.contains(enemy.getMyID())) it.remove();
-        }
-        GameController.removeListEnemies.clear();
+//        float delta = time - oldTime;
+//
+//        oldTime = time;
+//
+//        if(((int)time) % 4 == 0){
+//            if(!en){
+//                gameController.spawnEnemy(1, new int[] {3,0});
+//                en = true;
+//            }
+//        }
+//        else en = false;
+//
+//        for(Iterator<Map.Entry<Integer, Turret>> it = Game.turrets.entrySet().iterator(); it.hasNext();){
+//            Turret turret = it.next().getValue();
+//            turret.move(delta);
+//            if(GameController.removeListTurrets.contains(turret.getMyID())) it.remove();
+//        }
+//        GameController.removeListTurrets.clear();
+//
+//        for(Iterator<Map.Entry<Integer, Enemy>> it = Game.enemies.entrySet().iterator(); it.hasNext();){
+//            Enemy enemy = it.next().getValue();
+//            enemy.move(delta);
+//            if(GameController.removeListEnemies.contains(enemy.getMyID())) it.remove();
+//        }
+//        GameController.removeListEnemies.clear();
     }
 }

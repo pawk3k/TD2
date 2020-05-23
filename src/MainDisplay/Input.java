@@ -7,6 +7,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Input {
     private long window;
+    private double mouseX,mouseY;
     enum button {
         NONE,
         LEFT,
@@ -27,6 +28,14 @@ public class Input {
 
         Game.camera.translate(translate.mul(0.5f));
         Game.camera.updateV();
+    }
+
+    public double getMouseX() {
+        return mouseX;
+    }
+
+    public double getMouseY() {
+        return mouseY;
     }
 
     public Input(long in_window) {
@@ -58,12 +67,14 @@ public class Input {
         });
 
         glfwSetCursorPosCallback(in_window,((window1, xpos, ypos) -> {
+            mouseX = xpos;
+            mouseY = ypos;
             isMouseOnButtonL = isOverButton(xpos, ypos) == button.LEFT;
             isMouseOnButtonR = isOverButton(xpos, ypos) == button.RIGHT;
 
 
 
-            System.out.println(xpos + " " + ypos);
+//            System.out.println(xpos + " " + ypos);
         }));
         glfwSetMouseButtonCallback(in_window,((window1, button, action, mods) -> {
             if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){

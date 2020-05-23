@@ -41,9 +41,12 @@ public class Renderer {
                 0.0f, 1.0f, 0.0f);
         float aspectRatio = (float) 1300 / 768;
         projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(45.0f), aspectRatio, 0.01f, 100.0f);
-        Matrix4f orthoMatrix = new Matrix4f();
 
 
+    }
+
+    public Matrix4f getProjectionMatrix() {
+        return projectionMatrix;
     }
 
     public void refreshScreen() {
