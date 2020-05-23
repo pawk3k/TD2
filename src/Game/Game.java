@@ -9,6 +9,7 @@ import org.joml.Vector3f;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 public class Game {
     public static Map<Integer, GameObject> GameObjects = new HashMap<Integer, GameObject>();
@@ -18,6 +19,8 @@ public class Game {
     public static Map<Integer, Enemy> enemies = new HashMap<>();
     public static Camera camera = new Camera();
     public static int[][] GameMap;
+    private static int playerHealth = 5;
+    private static int[] heartsHUD = new int[playerHealth];
 
     private GameController gameController = new GameController();
 
@@ -27,29 +30,29 @@ public class Game {
      *  4 last bits considered to show next direction 0000
      *  UP RIGHT LEFT DOWN                            URLD
      * Build places:
-     *  8 bit marks building place, another 7 is building place ID (number)
-     *  1000000
+     *  16bit marks building place, 15-14 bits marks turret type, 13-1 bits marks turret id
+     *  1 00 0000000000000
      */
     public void init() throws Exception {
         GameMap = new int[][] {
                 {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-                {0,  0,  0,257,  0,  0,  0,  0,  0,  0,  0,  0,  4,  4,  4,  4,  4,  4,  4,  0},
+                {0,  0,  0,32768,  0,  0,  0,  0,  0,  0,  0,  0,  4,  4,  4,  4,  4,  4,  4,  0},
                 {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  0,  0,  0,  0,  0,  0,  0},
-                {4,  4,  4,  4,  4,  4,  1,  0,  0,  0,  0,  0,  8,  0,269,  0,  0,  0,  0,  0},
+                {4,  4,  4,  4,  4,  4,  1,  0,  0,  0,  0,  0,  8,  0,32768,  0,  0,  0,  0,  0},
                 {0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  8,  0,  0,  0,  0,  0,  0,  0},
-                {0,  0,  0,  0,258,  0,  1,  0,  0,  0,  0,  0,  8,  2,  2,  2,  2,  0,  0,  0},
+                {0,  0,  0,  0,32768,  0,  1,  0,  0,  0,  0,  0,  8,  2,  2,  2,  2,  0,  0,  0},
                 {0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  0,  0,  0},
-                {0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,267,  0,266,  0,  8,  0,268,  0},
-                {0,  0,  0,  0,259,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  0,  0,  0},
+                {0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,32768,  0,32768,  0,  8,  0,32768,  0},
+                {0,  0,  0,  0,32768,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  0,  0,  0},
                 {0,  0,  0,  0,  0,  0,  5,  4,  4,  4,  4,  4,  4,  4,  4,  4,  8,  0,  0,  0},
                 {0,  0,  0,  1,  2,  2,  2,  0,  0,  0,  0,  0,  0,  0,  8,  0,  0,  0,  0,  0},
-                {0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  0,265,  0,  0,  0},
-                {0,  0,  0,  1,  0,260,  0,  0,  0,  0,  0,  0,263,  0,  8,  0,  0,  0,  0,  0},
+                {0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  0,32768,  0,  0,  0},
+                {0,  0,  0,  1,  0,32768,  0,  0,  0,  0,  0,  0,32768,  0,  8,  0,  0,  0,  0,  0},
                 {0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  0,  0,  0,  0,  0},
-                {0,261,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  4,  4,  8,  0,  0,  0,  0,  0},
+                {0,32768,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  4,  4,  8,  0,  0,  0,  0,  0},
                 {0,  0,  0,  4,  4,  4,  4,  1,  0,  0,  0,  0,  8,  0,  0,  0,  0,  0,  0,  0},
                 {0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  8,  0,  0,  0,  0,  0,  0,  0},
-                {0,  0,  0,  0,  0,262,  0,  4,  4,  4,  4,  4,  8,  0,264,  0,  0,  0,  0,  0},
+                {0,  0,  0,  0,  0,32768,  0,  4,  4,  4,  4,  4,  8,  0,32768,  0,  0,  0,  0,  0},
                 {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
                 {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
         };
@@ -64,15 +67,13 @@ public class Game {
         int  hudModel1 = gameController.addModel("res/HpPlane.obj","res/tower.png",0,"src/Hud/v_hud.glsl", "src/Hud/f_hud.glsl");
         int  hudModel2 = gameController.addModel("res/HpPlane.obj","res/hp.png",2,"", "");
 
-        // Hearts
-        for (int i = 0; i < 5; i++) gameController.createGameHudObject(0,hudModel2);
 
         float x = 3.5f;
-
-        for( Integer go : GameHudObjects.keySet()){
-            GameHudObjects.get(go).translate(new Vector3f(x,15.f,0.f));
-            GameHudObjects.get(go).setRotation(new Vector3f(0.f,0,(float) Math.toRadians(180)));
-            GameHudObjects.get(go).updateM();
+        for(int i = 0; i < playerHealth; i++){
+            heartsHUD[i] = gameController.createGameHudObject(0,hudModel2);
+            GameHudObjects.get(heartsHUD[i]).translate(new Vector3f(x,15.f,0.f));
+            GameHudObjects.get(heartsHUD[i]).setRotation(new Vector3f(0.f,0,(float) Math.toRadians(180)));
+            GameHudObjects.get(heartsHUD[i]).updateM();
             x-=2.0;
         }
 
@@ -90,29 +91,48 @@ public class Game {
 
         gameController.spawnEnemy(1, new int[] {3,0});
 
-        gameController.spawnTurret(1, new int[] {1,3});
-        gameController.spawnTurret(1, new int[] {5,4});
-        gameController.spawnTurret(1, new int[] {8,4});
-        gameController.spawnTurret(1, new int[] {12,5});
-        gameController.spawnTurret(1, new int[] {14,1});
-        gameController.spawnTurret(1, new int[] {17,5});
-        gameController.spawnTurret(1, new int[] {3,14});
-        gameController.spawnTurret(1, new int[] {7,14});
-        gameController.spawnTurret(1, new int[] {7,12});
-        gameController.spawnTurret(1, new int[] {7,18});
-        gameController.spawnTurret(1, new int[] {11,16});
-        gameController.spawnTurret(1, new int[] {12,12});
-        gameController.spawnTurret(1, new int[] {17,14});
+//        gameController.spawnTurret(1, new int[] {1,3});
+//        gameController.spawnTurret(2, new int[] {5,4});
+//        gameController.spawnTurret(1, new int[] {8,4});
+//        gameController.spawnTurret(2, new int[] {12,5});
+//        gameController.spawnTurret(1, new int[] {14,1});
+//        gameController.spawnTurret(2, new int[] {17,5});
+//        gameController.spawnTurret(1, new int[] {3,14});
+//        gameController.spawnTurret(2, new int[] {7,14});
+//        gameController.spawnTurret(1, new int[] {7,12});
+//        gameController.spawnTurret(2, new int[] {7,18});
+//        gameController.spawnTurret(1, new int[] {11,16});
+//        gameController.spawnTurret(2, new int[] {12,12});
+//        gameController.spawnTurret(1, new int[] {17,14});
+    }
+
+    public static void getDamage() {
+        if(playerHealth > 0) {
+            playerHealth--;
+            GameController.removeListHUD.add(heartsHUD[playerHealth]);
+        }
     }
 
     boolean en;
     float oldTime = 0;
     public void update(float time) throws Exception {
+        if(playerHealth <= 0){
+            if(playerHealth == -1) return;
+            else{
+                playerHealth--;
+                int  gameOverModel = gameController.addModel("res/HpPlane.obj","res/GameOver.png",0,"src/Hud/v_hud.glsl", "src/Hud/f_hud.glsl");
+                int hgo = gameController.createGameHudObject(0,gameOverModel);
+                GameHudObjects.get(hgo).setRotation(new Vector3f(0.f,0,(float) Math.toRadians(180)));
+                GameHudObjects.get(hgo).setScale(new Vector3f(-10, 10, 0));
+                GameHudObjects.get(hgo).updateM();
+            }
+        }
+
         float delta = time - oldTime;
         oldTime = time;
-        if(((int)time) % 4 == 0){
+        if(((int)time) % 2 == 0){
             if(!en){
-                gameController.spawnEnemy(1, new int[] {3,0});
+                gameController.spawnEnemy(new Random().nextInt(2) + 1, new int[] {3,0});
                 en = true;
             }
         }

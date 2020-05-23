@@ -20,6 +20,10 @@ public class GameObjectPrefab {
         return id;
     }
 
+    public List<Integer> getChildren(){
+        return children;
+    }
+
     public Vector3f getScale(){
         return this.scale;
     }
@@ -120,10 +124,6 @@ public class GameObjectPrefab {
 
     public Matrix4f getM(){
         return M;
-    }
-
-    public void setM(Matrix4f newM){
-        this.M = newM;
     }
 
     /**

@@ -10,10 +10,14 @@ public class Bullet {
     private GameObject me;
     private float deltaCumulative;
     private Vector3f stPos, finPos;
+    private int targetEnemy;
+    private int myDamage;
 
     public void move(float delay){
         deltaCumulative += delay;
         if(deltaCumulative >= 1){
+            if(deleted) return;
+            if(Game.enemies.containsKey(targetEnemy)) Game.enemies.get(targetEnemy).damage(myDamage);
             GameController.removeListGameObjects.add(me.getId());
             deleted = true;
             return;
@@ -22,7 +26,9 @@ public class Bullet {
         me.updateM();
     }
 
-    public Bullet(Vector3f from, Vector3f to, int model) throws Exception {
+    public Bullet(Vector3f from, Vector3f to, int model, int targetEnemy, int damage) throws Exception {
+        this.myDamage = damage;
+        this.targetEnemy = targetEnemy;
         this.stPos = from;
         this.finPos = to;
 

@@ -7,13 +7,11 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Map;
+import java.util.*;
 
 public class Turret {
     private int myID, gun, platform, foundation, bulletModelID;
+    private int maxDamage;
     private ArrayList<Bullet> myBullets = new ArrayList<>();
     Vector3f position;
 
@@ -24,17 +22,17 @@ public class Turret {
     float deltaCumulative = 0,
             fireDelay = 0;
 
-    private float lerp(float a, float b, float f) { return a + f * (b - a); }
-
     public void move(float delta) throws Exception {
         boolean targetFound = false;
         Vector3f targetPosition = new Vector3f();
+        Enemy targetEnemy = null;
+
         for(Iterator<Map.Entry<Integer, Enemy>> it = Game.enemies.entrySet().iterator(); it.hasNext();){
-            Enemy enemy = it.next().getValue();
-            targetPosition = enemy.getPosition();
+            targetEnemy = it.next().getValue();
+            targetPosition = targetEnemy.getPosition();
             if(targetPosition.distance(position) < 30f){
-                deltaCumulative = lastEnemyID != enemy.getMyID() ? delta : deltaCumulative + delta > 1 ? 1 : deltaCumulative + delta;
-                lastEnemyID = enemy.getMyID();
+                deltaCumulative = lastEnemyID != targetEnemy.getMyID() ? delta : deltaCumulative + delta > 1 ? 1 : deltaCumulative + delta;
+                lastEnemyID = targetEnemy.getMyID();
                 targetFound = true;
                 break;
             }
@@ -58,7 +56,6 @@ public class Turret {
                 tar = new Vector2f(targetPosition.z, targetPosition.x);
         tar.sub(me).normalize();
         destRotation = new Vector2f(1,0).angle(tar);
-//        platformGO.setRotation(new Vector3f(0,lerp(myRotation,destRotation, deltaCumulative),0));
         platformGO.setRotation(new Vector3f(0, GameController.radianInterpolation(myRotation,destRotation,deltaCumulative),0));
         platformGO.updateMF();
 
@@ -67,11 +64,21 @@ public class Turret {
         new Matrix4f(Game.GameObjects.get(gun).getM()).translate(new Vector3f(0,0.7f,2.3f)).getTranslation(gunTip);
         if(deltaCumulative > 0.3 && fireDelay >= 0.15){
             fireDelay = 0;
-            myBullets.add(new Bullet(new Vector3f(gunTip), targetPosition,bulletModelID));
+            myBullets.add(new Bullet(new Vector3f(gunTip), targetPosition, bulletModelID, targetEnemy.getMyID(), new Random().nextInt(maxDamage)));
         }
     }
 
-    public Turret(int id, int gun, int platform, int foundation, Vector3f position, int bulletModelID) throws Exception {
+    public void destroy(){
+        for(ListIterator<Bullet> bulletIt = myBullets.listIterator(); bulletIt.hasNext(); ){
+            bulletIt.next().move(1.0f);
+            bulletIt.remove();
+        }
+        GameController.removeGOTree(foundation);
+        GameController.removeListTurrets.add(myID);
+    }
+
+    public Turret(int id, int gun, int platform, int foundation, Vector3f position, int bulletModelID, int dmg) {
+        this.maxDamage = dmg;
         this.myID = id;
         this.gun = gun;
         this.platform = platform;

@@ -19,9 +19,13 @@ public class Enemy {
     private boolean rotating = false;
     private float rotateTarget = 0;
 
+    private int myHealth;
+
     public int getMyID(){
         return myID;
     }
+
+    public void damage(int dmg){ myHealth -= dmg; }
 
     /**
      * select next position to move on map
@@ -38,11 +42,9 @@ public class Enemy {
         if((hint & 8) != 0) possibleDirections[selected++] = new int[] {myMapPosition[0]-1,myMapPosition[1]};//up
 
         if(selected == 0){
-            //TODO: call enemy damaged player
             System.out.println("Enemy damaged player");
-
-            GameController.removeListGameObjects.add(Game.GameObjects.get(body).getId());
-            GameController.removeListEnemies.add(myID);
+            Game.getDamage();
+            killMe();
             return;
         }
         myOldPosition = new int [] {myMapPosition[0],myMapPosition[1]};
@@ -55,11 +57,20 @@ public class Enemy {
         rotating = true;
     }
 
+    private void killMe(){
+        GameController.removeListGameObjects.add(Game.GameObjects.get(body).getId());
+        GameController.removeListEnemies.add(myID);
+    }
+
     /**
      * Make enemy do its own business
      * @param delta time delta on scene
      */
     public void move(float delta){
+        if(myHealth <= 0){
+            killMe();
+            return;
+        }
         deltaCumulative = deltaCumulative + delta > 1 ? 1 : deltaCumulative + delta;
         GameObject bodyGO = Game.GameObjects.get(body);
 
@@ -85,7 +96,8 @@ public class Enemy {
      * @param mapPos position on map in matrix coordinates [y, x]
      * @param y Enemy y (height) position on scene
      */
-    public Enemy(int id, int body, int[] mapPos, float y){
+    public Enemy(int id, int body, int[] mapPos, float y, int health){
+        this.myHealth = health;
         this.myID = id;
         this.body = body;
         this.height = y;

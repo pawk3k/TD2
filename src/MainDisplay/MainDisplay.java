@@ -94,38 +94,31 @@ public class  MainDisplay {
         Renderer myRenderer = new Renderer();
         Input input = new Input(window);
 
-        long start  = System.currentTimeMillis();
-        long end;
-        int w = 250;
-        int h = 200;
-        int x = 0;
-        int y = 0;
         glEnable(GL11.GL_BLEND);
         glEnable(GL11.GL_DEPTH_TEST);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
         while (!glfwWindowShouldClose(window)) {
-            w =400;
-            h  =250;
-            x=400;
-            end = System.currentTimeMillis();
             myRenderer.refreshScreen();
             GL11.glViewport(0, 0, getWidth(), getHeight());
             input.submitKeys();
             mainScene.update((float)(glfwGetTime()));
-//
 
             for(Iterator<Map.Entry<Integer, GameObject>> it = Game.GameObjects.entrySet().iterator(); it.hasNext();){
                 GameObject gameObject = it.next().getValue();
                 if(GameController.removeListGameObjects.contains(gameObject.getId())) it.remove();
                 else myRenderer.render(gameObject, Game.camera.getV());
             }
-
-            for (Map.Entry<Integer, GameObject> sceneObject : Game.GameHudObjects.entrySet()) {
-                myRenderer.renderHud(sceneObject.getValue(), getWidth(),getHeight());
-                x+=100;
-
-            }
             GameController.removeListGameObjects.clear();
+
+            for(Iterator<Map.Entry<Integer, GameObject>> it = Game.GameHudObjects.entrySet().iterator(); it.hasNext();){
+                GameObject gameHUDObject = it.next().getValue();
+                myRenderer.renderHud(gameHUDObject, getWidth(), getHeight());
+                if(GameController.removeListHUD.contains(gameHUDObject.getId())) it.remove();
+                else myRenderer.render(gameHUDObject, Game.camera.getV());
+            }
+
+            GameController.removeListHUD.clear();
 
             glfwSwapBuffers(window);
             glfwPollEvents();

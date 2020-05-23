@@ -13,6 +13,7 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * e.g. Game Manager (maybe better to rename it later). Used to storage models, shaders etc.
@@ -27,6 +28,7 @@ public class GameController {
     public static ArrayList<Integer> removeListGameObjects = new ArrayList<>();
     public static ArrayList<Integer> removeListTurrets = new ArrayList<>();
     public static ArrayList<Integer> removeListEnemies = new ArrayList<>();
+    public static ArrayList<Integer> removeListHUD = new ArrayList<>();
 
     private int[] easyTurretParts;
     private int[] hardTurretParts;
@@ -82,7 +84,13 @@ public class GameController {
                 break;
             case 2:
                 if (loadedParts[1]) return;
-                System.out.println("hardTurretParts load test");
+                hardTurretParts = new int[]{
+                        addModel("res/Turrets/EasyTurret/Gun.obj", "res/Red.png", (modelID == 1 ? 0 : 1), "src/shaders/vertex.glsl", "src/shaders/fragment.glsl"),
+                        addModel("res/Turrets/EasyTurret/BarrelGuard.obj", "res/Turrets/EasyTurret/ClippedMetal.png", 1, "", ""),
+                        addModel("res/Turrets/EasyTurret/Platform.obj", "res/Turrets/EasyTurret/GreyMetal.png", 1, "", ""),
+                        addModel("res/Turrets/EasyTurret/Foundation.obj", "res/Turrets/EasyTurret/ClippedMetal.png", 1, "", ""),
+                        addModel("res/Turrets/Bullet/bullet.obj","res/Turrets/Bullet/bullet.png",1,"","")
+                };
                 loadedParts[1] = true;
                 break;
             case 3:
@@ -94,12 +102,24 @@ public class GameController {
                 break;
             case 4:
                 if (loadedParts[3]) return;
-                System.out.println("hardEnemyParts load test");
+                hardEnemyParts = new int[]{
+                        addModel("res/Enemy/eye.obj","res/Enemy/EvilEye.png",(modelID == 1 ? 0 : 1),"src/shaders/vertex.glsl","src/shaders/fragment.glsl")
+                };
                 loadedParts[3] = true;
                 break;
             default:
                 throw new Exception("Bad type");
         }
+    }
+
+    /**
+     * Remove GameObjects tree by children
+     * @param gameObjectID id of parent game object
+     */
+    public static void removeGOTree(int gameObjectID){
+        GameObject given = Game.GameObjects.get(gameObjectID);
+        for(Integer GObj : given.getChildren()) removeGOTree(GObj);
+        removeListGameObjects.add(given.getId());
     }
 
     /**
@@ -110,24 +130,46 @@ public class GameController {
      */
     public void spawnTurret(int type, int[] pos) throws Exception {
         Vector3f position = calcVec(pos, 3f, 10f);
+        int foundation, platform, gun;
         switch (type) {
             case 1:
                 loadPartsPack(1);
-                int foundation = createGameObject(0, easyTurretParts[3]),
-                        platform = createGameObject(foundation, easyTurretParts[2]),
-                        gun = createGameObject(platform, easyTurretParts[0]);
+
+                foundation = createGameObject(0, easyTurretParts[3]);
+                platform = createGameObject(foundation, easyTurretParts[2]);
+                gun = createGameObject(platform, easyTurretParts[0]);
                 createGameObject(gun, easyTurretParts[1]);
 
-                Game.turrets.put(idTurretsCounter, new Turret(idTurretsCounter, gun, platform, foundation, position, easyTurretParts[4]));
+                Game.turrets.put(idTurretsCounter, new Turret(idTurretsCounter, gun, platform, foundation, position, easyTurretParts[4], 5));
                 break;
             case 2:
                 loadPartsPack(2);
-                //TODO: Додати турель 2
+
+                foundation = createGameObject(0, hardTurretParts[3]);
+                platform = createGameObject(foundation, hardTurretParts[2]);
+                gun = createGameObject(platform, hardTurretParts[0]);
+                createGameObject(gun, hardTurretParts[1]);
+
+                Game.turrets.put(idTurretsCounter, new Turret(idTurretsCounter, gun, platform, foundation, position, hardTurretParts[4], 10));
                 break;
             default:
                 throw new Exception("No such turret type");
         }
+        Game.GameMap[pos[0]][pos[1]] = (32768 | (type << 13)) | idTurretsCounter;
         idTurretsCounter++;
+    }
+
+    public void upgradeStructure(int[] pos) throws Exception {
+        if((Game.GameMap[pos[0]][pos[1]] & 32768) != 32768) return;
+        int type = (Game.GameMap[pos[0]][pos[1]] & 24576) >> 13;
+        switch (type){
+            case 0:
+                spawnTurret(1, pos);
+                break;
+            case 1:
+                Game.turrets.get(Game.GameMap[pos[0]][pos[1]] & 8191).destroy();
+                spawnTurret(2, pos);
+        }
     }
 
     /**
@@ -137,19 +179,25 @@ public class GameController {
      * @param pos position on map in matrix coordinates [y, x]
      */
     public void spawnEnemy(int type, int[] pos) throws Exception {
+        int body;
         switch (type) {
             case 1:
                 loadPartsPack(3);
 
-                int body = createGameObject(0, easyEnemyParts[0]);
+                body = createGameObject(0, easyEnemyParts[0]);
                 Game.GameObjects.get(body).setRotation(new Vector3f(0,(float)Math.toRadians(90),0));
                 Game.GameObjects.get(body).setScale(new Vector3f(2,2,2));
 
-                Game.enemies.put(idEnemyCounter,new Enemy(idEnemyCounter, body, pos, 5f));
+                Game.enemies.put(idEnemyCounter,new Enemy(idEnemyCounter, body, pos, 5f, 250));
                 break;
             case 2:
                 loadPartsPack(4);
-                //TODO: Додати ворога 2
+
+                body = createGameObject(0, hardEnemyParts[0]);
+                Game.GameObjects.get(body).setRotation(new Vector3f(0,(float)Math.toRadians(90),0));
+                Game.GameObjects.get(body).setScale(new Vector3f(2,2,2));
+
+                Game.enemies.put(idEnemyCounter,new Enemy(idEnemyCounter, body, pos, 5f, 550));
                 break;
             default:
                 throw new Exception("No such turret type");
@@ -175,7 +223,6 @@ public class GameController {
     public int createGameHudObject(int parent, int model) throws Exception {
         Game.GameHudObjects.put(idGameObjectsCounter, new GameObject(idGameObjectsCounter, parent, model));
         return idGameObjectsCounter++;
-
     }
 
     /**
@@ -187,7 +234,6 @@ public class GameController {
         Game.GameObjects.put(idGameObjectsCounter, new GameObject(idGameObjectsCounter, parent, model));
         return idGameObjectsCounter++;
     }
-
 
     /**
      * Add new model to storage in memory. Returns key to get model from models map.
