@@ -2,6 +2,7 @@ package Game.PlayableGameObjects;
 
 import Game.Game;
 import Game.GameController;
+import Game.GameObject;
 import org.joml.Vector3f;
 import java.util.Random;
 
@@ -12,11 +13,19 @@ public class Enemy {
                      targetPosition;
     private int[] myMapPosition;
     private float height;
+    private float myTargetRotation;
     private float deltaCumulative = 0;
+
+    private boolean rotating = false;
+    private float rotateTarget = 0;
+
+    private int myHealth;
 
     public int getMyID(){
         return myID;
     }
+
+    public void damage(int dmg){ myHealth -= dmg; }
 
     /**
      * select next position to move on map
@@ -24,6 +33,7 @@ public class Enemy {
     private void selectNextPos(){
         int selected = 0,
                 hint = Game.GameMap[myMapPosition[0]][myMapPosition[1]];
+        int[] myOldPosition;
         int[][] possibleDirections = new int[4][2];
 
         if((hint & 1) != 0) possibleDirections[selected++] = new int[] {myMapPosition[0]+1,myMapPosition[1]};//down
@@ -32,17 +42,24 @@ public class Enemy {
         if((hint & 8) != 0) possibleDirections[selected++] = new int[] {myMapPosition[0]-1,myMapPosition[1]};//up
 
         if(selected == 0){
-            //TODO: call enemy damaged player
             System.out.println("Enemy damaged player");
-
-            GameController.removeListGameObjects.add(Game.GameObjects.get(body).getId());
-            GameController.removeListEnemies.add(myID);
-//            Game.GameObjects.keySet().removeIf(key -> key == Game.GameObjects.get(body).getId());
-//            Game.enemies.keySet().removeIf(key -> key == myID);
+            Game.getDamage();
+            killMe();
             return;
         }
+        myOldPosition = new int [] {myMapPosition[0],myMapPosition[1]};
         myMapPosition = possibleDirections[new Random().nextInt(selected)];
         targetPosition = GameController.calcVec(myMapPosition,height,10);
+        if(myOldPosition[0] - myMapPosition[0] > 0) rotateTarget = (float) Math.toRadians(180);
+        else if(myOldPosition[0] - myMapPosition[0] < 0) rotateTarget = 0;
+        else if(myOldPosition[1] - myMapPosition[1] > 0) rotateTarget = (float) Math.toRadians(-90);
+        else rotateTarget = (float) Math.toRadians(90);
+        rotating = true;
+    }
+
+    private void killMe(){
+        GameController.removeListGameObjects.add(Game.GameObjects.get(body).getId());
+        GameController.removeListEnemies.add(myID);
     }
 
     /**
@@ -50,10 +67,18 @@ public class Enemy {
      * @param delta time delta on scene
      */
     public void move(float delta){
+        if(myHealth <= 0){
+            killMe();
+            return;
+        }
         deltaCumulative = deltaCumulative + delta > 1 ? 1 : deltaCumulative + delta;
+        GameObject bodyGO = Game.GameObjects.get(body);
+
+        bodyGO.setRotation(new Vector3f(0,GameController.radianInterpolation(bodyGO.getRotation().y,rotateTarget,deltaCumulative),0));
+
         Vector3f currentPosition = new Vector3f(oldPosition).lerp(targetPosition,deltaCumulative);
-        Game.GameObjects.get(body).setTranslation(currentPosition);
-        Game.GameObjects.get(body).updateMF();
+        bodyGO.setTranslation(currentPosition);
+        bodyGO.updateMF();
         if(currentPosition.distance(targetPosition) <= 0.05f) {
             deltaCumulative = 0;
             oldPosition = new Vector3f(targetPosition);
@@ -71,7 +96,8 @@ public class Enemy {
      * @param mapPos position on map in matrix coordinates [y, x]
      * @param y Enemy y (height) position on scene
      */
-    public Enemy(int id, int body, int[] mapPos, float y){
+    public Enemy(int id, int body, int[] mapPos, float y, int health){
+        this.myHealth = health;
         this.myID = id;
         this.body = body;
         this.height = y;

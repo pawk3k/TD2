@@ -40,9 +40,7 @@ public class Renderer {
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f);
         float aspectRatio = (float) 1300 / 768;
-        projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(45.0f), aspectRatio, 0.01f, 100.0f);
-
-
+        projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(45.0f), aspectRatio, 0.01f, 110.f);
     }
 
     public Matrix4f getProjectionMatrix() {
@@ -129,6 +127,43 @@ public class Renderer {
         shader.unbind();
 
     }
+
+    public void renderColored(GameObject obj,Matrix4f camera){
+
+
+        Model model = GameController.models.get(obj.getModel());
+        int id =  model.getShaderProgramId();
+
+        Shader shader =  GameController.shaders.get(3);
+        shader.bind();
+        Light light =  Game.lightPoints.get(0);
+        camera.get(V);
+        obj.getM().get(M);
+        this.projectionMatrix.get(P);
+        int m_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "M");
+        int p_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "P");
+        int v_Matrix = GL30.glGetUniformLocation(model.getShaderProgramId(), "V");
+        int color = GL30.glGetUniformLocation(model.getShaderProgramId(), "color");
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
+
+        GL30.glUniformMatrix4fv(m_Matrix, false, M);
+        GL30.glUniformMatrix4fv(p_Matrix, false, P);
+        GL30.glUniformMatrix4fv(v_Matrix, false, V);
+        glBindVertexArray(model.getVaoID());
+        Vector3f colorVec = obj.getColor();
+        glUniform4f(color,colorVec.x,colorVec.y,colorVec.z,1);
+        // Drawing scene
+        glDrawElements(GL_TRIANGLES, model.getIndicesNumber(), GL_UNSIGNED_INT, 0);
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
+
+        shader.unbind();
+    }
+
+
     private void load_light_struct(int shader_program_id, Light light,String name_of_light){
         int lightPos = GL30.glGetUniformLocation(shader_program_id, name_of_light + ".position");
         int lightCol = GL30.glGetUniformLocation(shader_program_id, name_of_light + ".color");

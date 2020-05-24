@@ -12,9 +12,16 @@ public class Input {
         NONE,
         LEFT,
         RIGHT
-
     }
-    private boolean hold_w,hold_a,hold_s,hold_d,anyKeyPressed,isMouseOnButtonL,isMouseOnButtonR;
+    private boolean hold_w,hold_a,hold_s,hold_d,anyKeyPressed,isMouseOnButtonL,isMouseOnButtonR, isMouseLPressed;
+
+    public void setMouseLPressed(boolean mouseLPressed) {
+        isMouseLPressed = mouseLPressed;
+    }
+
+    public boolean isMouseLPressed() {
+        return isMouseLPressed;
+    }
 
     public void submitKeys(){
         if(!anyKeyPressed) return;
@@ -40,8 +47,8 @@ public class Input {
 
     public Input(long in_window) {
 
-        glfwSetScrollCallback(in_window, (window, xoffset, yoffset) -> {
-            if(yoffset == 1.0f) Game.camera.zoom(true);
+        glfwSetScrollCallback(in_window, (window, xOffset, yOffset) -> {
+            if(yOffset == 1.0f) Game.camera.zoom(true);
             else Game.camera.zoom(false);
         });
 
@@ -66,36 +73,30 @@ public class Input {
             if (key == GLFW_KEY_ESCAPE) glfwSetWindowShouldClose(window, true);
         });
 
-        glfwSetCursorPosCallback(in_window,((window1, xpos, ypos) -> {
-            mouseX = xpos;
-            mouseY = ypos;
-            isMouseOnButtonL = isOverButton(xpos, ypos) == button.LEFT;
-            isMouseOnButtonR = isOverButton(xpos, ypos) == button.RIGHT;
-
-
-
-//            System.out.println(xpos + " " + ypos);
+        glfwSetCursorPosCallback(in_window,((window1, xPos, yPos) -> {
+            mouseX = xPos;
+            mouseY = yPos;
+            isMouseOnButtonL = isOverButton(xPos, yPos) == button.LEFT;
+            isMouseOnButtonR = isOverButton(xPos, yPos) == button.RIGHT;
         }));
+
         glfwSetMouseButtonCallback(in_window,((window1, button, action, mods) -> {
             if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
-                if(isMouseOnButtonL){
-                    System.out.println("Left pressed");
-                }
-                if(isMouseOnButtonR){
-                    System.out.println("Right pressed");
-                }
+                isMouseLPressed = true;
+            }
+            if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE){
+                isMouseLPressed = false;
             }
         }));
     }
 
     public button isOverButton(double x, double y){
-
-        if((x>540 && x < 600) && (y>654 && y < 720)){
+        if((x > 540 && x < 600) && (y > 654 && y < 720)){
             return button.LEFT;
         }
-        if((x > 700 && x < 760) && (y>650 && y < 720)){
+        if((x > 700 && x < 760) && (y > 650 && y < 720)){
             return button.RIGHT;
         }
-        else return  button.NONE ;
+        else return button.NONE ;
     }
 }

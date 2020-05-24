@@ -9,15 +9,47 @@ import java.util.List;
 public class GameObjectPrefab {
     protected int id;
     protected int parent;
-    protected List<Integer> children = new ArrayList<>();
+    private List<Integer> children = new ArrayList<>();
     protected Matrix4f M = new Matrix4f().identity();
 
     protected Vector3f scale = new Vector3f(1.0f, 1.0f, 1.0f);
     protected Vector3f rotation = new Vector3f();
     protected Vector3f translation = new Vector3f();
+    protected Vector3f color = new Vector3f();
+    private int[] placeOnMap;
+
+    public void setPlaceOnMap(int[] placeOnMap) {
+        this.placeOnMap = placeOnMap;
+    }
+
+    public int[] getPlaceOnMap() {
+        return placeOnMap;
+    }
+
+    private int colorId;
+
+    public int getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
+    }
+
+    public Vector3f getColor() {
+        return color;
+    }
+
+    public void setColor(Vector3f color) {
+        this.color = color;
+    }
 
     public int getId(){
         return id;
+    }
+
+    public List<Integer> getChildren(){
+        return children;
     }
 
     public Vector3f getScale(){
@@ -120,10 +152,6 @@ public class GameObjectPrefab {
 
     public Matrix4f getM(){
         return M;
-    }
-
-    public void setM(Matrix4f newM){
-        this.M = newM;
     }
 
     /**
