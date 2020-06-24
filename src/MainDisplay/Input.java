@@ -6,14 +6,13 @@ import org.joml.Vector3f;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Input {
-    private long window;
     private double mouseX,mouseY;
-    enum button {
-        NONE,
-        LEFT,
-        RIGHT
-    }
-    private boolean hold_w,hold_a,hold_s,hold_d,anyKeyPressed,isMouseOnButtonL,isMouseOnButtonR, isMouseLPressed;
+    private boolean hold_w;
+    private boolean hold_a;
+    private boolean hold_s;
+    private boolean hold_d;
+    private boolean anyKeyPressed;
+    private boolean isMouseLPressed;
 
     public void setMouseLPressed(boolean mouseLPressed) {
         isMouseLPressed = mouseLPressed;
@@ -76,8 +75,6 @@ public class Input {
         glfwSetCursorPosCallback(in_window,((window1, xPos, yPos) -> {
             mouseX = xPos;
             mouseY = yPos;
-            isMouseOnButtonL = isOverButton(xPos, yPos) == button.LEFT;
-            isMouseOnButtonR = isOverButton(xPos, yPos) == button.RIGHT;
         }));
 
         glfwSetMouseButtonCallback(in_window,((window1, button, action, mods) -> {
@@ -88,15 +85,5 @@ public class Input {
                 isMouseLPressed = false;
             }
         }));
-    }
-
-    public button isOverButton(double x, double y){
-        if((x > 540 && x < 600) && (y > 654 && y < 720)){
-            return button.LEFT;
-        }
-        if((x > 700 && x < 760) && (y > 650 && y < 720)){
-            return button.RIGHT;
-        }
-        else return button.NONE ;
     }
 }

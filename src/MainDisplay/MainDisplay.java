@@ -1,24 +1,22 @@
 package MainDisplay;
 
-import Camera.Camera;
 import Game.Game;
-import Game.GameObject;
 import Game.GameController;
+import Game.GameObject;
 import Renderer.Renderer;
-import Input.*;
 import org.joml.Vector3f;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
-import shaders.Shader;
-import java.awt.*;
-import java.nio.*;
-import java.util.*;
-import java.nio.IntBuffer;
 
-import SomeMath.Bezier;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 
 import static java.lang.Math.abs;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -26,7 +24,6 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
-import org.lwjgl.BufferUtils;
 public class  MainDisplay {
     private long window;
     private int width;
@@ -92,44 +89,23 @@ public class  MainDisplay {
 
         Renderer myRenderer = new Renderer();
         Input input = new Input(window);
-        Camera camera = new Camera();
-        GameObject map = Game.GameObjects.get(1);
-//        MousePicker mousePicker = new MousePicker(camera,myRenderer,input);
         GameController gameController = GameController.getInstance();
-//        gameController.upgradeStructure(new int[]{1,3});
-//        gameController.upgradeStructure(new int[]{1,3});
         GameObject gO=  Game.GameObjects.get(1);
         ByteBuffer buffer = BufferUtils.createByteBuffer( 3);
-        FloatBuffer fBuffer = BufferUtils.createFloatBuffer(3);
-        long pixels = 0;
-        int[] pixels1 = {0,0,0};
-        float[] pixels2 = {0,0,0};
         byte[] myBarr = new byte[3];
         gO.setRotation(new Vector3f(3.14f,0f,0f));
         glEnable(GL11.GL_BLEND);
         glEnable(GL11.GL_DEPTH_TEST);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
         while (!glfwWindowShouldClose(window)) {
-
-
             myRenderer.refreshScreen();
-//            GL11.glViewport(0, 0, getWidth(), getHeight());
-
-
-//            mousePicker.update();
-
-
-
             mainScene.update((float)(glfwGetTime()));
 
             for(Iterator<Map.Entry<Integer, GameObject>> it = Game.GameColoredObjects.entrySet().iterator(); it.hasNext();){
-
-
-
                 GameObject gameObject = it.next().getValue();
 
                 if(abs(myBarr[0])+6>= gameObject.getColorId()  && abs(myBarr[0])-6<=gameObject.getColorId() ){
-//                    System.out.println(Arrays.toString(gameObject.getPlaceOnMap()));
                         if( input.isMouseLPressed()){
                             input.setMouseLPressed(false);
                             gameController.upgradeStructure(gameObject.getPlaceOnMap());

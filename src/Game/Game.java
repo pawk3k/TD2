@@ -61,7 +61,6 @@ public class Game {
                 {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
         };
 
-
         System.out.println(GameController.calcVec(new int[]{1,3},1,10));
         Light light = new Light();
         lightPoints.put(0, light);
@@ -70,11 +69,9 @@ public class Game {
         GameObjects.get(map).scale(new Vector3f(10f,10f,10f));
         GameObjects.get(map).updateM();
 
-
         int  hudModel1 = gameController.addModel("res/HpPlane.obj","res/tower.png",0,"src/Hud/v_hud.glsl", "src/Hud/f_hud.glsl");
         int  coloredModel = gameController.addModel("res/HpPlane.obj","res/tower.png",0,"src/ColoredShaders/v_colored.glsl", "src/ColoredShaders/f_colored.glsl");
         int  hudModel2 = gameController.addModel("res/HpPlane.obj","res/hp.png",2,"", "");
-
 
         float x = 3.5f;
         for(int i = 0; i < playerHealth; i++){
@@ -84,15 +81,6 @@ public class Game {
             GameHudObjects.get(heartsHUD[i]).updateM();
             x-=2.0;
         }
-
-
-
-
-
-/**
- *
- * Colored squres
-**/
 
         float step = 0.0f; // 0.05
         for (int i = 0; i < GameMap[0].length; i++) {
@@ -104,19 +92,15 @@ public class Game {
                     GameColoredObjects.get(coloredSquare).setTranslation(position);
                     GameColoredObjects.get(coloredSquare).setScale(new Vector3f(0.5f,0.5f,0.5f).mul(10));
 
-                    float id = ((float)GameMap[i][j] + (i + j)*100)/40000;
                     GameColoredObjects.get(coloredSquare).setColor(new Vector3f(step,0.f,1.0f));
                     int colorId = (int)ceil(255*step);
                     GameColoredObjects.get(coloredSquare).setColorId(colorId);
                     step+=0.03;
                     GameColoredObjects.get(coloredSquare).setPlaceOnMap(new int[]{i,j});
                     GameColoredObjects.get(coloredSquare).updateM();
-
                 }
-
             }
         }
-
 
         int cubeGO4 = gameController.createGameHudObject(0,hudModel1);
         GameHudObjects.get(cubeGO4).translate(new Vector3f(4,-15.f,0.f));
@@ -131,7 +115,6 @@ public class Game {
         GameHudObjects.get(cubeGO5).updateM();
 
         gameController.spawnEnemy(1, new int[] {3,0});
-
     }
 
     public static void getDamage() {
